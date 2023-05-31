@@ -20,7 +20,6 @@ scale = Vector2(1, 1.313)
 shape = SubResource("RectangleShape2D_oac5m")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(0, -300)
 zoom = Vector2(1.5, 1.5)
 
 [node name="is_dashing" type="Timer" parent="."]
@@ -31,5 +30,14 @@ one_shot = true
 wait_time = 0.5
 one_shot = true
 
+[node name="coyote_timer_floor" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+
+[node name="coyote_timer_wall" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="timeout" from="is_dashing" to="." method="_on_is_dashing_timeout"]
 [connection signal="timeout" from="dash_cooldown" to="." method="_on_dash_cooldown_timeout"]
+[connection signal="timeout" from="coyote_timer_floor" to="." method="_on_coyote_timer_floor_timeout"]
+[connection signal="timeout" from="coyote_timer_wall" to="." method="_on_coyote_timer_wall_timeout"]

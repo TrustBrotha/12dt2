@@ -17,54 +17,97 @@ var movement_state = "normal"
 var last_direction
 var can_move = true
 var can_dash = true 
+var can_jump = true
+var can_jump_wall = true
+var is_dashing = false
+var coyote_timer_floor_already_called = false
+var coyote_timer_wall_already_called = false
 
 func _physics_process(delta):
-	# Add the gravity.
-
-
 	# Handle Jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	handle_jump()
+	movement_states(delta)
+	basic_movement()
+	wall_slide()
+	dash()
+	
+	
+	move_and_slide()
+	print(coyote_timer_wall_already_called)
+	print(can_jump_wall)
+	print(movement_state)
+	print(is_on_wall())
+	print(get_node("/root/world/player/coyote_timer_wall").time_left)
+
+func handle_jump():
+	if Input.is_action_just_pressed("jump") and can_jump == true:
 		velocity.y = -jump_force
+	
+	if Input.is_action_just_pressed("jump") and can_jump_wall == true:
+		velocity.y = -0.75 * jump_force
+		
 	if is_on_wall():
 		movement_state = "wall"
-		if Input.is_action_just_pressed("jump") and Input.is_action_pressed("move_right"):
-			velocity.x = -jump_force 
-			velocity.y = -jump_force
-		if Input.is_action_just_pressed("jump") and Input.is_action_pressed("move_left"):
-			velocity.x = jump_force 
-			velocity.y = -jump_force
-		
+		if can_jump_wall == true:
+			if Input.is_action_just_pressed("jump"):
+				if Input.is_action_pressed("move_right"):
+					velocity.x = -jump_force 
+					velocity.y = -jump_force
+				if Input.is_action_pressed("move_left"):
+					velocity.x = jump_force 
+					velocity.y = -jump_force
+
+func movement_states(delta):
+	if is_on_floor() and movement_state != "dash":
+		movement_state = "normal"
 	
-	#different states of movement
 	if movement_state == "normal":
 		can_move = true
 		velocity.x = clamp(velocity.x,-maxspeed,maxspeed)
+		can_jump_wall = false
 		
-		#gravity
+		if is_on_floor():
+			can_jump = true
+			coyote_timer_floor_already_called = false
+		
 		if not is_on_floor():
 			velocity.y += 1.5 * gravity * delta
 			if velocity.y > 2000:
 				velocity.y = 2000
+			if coyote_timer_floor_already_called == false:
+				if velocity.y >= 0:
+					get_node("/root/world/player/coyote_timer_floor").start()
+					coyote_timer_floor_already_called = true  
+				elif velocity.y < 0:
+					can_jump = false
 	
 	elif movement_state == "dash":
 		can_move = false
 		velocity.x = clamp(velocity.x,-(5000),(5000))
-		#gravity
+		#no gravity
 		velocity.y = 0
 	
 	elif movement_state == "wall":
 		can_move = true
 		velocity.x = clamp(velocity.x,-(1.3*maxspeed),(1.3*maxspeed))
 		
+		if is_on_wall():
+			can_jump_wall = true
+			coyote_timer_wall_already_called = false
+		
+		if not is_on_wall():
+			if coyote_timer_wall_already_called == false:
+				get_node("/root/world/player/coyote_timer_wall").start()
+				coyote_timer_wall_already_called = true  
+			
+		
 		#gravity
 		if not is_on_floor():
 			velocity.y += 1.5 * gravity * delta
 			if velocity.y > 2000:
 				velocity.y = 2000
-		
-	
-	
-	
+
+func basic_movement():
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("move_left", "move_right")
 	if can_move == true:
@@ -74,31 +117,33 @@ func _physics_process(delta):
 		else:
 			velocity.x = lerpf(velocity.x,0.0,0.2)
 			#velocity.x = move_toward(velocity.x, 0, speed) #same thing written differently
-	
-	#sliding down wall
+
+func wall_slide():
 	if is_on_wall():
 		if Input.is_action_pressed("move_right"):
-			velocity.y = lerpf(velocity.y,0.0,0.1)
+			velocity.y = lerpf(velocity.y,0.0,0.2)
 		if Input.is_action_pressed("move_left"):
-			velocity.y = lerpf(velocity.y,0.0,0.1)
-	
-	#dash
+			velocity.y = lerpf(velocity.y,0.0,0.2)
+
+func dash():
 	if Input.is_action_just_pressed("dash") and can_dash:
 		movement_state = "dash"
 		get_node("/root/world/player/is_dashing").start()
 		velocity.x += last_direction * 2000
-		
-	
-	
-	move_and_slide()
-	print(velocity)
-	print(can_dash)
-
+		can_dash = false
 
 func _on_is_dashing_timeout():
 	movement_state = "normal"
 	get_node("/root/world/player/dash_cooldown").start()
-	can_dash = false
 
 func _on_dash_cooldown_timeout():
 	can_dash = true
+
+
+
+func _on_coyote_timer_wall_timeout():
+	can_jump_wall = false
+
+
+func _on_coyote_timer_floor_timeout():
+	can_jump = false
