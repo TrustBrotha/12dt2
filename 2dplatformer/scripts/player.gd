@@ -9,7 +9,7 @@
 
 extends CharacterBody2D
 
-@export var jump_force = 700.0
+@export var jump_force = 1000.0
 @export var maxspeed = 500.0
 @export var acceleration = 50
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity") # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -25,11 +25,11 @@ var coyote_timer_wall_already_called = false
 
 func _physics_process(delta):
 	# Handle Jump.
-	handle_jump()
 	movement_states(delta)
 	basic_movement()
 	wall_slide()
 	dash()
+	abilities()
 	
 	
 	move_and_slide()
@@ -39,27 +39,14 @@ func _physics_process(delta):
 	print(is_on_wall())
 	print(get_node("/root/world/player/coyote_timer_wall").time_left)
 
-func handle_jump():
-	if Input.is_action_just_pressed("jump") and can_jump == true:
-		velocity.y = -jump_force
-	
-	if Input.is_action_just_pressed("jump") and can_jump_wall == true:
-		velocity.y = -0.75 * jump_force
-		
-	if is_on_wall():
-		movement_state = "wall"
-		if can_jump_wall == true:
-			if Input.is_action_just_pressed("jump"):
-				if Input.is_action_pressed("move_right"):
-					velocity.x = -jump_force 
-					velocity.y = -jump_force
-				if Input.is_action_pressed("move_left"):
-					velocity.x = jump_force 
-					velocity.y = -jump_force
+
 
 func movement_states(delta):
+	
 	if is_on_floor() and movement_state != "dash":
 		movement_state = "normal"
+	if is_on_wall() and !is_on_floor():
+		movement_state = "wall"
 	
 	if movement_state == "normal":
 		can_move = true
@@ -71,7 +58,7 @@ func movement_states(delta):
 			coyote_timer_floor_already_called = false
 		
 		if not is_on_floor():
-			velocity.y += 1.5 * gravity * delta
+			velocity.y += 2 * gravity * delta
 			if velocity.y > 2000:
 				velocity.y = 2000
 			if coyote_timer_floor_already_called == false:
@@ -80,6 +67,11 @@ func movement_states(delta):
 					coyote_timer_floor_already_called = true  
 				elif velocity.y < 0:
 					can_jump = false
+		
+		if Input.is_action_just_pressed("jump") and can_jump == true:
+			velocity.y = -jump_force
+		if Input.is_action_just_released("jump") and velocity.y < 0:
+			velocity.y /= 2
 	
 	elif movement_state == "dash":
 		can_move = false
@@ -94,16 +86,28 @@ func movement_states(delta):
 		if is_on_wall():
 			can_jump_wall = true
 			coyote_timer_wall_already_called = false
+			if Input.is_action_just_pressed("jump"):
+				if Input.is_action_pressed("move_right"):
+					velocity.x = -0.75*jump_force 
+					velocity.y = -jump_force
+				if Input.is_action_pressed("move_left"):
+					velocity.x = 0.75*jump_force 
+					velocity.y = -jump_force
 		
 		if not is_on_wall():
 			if coyote_timer_wall_already_called == false:
 				get_node("/root/world/player/coyote_timer_wall").start()
-				coyote_timer_wall_already_called = true  
-			
+				coyote_timer_wall_already_called = true 
 		
+		if Input.is_action_just_pressed("jump") and can_jump_wall == true:
+			velocity.y = -jump_force
+		if Input.is_action_just_released("jump") and velocity.y < 0:
+			velocity.y /= 2
+			velocity.x /= 4
+			
 		#gravity
 		if not is_on_floor():
-			velocity.y += 1.5 * gravity * delta
+			velocity.y += 2 * gravity * delta
 			if velocity.y > 2000:
 				velocity.y = 2000
 
@@ -132,6 +136,9 @@ func dash():
 		velocity.x += last_direction * 2000
 		can_dash = false
 
+func abilities():
+	pass
+
 func _on_is_dashing_timeout():
 	movement_state = "normal"
 	get_node("/root/world/player/dash_cooldown").start()
@@ -139,11 +146,8 @@ func _on_is_dashing_timeout():
 func _on_dash_cooldown_timeout():
 	can_dash = true
 
-
-
 func _on_coyote_timer_wall_timeout():
 	can_jump_wall = false
-
 
 func _on_coyote_timer_floor_timeout():
 	can_jump = false

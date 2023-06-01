@@ -27,14 +27,15 @@ wait_time = 0.175
 one_shot = true
 
 [node name="dash_cooldown" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 0.33
 one_shot = true
 
 [node name="coyote_timer_floor" type="Timer" parent="."]
-wait_time = 0.4
+wait_time = 0.1
 one_shot = true
 
 [node name="coyote_timer_wall" type="Timer" parent="."]
+wait_time = 0.1
 one_shot = true
 
 [connection signal="timeout" from="is_dashing" to="." method="_on_is_dashing_timeout"]
