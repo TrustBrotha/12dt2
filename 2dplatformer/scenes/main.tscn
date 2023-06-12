@@ -1,9 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bsgvap86t4i1g"]
+[gd_scene load_steps=6 format=3 uid="uid://bcbkfnsmhssqb"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_8kncp"]
-[ext_resource type="Texture2D" uid="uid://bva6iihufen86" path="res://icon.svg" id="1_8uq7s"]
 [ext_resource type="Script" path="res://scripts/block.gd" id="2_8hivo"]
-[ext_resource type="PackedScene" uid="uid://r6om2p7fcy2c" path="res://scenes/player.tscn" id="2_vk7ns"]
+[ext_resource type="PackedScene" uid="uid://b8yxshps1roge" path="res://scenes/player.tscn" id="2_vk7ns"]
+[ext_resource type="Texture2D" uid="uid://bva6iihufen86" path="res://assets/icon.svg" id="3_xrhhq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l4h3f"]
 size = Vector2(1150, 244)
@@ -19,7 +19,7 @@ metadata/_edit_group_ = true
 [node name="Sprite2D" type="Sprite2D" parent="platform"]
 position = Vector2(580.5, 522)
 scale = Vector2(9.00781, 1.85938)
-texture = ExtResource("1_8uq7s")
+texture = ExtResource("3_xrhhq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="platform"]
 position = Vector2(578, 523)
@@ -33,7 +33,7 @@ metadata/_edit_group_ = true
 [node name="Sprite2D" type="Sprite2D" parent="platform2"]
 position = Vector2(580.5, 522)
 scale = Vector2(9.00781, 1.85938)
-texture = ExtResource("1_8uq7s")
+texture = ExtResource("3_xrhhq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="platform2"]
 position = Vector2(578, 523)
@@ -47,7 +47,7 @@ metadata/_edit_group_ = true
 [node name="Sprite2D" type="Sprite2D" parent="platform3"]
 position = Vector2(580.5, 660.5)
 scale = Vector2(9.00781, 4.02344)
-texture = ExtResource("1_8uq7s")
+texture = ExtResource("3_xrhhq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="platform3"]
 position = Vector2(582, 662)
@@ -62,7 +62,7 @@ metadata/_edit_group_ = true
 [node name="Sprite2D" type="Sprite2D" parent="platform4"]
 position = Vector2(580.5, 660.5)
 scale = Vector2(9.00781, 4.02344)
-texture = ExtResource("1_8uq7s")
+texture = ExtResource("3_xrhhq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="platform4"]
 position = Vector2(582, 662)
@@ -77,7 +77,7 @@ metadata/_edit_group_ = true
 [node name="Sprite2D" type="Sprite2D" parent="platform5"]
 position = Vector2(580.5, 660.5)
 scale = Vector2(9.00781, 4.02344)
-texture = ExtResource("1_8uq7s")
+texture = ExtResource("3_xrhhq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="platform5"]
 position = Vector2(582, 662)
@@ -93,7 +93,7 @@ metadata/_edit_group_ = true
 [node name="Sprite2D" type="Sprite2D" parent="platform6"]
 position = Vector2(580.5, 660.5)
 scale = Vector2(9.00781, 4.02344)
-texture = ExtResource("1_8uq7s")
+texture = ExtResource("3_xrhhq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="platform6"]
 position = Vector2(582, 662)
@@ -109,7 +109,7 @@ metadata/_edit_group_ = true
 [node name="Sprite2D" type="Sprite2D" parent="platform7"]
 position = Vector2(580.5, 660.5)
 scale = Vector2(9.00781, 4.02344)
-texture = ExtResource("1_8uq7s")
+texture = ExtResource("3_xrhhq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="platform7"]
 position = Vector2(582, 662)

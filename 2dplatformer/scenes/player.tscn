@@ -1,18 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://r6om2p7fcy2c"]
+[gd_scene load_steps=6 format=3 uid="uid://b8yxshps1roge"]
 
-[ext_resource type="Texture2D" uid="uid://bva6iihufen86" path="res://icon.svg" id="1_7h7ch"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_sebs5"]
+[ext_resource type="PackedScene" uid="uid://0xkffbs126le" path="res://scenes/sword.tscn" id="2_8cfrr"]
+[ext_resource type="Texture2D" uid="uid://bva6iihufen86" path="res://assets/icon.svg" id="2_fa3lw"]
+[ext_resource type="PackedScene" uid="uid://cqphxjpt3moxm" path="res://scenes/fireball.tscn" id="3_angvt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oac5m"]
 size = Vector2(127, 128.26)
 
 [node name="player" type="CharacterBody2D"]
 script = ExtResource("1_sebs5")
+sword_scene = ExtResource("2_8cfrr")
+fireball_scene = ExtResource("3_angvt")
+metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -85)
 scale = Vector2(1, 1.3125)
-texture = ExtResource("1_7h7ch")
+texture = ExtResource("2_fa3lw")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -84.797)
@@ -21,6 +26,8 @@ shape = SubResource("RectangleShape2D_oac5m")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(1.5, 1.5)
+
+[node name="melee_cooldown" type="Timer" parent="."]
 
 [node name="is_dashing" type="Timer" parent="."]
 wait_time = 0.175
@@ -38,7 +45,23 @@ one_shot = true
 wait_time = 0.1
 one_shot = true
 
+[node name="weapon_spawn" type="Node2D" parent="."]
+position = Vector2(75, -75)
+
+[node name="Sprite2D" type="Sprite2D" parent="weapon_spawn"]
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_fa3lw")
+
+[node name="is_casting" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[node name="casting_cooldown" type="Timer" parent="."]
+
+[connection signal="timeout" from="melee_cooldown" to="." method="_on_melee_cooldown_timeout"]
 [connection signal="timeout" from="is_dashing" to="." method="_on_is_dashing_timeout"]
 [connection signal="timeout" from="dash_cooldown" to="." method="_on_dash_cooldown_timeout"]
 [connection signal="timeout" from="coyote_timer_floor" to="." method="_on_coyote_timer_floor_timeout"]
 [connection signal="timeout" from="coyote_timer_wall" to="." method="_on_coyote_timer_wall_timeout"]
+[connection signal="timeout" from="is_casting" to="." method="_on_is_casting_timeout"]
+[connection signal="timeout" from="casting_cooldown" to="." method="_on_casting_cooldown_timeout"]

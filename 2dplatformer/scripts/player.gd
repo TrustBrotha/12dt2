@@ -8,20 +8,24 @@
 #
 
 extends CharacterBody2D
-
+@export var sword_scene: PackedScene
+@export var fireball_scene: PackedScene
 @export var jump_force = 1000.0
 @export var maxspeed = 500.0
 @export var acceleration = 50
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity") # Get the gravity from the project settings to be synced with RigidBody nodes.
 var movement_state = "normal"
-var last_direction
+var last_direction = 1
 var can_move = true
 var can_dash = true 
 var can_jump = true
 var can_jump_wall = true
 var is_dashing = false
+var can_melee = true
+var can_cast = true
 var coyote_timer_floor_already_called = false
 var coyote_timer_wall_already_called = false
+#var sword = sword_scene.instantiate()
 
 func _physics_process(delta):
 	# Handle Jump.
@@ -29,15 +33,13 @@ func _physics_process(delta):
 	basic_movement()
 	wall_slide()
 	dash()
+	weapon_spawn_location()
 	abilities()
+	melee()
 	
 	
 	move_and_slide()
-	print(coyote_timer_wall_already_called)
-	print(can_jump_wall)
-	print(movement_state)
-	print(is_on_wall())
-	print(get_node("/root/world/player/coyote_timer_wall").time_left)
+	print(last_direction)
 
 
 
@@ -57,7 +59,7 @@ func movement_states(delta):
 			can_jump = true
 			coyote_timer_floor_already_called = false
 		
-		if not is_on_floor():
+		if !is_on_floor():
 			velocity.y += 2 * gravity * delta
 			if velocity.y > 2000:
 				velocity.y = 2000
@@ -110,6 +112,10 @@ func movement_states(delta):
 			velocity.y += 2 * gravity * delta
 			if velocity.y > 2000:
 				velocity.y = 2000
+	
+	elif movement_state == "casting":
+		can_move = false
+		velocity.y = 0
 
 func basic_movement():
 	# Get the input direction and handle the movement/deceleration.
@@ -137,7 +143,28 @@ func dash():
 		can_dash = false
 
 func abilities():
-	pass
+	if Input.is_action_just_pressed("ranged") and can_cast == true:
+		movement_state = "casting"
+		$is_casting.start()
+		var fireball = fireball_scene.instantiate()
+		fireball.position = $weapon_spawn.global_position
+		fireball.rotation = 0
+		fireball.scale.x = 1 * last_direction
+		add_sibling(fireball)
+		can_cast = false
+
+func weapon_spawn_location():
+	$weapon_spawn.position.x = 75 * last_direction
+
+func melee():
+	if Input.is_action_just_pressed("melee") and can_melee == true:
+		var sword = sword_scene.instantiate()
+		sword.position = $weapon_spawn.position
+		sword.rotation = 0
+		sword.scale.x = 1 * last_direction
+		add_child(sword)
+		can_melee = false
+		$melee_cooldown.start()
 
 func _on_is_dashing_timeout():
 	movement_state = "normal"
@@ -151,3 +178,13 @@ func _on_coyote_timer_wall_timeout():
 
 func _on_coyote_timer_floor_timeout():
 	can_jump = false
+
+func _on_melee_cooldown_timeout():
+	can_melee = true
+
+func _on_is_casting_timeout():
+	movement_state = "normal"
+	$casting_cooldown.start()
+
+func _on_casting_cooldown_timeout():
+	can_cast = true
