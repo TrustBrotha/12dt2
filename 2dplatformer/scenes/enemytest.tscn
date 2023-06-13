@@ -1,0 +1,68 @@
+[gd_scene load_steps=9 format=3 uid="uid://cxg1m1njkwwc5"]
+
+[ext_resource type="Script" path="res://scripts/enemytest.gd" id="1_v6o0j"]
+[ext_resource type="Texture2D" uid="uid://bva6iihufen86" path="res://icon.svg" id="2_ocb4c"]
+[ext_resource type="Texture2D" uid="uid://c1xyd1cs1v1n6" path="res://assets/fireballtest.png" id="3_peol7"]
+[ext_resource type="Texture2D" uid="uid://bm0fptb7q8n4d" path="res://assets/waterballtest.png" id="4_262jf"]
+[ext_resource type="Texture2D" uid="uid://d36rt6vjt36rn" path="res://assets/lightningballtest.png" id="5_74ms1"]
+[ext_resource type="Texture2D" uid="uid://ctxdu7vih5nk5" path="res://assets/steamtest.png" id="6_sessg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ywvyw"]
+size = Vector2(126, 115)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_finxi"]
+size = Vector2(136, 125)
+
+[node name="enemytest" type="CharacterBody2D"]
+script = ExtResource("1_v6o0j")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_ocb4c")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, -2.5)
+shape = SubResource("RectangleShape2D_ywvyw")
+
+[node name="raycastfloorcheck" type="RayCast2D" parent="."]
+position = Vector2(80, 30)
+
+[node name="raycastwallcheck" type="RayCast2D" parent="."]
+rotation = -1.5708
+target_position = Vector2(0, 75)
+
+[node name="weaponhitbox" type="Area2D" parent="."]
+metadata/enemy = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="weaponhitbox"]
+position = Vector2(1, -2.5)
+shape = SubResource("RectangleShape2D_finxi")
+
+[node name="fire_effect_test" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, -100)
+scale = Vector2(3, 3)
+texture = ExtResource("3_peol7")
+
+[node name="water_effect_test" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, -100)
+scale = Vector2(3, 3)
+texture = ExtResource("4_262jf")
+
+[node name="lightning_effect_test" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, -100)
+scale = Vector2(3, 3)
+texture = ExtResource("5_74ms1")
+
+[node name="steam_effect_test" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.509804)
+scale = Vector2(10, 10)
+texture = ExtResource("6_sessg")
+
+[node name="debuff_cooldown" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="area_entered" from="weaponhitbox" to="." method="_on_area_2d_area_entered"]
+[connection signal="timeout" from="debuff_cooldown" to="." method="_on_debuff_cooldown_timeout"]

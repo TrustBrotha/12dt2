@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://c66qy8rgvt65a"]
+
+[ext_resource type="Script" path="res://scripts/firesword.gd" id="1_76w4x"]
+[ext_resource type="Texture2D" uid="uid://bwlaev5vjik0q" path="res://assets/lightningswordtest.png" id="2_rst46"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v774h"]
+size = Vector2(48, 32.5455)
+
+[node name="sword" type="Area2D"]
+script = ExtResource("1_76w4x")
+metadata/_edit_group_ = true
+metadata/lightning = true
+metadata/melee = true
+metadata/weapon = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8)
+scale = Vector2(2, 5.5)
+shape = SubResource("RectangleShape2D_v774h")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(5, 5)
+texture = ExtResource("2_rst46")
+
+[node name="is_meleeing" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[connection signal="timeout" from="is_meleeing" to="." method="_on_is_meleeing_timeout"]

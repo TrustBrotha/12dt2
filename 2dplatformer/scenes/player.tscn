@@ -1,18 +1,28 @@
-[gd_scene load_steps=6 format=3 uid="uid://b8yxshps1roge"]
+[gd_scene load_steps=11 format=3 uid="uid://b8yxshps1roge"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_sebs5"]
-[ext_resource type="PackedScene" uid="uid://0xkffbs126le" path="res://scenes/sword.tscn" id="2_8cfrr"]
-[ext_resource type="Texture2D" uid="uid://bva6iihufen86" path="res://assets/icon.svg" id="2_fa3lw"]
+[ext_resource type="Texture2D" uid="uid://bva6iihufen86" path="res://icon.svg" id="2_fa3lw"]
+[ext_resource type="PackedScene" uid="uid://b0m6ij051iod8" path="res://scenes/firesword.tscn" id="2_ppjs1"]
 [ext_resource type="PackedScene" uid="uid://cqphxjpt3moxm" path="res://scenes/fireball.tscn" id="3_angvt"]
+[ext_resource type="PackedScene" uid="uid://d71h112bpicd" path="res://scenes/watersword.tscn" id="3_wjp1s"]
+[ext_resource type="PackedScene" uid="uid://c48fq8g3n3hbx" path="res://scenes/waterball.tscn" id="4_ny7ny"]
+[ext_resource type="PackedScene" uid="uid://c66qy8rgvt65a" path="res://scenes/lightningsword.tscn" id="4_qns8r"]
+[ext_resource type="PackedScene" uid="uid://e2cbsn0reei1" path="res://scenes/lightningball.tscn" id="6_cj6on"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oac5m"]
 size = Vector2(127, 128.26)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s87vr"]
+size = Vector2(139, 134.806)
+
 [node name="player" type="CharacterBody2D"]
 script = ExtResource("1_sebs5")
-sword_scene = ExtResource("2_8cfrr")
+firesword_scene = ExtResource("2_ppjs1")
+watersword_scene = ExtResource("3_wjp1s")
+lightningsword_scene = ExtResource("4_qns8r")
 fireball_scene = ExtResource("3_angvt")
-metadata/_edit_group_ = true
+waterball_scene = ExtResource("4_ny7ny")
+lightningball_scene = ExtResource("6_cj6on")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -85)
@@ -25,9 +35,11 @@ scale = Vector2(1, 1.313)
 shape = SubResource("RectangleShape2D_oac5m")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(1.5, 1.5)
+zoom = Vector2(7, 7)
 
 [node name="melee_cooldown" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
 
 [node name="is_dashing" type="Timer" parent="."]
 wait_time = 0.175
@@ -42,21 +54,30 @@ wait_time = 0.1
 one_shot = true
 
 [node name="coyote_timer_wall" type="Timer" parent="."]
-wait_time = 0.1
+wait_time = 0.05
 one_shot = true
 
 [node name="weapon_spawn" type="Node2D" parent="."]
-position = Vector2(75, -75)
+position = Vector2(85, -75)
+metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="weapon_spawn"]
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("2_fa3lw")
 
 [node name="is_casting" type="Timer" parent="."]
-wait_time = 0.3
+wait_time = 0.2
 one_shot = true
 
 [node name="casting_cooldown" type="Timer" parent="."]
+wait_time = 0.2
+
+[node name="enemyhitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="enemyhitbox"]
+position = Vector2(-0.5, -84.5)
+scale = Vector2(1, 1.313)
+shape = SubResource("RectangleShape2D_s87vr")
 
 [connection signal="timeout" from="melee_cooldown" to="." method="_on_melee_cooldown_timeout"]
 [connection signal="timeout" from="is_dashing" to="." method="_on_is_dashing_timeout"]
@@ -65,3 +86,4 @@ one_shot = true
 [connection signal="timeout" from="coyote_timer_wall" to="." method="_on_coyote_timer_wall_timeout"]
 [connection signal="timeout" from="is_casting" to="." method="_on_is_casting_timeout"]
 [connection signal="timeout" from="casting_cooldown" to="." method="_on_casting_cooldown_timeout"]
+[connection signal="area_entered" from="enemyhitbox" to="." method="_on_enemyhitbox_area_entered"]
