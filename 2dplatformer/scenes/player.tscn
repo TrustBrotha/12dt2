@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b8yxshps1roge"]
+[gd_scene load_steps=12 format=3 uid="uid://b8yxshps1roge"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_sebs5"]
 [ext_resource type="Texture2D" uid="uid://bva6iihufen86" path="res://icon.svg" id="2_fa3lw"]
@@ -14,6 +14,9 @@ size = Vector2(127, 128.26)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s87vr"]
 size = Vector2(139, 134.806)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t7tvg"]
+size = Vector2(128, 50)
 
 [node name="player" type="CharacterBody2D"]
 script = ExtResource("1_sebs5")
@@ -53,10 +56,6 @@ one_shot = true
 wait_time = 0.1
 one_shot = true
 
-[node name="coyote_timer_wall" type="Timer" parent="."]
-wait_time = 0.1
-one_shot = true
-
 [node name="weapon_spawn" type="Node2D" parent="."]
 position = Vector2(85, -75)
 metadata/_edit_group_ = true
@@ -79,11 +78,39 @@ position = Vector2(-0.5, -84.5)
 scale = Vector2(1, 1.313)
 shape = SubResource("RectangleShape2D_s87vr")
 
+[node name="waterdetection" type="Area2D" parent="."]
+position = Vector2(-1, 4)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="waterdetection"]
+position = Vector2(1, -26)
+shape = SubResource("RectangleShape2D_t7tvg")
+
+[node name="wallcheckleft" type="RayCast2D" parent="."]
+position = Vector2(0, -10)
+rotation = 1.5708
+target_position = Vector2(0, 120)
+
+[node name="wallcheckleft2" type="RayCast2D" parent="."]
+position = Vector2(0, -160)
+rotation = 1.5708
+target_position = Vector2(0, 120)
+
+[node name="wallcheckright" type="RayCast2D" parent="."]
+position = Vector2(0, -10)
+rotation = -1.5708
+target_position = Vector2(0, 120)
+
+[node name="wallcheckright2" type="RayCast2D" parent="."]
+position = Vector2(0, -160)
+rotation = -1.5708
+target_position = Vector2(0, 120)
+
 [connection signal="timeout" from="melee_cooldown" to="." method="_on_melee_cooldown_timeout"]
 [connection signal="timeout" from="is_dashing" to="." method="_on_is_dashing_timeout"]
 [connection signal="timeout" from="dash_cooldown" to="." method="_on_dash_cooldown_timeout"]
 [connection signal="timeout" from="coyote_timer_floor" to="." method="_on_coyote_timer_floor_timeout"]
-[connection signal="timeout" from="coyote_timer_wall" to="." method="_on_coyote_timer_wall_timeout"]
 [connection signal="timeout" from="is_casting" to="." method="_on_is_casting_timeout"]
 [connection signal="timeout" from="casting_cooldown" to="." method="_on_casting_cooldown_timeout"]
 [connection signal="area_entered" from="enemyhitbox" to="." method="_on_enemyhitbox_area_entered"]
+[connection signal="area_entered" from="waterdetection" to="." method="_on_waterdetection_area_entered"]
