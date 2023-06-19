@@ -40,10 +40,11 @@ func _physics_process(delta):
 	weapon_spawn_location()
 	loadout()
 	abilities()
-	melee()
+	
 	
 	
 	move_and_slide()
+	print(last_direction)
 
 
 
@@ -56,7 +57,7 @@ func movement_states(delta):
 	
 	if movement_state == "normal":
 		can_move = true
-		velocity.x = clamp(velocity.x,-maxspeed,maxspeed)
+#		velocity.x = clamp(velocity.x,-maxspeed,maxspeed)
 		can_jump_wall = false
 		
 		if is_on_floor():
@@ -137,10 +138,15 @@ func movement_states(delta):
 func basic_movement():
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("move_left", "move_right")
+	
 	if can_move == true:
 		if direction:
 			velocity.x += direction * acceleration
 			last_direction = direction
+			if velocity.x >= maxspeed:
+				velocity.x = maxspeed
+			elif velocity.x <= -maxspeed:
+				velocity.x = -maxspeed
 		else:
 			velocity.x = lerpf(velocity.x,0.0,0.2)
 			#velocity.x = move_toward(velocity.x, 0, speed) #same thing written differently
@@ -156,8 +162,6 @@ func dash():
 func weapon_spawn_location():
 	$weapon_spawn.position.x = 85 * last_direction
 	$weapon_spawn.position.y = -75
-	
-		
 
 func double_jump():
 	pass
@@ -175,18 +179,6 @@ func loadout():
 		loadout_selected = 3
 	
 	currentloadout = loadouts[loadout_selected-1]
-
-func melee():
-	if Input.is_action_just_pressed("melee") and can_melee == true:
-		if currentloadout == "fire":
-			var sword = firesword_scene.instantiate()
-			melee_spawning(sword)
-		elif currentloadout == "water":
-			var sword = watersword_scene.instantiate()
-			melee_spawning(sword)
-		elif currentloadout == "lightning":
-			var sword = lightningsword_scene.instantiate()
-			melee_spawning(sword)
 
 func melee_spawning(sword):
 	if Input.is_action_pressed("up"):
@@ -207,6 +199,16 @@ func melee_spawning(sword):
 
 
 func abilities():
+	if Input.is_action_just_pressed("melee") and can_melee == true:
+		if currentloadout == "fire":
+			var sword = firesword_scene.instantiate()
+			melee_spawning(sword)
+		elif currentloadout == "water":
+			var sword = watersword_scene.instantiate()
+			melee_spawning(sword)
+		elif currentloadout == "lightning":
+			var sword = lightningsword_scene.instantiate()
+			melee_spawning(sword)
 	#make so can only cast when melee animation finished
 	if Input.is_action_just_pressed("ranged") and can_cast == true:
 		if currentloadout == "fire":
@@ -254,5 +256,7 @@ func _on_casting_cooldown_timeout():
 
 func _on_enemyhitbox_area_entered(area):
 	if area.has_meta("enemy"):
+		
+		velocity += 10 * (global_position - area.global_position)
 		print("oww")
 	
