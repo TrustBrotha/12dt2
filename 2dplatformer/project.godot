@@ -10,7 +10,8 @@ config_version=5
 
 [application]
 
-config/name="2Dplatformer"
+config/name="12DT2MetroidvaniaTest_Thomas_Shaw"
+run/main_scene="res://scenes/testlevel.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 config/icon="res://assets/icon.svg"
 

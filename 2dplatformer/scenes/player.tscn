@@ -15,8 +15,8 @@ size = Vector2(127, 128.26)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s87vr"]
 size = Vector2(139, 134.806)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_t7tvg"]
-size = Vector2(128, 50)
+[sub_resource type="LabelSettings" id="LabelSettings_3yi6h"]
+font_size = 20
 
 [node name="player" type="CharacterBody2D"]
 script = ExtResource("1_sebs5")
@@ -38,6 +38,7 @@ scale = Vector2(1, 1.313)
 shape = SubResource("RectangleShape2D_oac5m")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -500)
 zoom = Vector2(7, 7)
 
 [node name="melee_cooldown" type="Timer" parent="."]
@@ -78,33 +79,42 @@ position = Vector2(-0.5, -84.5)
 scale = Vector2(1, 1.313)
 shape = SubResource("RectangleShape2D_s87vr")
 
-[node name="waterdetection" type="Area2D" parent="."]
-position = Vector2(-1, 4)
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="waterdetection"]
-position = Vector2(1, -26)
-shape = SubResource("RectangleShape2D_t7tvg")
-
 [node name="wallcheckleft" type="RayCast2D" parent="."]
 position = Vector2(0, -10)
 rotation = 1.5708
-target_position = Vector2(0, 120)
+target_position = Vector2(0, 90)
 
 [node name="wallcheckleft2" type="RayCast2D" parent="."]
 position = Vector2(0, -160)
 rotation = 1.5708
-target_position = Vector2(0, 120)
+target_position = Vector2(0, 90)
 
 [node name="wallcheckright" type="RayCast2D" parent="."]
 position = Vector2(0, -10)
 rotation = -1.5708
-target_position = Vector2(0, 120)
+target_position = Vector2(0, 90)
 
 [node name="wallcheckright2" type="RayCast2D" parent="."]
 position = Vector2(0, -160)
 rotation = -1.5708
-target_position = Vector2(0, 120)
+target_position = Vector2(0, 90)
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="healthtemp" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = -65.0
+offset_top = -228.0
+offset_right = 67.0
+offset_bottom = -185.0
+text = "Health: 2000"
+label_settings = SubResource("LabelSettings_3yi6h")
+horizontal_alignment = 1
+vertical_alignment = 2
 
 [connection signal="timeout" from="melee_cooldown" to="." method="_on_melee_cooldown_timeout"]
 [connection signal="timeout" from="is_dashing" to="." method="_on_is_dashing_timeout"]
@@ -113,4 +123,4 @@ target_position = Vector2(0, 120)
 [connection signal="timeout" from="is_casting" to="." method="_on_is_casting_timeout"]
 [connection signal="timeout" from="casting_cooldown" to="." method="_on_casting_cooldown_timeout"]
 [connection signal="area_entered" from="enemyhitbox" to="." method="_on_enemyhitbox_area_entered"]
-[connection signal="area_entered" from="waterdetection" to="." method="_on_waterdetection_area_entered"]
+[connection signal="area_exited" from="enemyhitbox" to="." method="_on_enemyhitbox_area_exited"]

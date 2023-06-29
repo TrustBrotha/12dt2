@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cxg1m1njkwwc5"]
+[gd_scene load_steps=10 format=3 uid="uid://cxg1m1njkwwc5"]
 
 [ext_resource type="Script" path="res://scripts/enemytest.gd" id="1_v6o0j"]
 [ext_resource type="Texture2D" uid="uid://bva6iihufen86" path="res://icon.svg" id="2_ocb4c"]
@@ -11,7 +11,9 @@
 size = Vector2(126, 115)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_finxi"]
-size = Vector2(136, 125)
+size = Vector2(146, 125)
+
+[sub_resource type="LabelSettings" id="LabelSettings_6hqq0"]
 
 [node name="enemytest" type="CharacterBody2D"]
 script = ExtResource("1_v6o0j")
@@ -63,6 +65,23 @@ texture = ExtResource("6_sessg")
 
 [node name="debuff_cooldown" type="Timer" parent="."]
 one_shot = true
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="healthtemp" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = -48.0
+offset_top = -101.0
+offset_right = 49.0
+offset_bottom = -75.0
+text = "Health: 1000"
+label_settings = SubResource("LabelSettings_6hqq0")
+horizontal_alignment = 1
+vertical_alignment = 2
 
 [connection signal="area_entered" from="weaponhitbox" to="." method="_on_area_2d_area_entered"]
 [connection signal="timeout" from="debuff_cooldown" to="." method="_on_debuff_cooldown_timeout"]

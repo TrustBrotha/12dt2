@@ -34,6 +34,7 @@ var currentloadout
 #var sword = sword_scene.instantiate()
 
 func _physics_process(delta):
+	print(movement_state)
 	# Handle Jump.
 	movement_states(delta)
 	basic_movement()
@@ -44,7 +45,6 @@ func _physics_process(delta):
 	healthcheck()
 	
 	move_and_slide()
-	
 
 
 
@@ -56,6 +56,7 @@ func movement_states(delta):
 		movement_state = "wall"
 	
 	if movement_state == "normal":
+		can_dash = true
 		can_move = true
 #		velocity.x = clamp(velocity.x,-maxspeed,maxspeed)
 		
@@ -92,15 +93,20 @@ func movement_states(delta):
 	
 	elif movement_state == "wall":
 		can_move = true
+		can_dash = true
+		if last_direction == -1:
+			velocity.x = clamp(velocity.x,-1*maxspeed,2*maxspeed)
+		elif last_direction == 1:
+			velocity.x = clamp(velocity.x,-2*maxspeed,1*maxspeed)
 		
-		if is_on_wall() and  (Input.is_action_pressed("move_right") or Input.is_action_pressed("move_left")):
-			velocity.y = lerpf(velocity.y,0.0,0.25)
+		if is_on_wall() and (Input.is_action_pressed("move_right") or Input.is_action_pressed("move_left")):
+			velocity.y = int(lerpf(velocity.y,0.0,0.25))
 			
 		if Input.is_action_just_pressed("jump"):
 			if $wallcheckleft.is_colliding() == true or $wallcheckleft2.is_colliding() == true:
 				velocity.x = 2 * maxspeed
 				velocity.y = -1 * jump_force
-			if $wallcheckright.is_colliding() == true or $wallcheckright2.is_colliding() == true:
+			elif $wallcheckright.is_colliding() == true or $wallcheckright2.is_colliding() == true:
 				velocity.x = -2 * maxspeed
 				velocity.y = -1 * jump_force
 				
@@ -114,22 +120,23 @@ func movement_states(delta):
 			if velocity.y > 2000:
 				velocity.y = 2000
 
-
 	elif movement_state == "casting":
+		can_dash = false
 		can_move = false
 		velocity.y = 0
 		velocity.x = 0
 		
 	elif movement_state == "swimming":
+		can_dash = false
 		velocity.x = clamp(velocity.x,(-0.25 *maxspeed),(0.25 *maxspeed))
 		velocity.y = clamp(velocity.y,(-0.25 *maxspeed),(0.25 *maxspeed))
-		can_jump = true
+		can_jump = false
 		if Input.is_action_pressed("up") or Input.is_action_pressed("jump"):
 			velocity.y -= acceleration
 		elif Input.is_action_pressed("down"):
 			velocity.y += acceleration
 		else:
-			velocity.y = lerpf(velocity.y,0.0,0.2)
+			velocity.y = int(lerpf(velocity.y,0.0,0.2))
 
 func basic_movement():
 	# Get the input direction and handle the movement/deceleration.
@@ -141,19 +148,9 @@ func basic_movement():
 			if Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right"):
 				velocity.x += direction * acceleration
 				if movement_state != "wall":
-					if velocity.x >= maxspeed:
-						velocity.x = maxspeed
-					if velocity.x <= -maxspeed:
-						velocity.x = -maxspeed
-				elif movement_state == "wall":
-					if last_direction == -1:
-					
-						velocity.x = clamp(velocity.x,-1*maxspeed,2*maxspeed)
-					elif last_direction == 1:
-						velocity.x = clamp(velocity.x,-2*maxspeed,1*maxspeed)
+					velocity.x = clamp(velocity.x,-maxspeed,maxspeed)
 		else:
-			velocity.x = lerpf(velocity.x,0.0,0.2)
-
+			velocity.x = int(lerpf(velocity.x,0.0,0.2))
 
 func dash():
 	if Input.is_action_just_pressed("dash") and can_dash:
@@ -171,9 +168,9 @@ func double_jump():
 
 func loadout():
 	#selecting loadout position
-	if Input.is_action_just_pressed("loadout_up"):
+	if Input.is_action_just_released("loadout_up"):
 		loadout_selected += 1
-	elif Input.is_action_just_pressed("loadout_down"):
+	elif Input.is_action_just_released("loadout_down"):
 		loadout_selected -= 1
 		
 	if loadout_selected > 3:
@@ -258,15 +255,18 @@ func _on_casting_cooldown_timeout():
 
 func _on_enemyhitbox_area_entered(area):
 	if area.has_meta("enemy"):
-		print(health)
 		velocity.x += 10 * (global_position.x - area.global_position.x)
 		velocity.y += 20 * (global_position.y - area.global_position.y)
 		health -= 100
-		print("oww")
-
-func _on_waterdetection_area_entered(area):
+		if health > 0:
+			get_node("/root/testlevel/player/Control/healthtemp").text = "health: " + str(health)
+		elif health <= 0:
+			get_node("/root/testlevel/player/Control/healthtemp").text = "epic death message"
 	if area.has_meta("waterarea"):
 		movement_state = "swimming"
 
-func _on_water_area_exited(area):
-	movement_state = "normal"
+func _on_enemyhitbox_area_exited(area):
+	if area.has_meta("waterarea"):
+		movement_state = "normal"
+	else:
+		pass

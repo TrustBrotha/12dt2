@@ -1,0 +1,65 @@
+[gd_scene load_steps=6 format=3 uid="uid://bl1hug2vdm8ad"]
+
+[ext_resource type="Script" path="res://scripts/boid.gd" id="1_mg0v1"]
+[ext_resource type="Texture2D" uid="uid://bxlwcer8c4gx0" path="res://pixil-frame-0 (11).png" id="2_a5nkb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0gqwb"]
+radius = 120.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s3b2r"]
+size = Vector2(153.333, 96)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g78yb"]
+size = Vector2(37, 16)
+
+[node name="boid" type="Area2D" groups=["boid"]]
+scale = Vector2(0.15, 0.15)
+script = ExtResource("1_mg0v1")
+metadata/boid = true
+
+[node name="vision" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="vision"]
+visible = false
+shape = SubResource("CircleShape2D_0gqwb")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="vision"]
+visible = false
+polygon = PackedVector2Array(0, -168, 48, -160, 96, -136, 136, -96, 160, -48, 168, 0, 160, 48, 136, 96, 96, 136, 48, 160, 0, 168)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="vision"]
+position = Vector2(43.3333, 0)
+shape = SubResource("RectangleShape2D_s3b2r")
+
+[node name="sprite" type="Polygon2D" parent="."]
+visible = false
+polygon = PackedVector2Array(24, 0, 16, -8, 8, -8, 0, 0, -8, -8, -16, -8, -16, -5, -8, -5, -4, 0, -8, 5, -16, 5, -16, 8, -8, 8, 0, 0, 8, 8, 16, 8)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(2, 1)
+rotation = 1.5708
+scale = Vector2(3, 3)
+texture = ExtResource("2_a5nkb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(3.5, 0)
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_g78yb")
+
+[node name="rayfolder" type="Node2D" parent="."]
+
+[node name="RayCast2D" type="RayCast2D" parent="rayfolder"]
+target_position = Vector2(500, -10)
+
+[node name="RayCast2D2" type="RayCast2D" parent="rayfolder"]
+target_position = Vector2(490, 10)
+
+[node name="RayCast2D3" type="RayCast2D" parent="rayfolder"]
+target_position = Vector2(170, 170)
+
+[node name="RayCast2D4" type="RayCast2D" parent="rayfolder"]
+target_position = Vector2(170, -170)
+
+[connection signal="area_entered" from="vision" to="." method="_on_vision_area_entered"]
+[connection signal="area_exited" from="vision" to="." method="_on_vision_area_exited"]
