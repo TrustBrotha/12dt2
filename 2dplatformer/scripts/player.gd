@@ -6,12 +6,17 @@
 #
 
 extends CharacterBody2D
+@onready var state_machine : CharacterStateMachine = $character_state_machine
+@onready var right_wall_check_folder := $wall_check_folder/right_wall_check_folder.get_children()
+@onready var left_wall_check_folder := $wall_check_folder/left_wall_check_folder.get_children()
+
 @export var firesword_scene: PackedScene
 @export var watersword_scene: PackedScene
 @export var lightningsword_scene: PackedScene
 @export var fireball_scene: PackedScene
 @export var waterball_scene: PackedScene
 @export var lightningball_scene: PackedScene
+
 @export var jump_force = 250.0
 @export var maxspeed = 125
 @export var acceleration = 30
@@ -19,11 +24,8 @@ extends CharacterBody2D
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity") # Get the gravity from the project settings to be synced with RigidBody nodes.
 var movement_state = "normal"
 var last_direction = 1
-var can_move = true
-var can_dash = true 
-var can_jump = true
-var is_wall_jumping = false
-var is_dashing = false
+
+
 var can_melee = true
 var can_cast = true
 var coyote_timer_floor_already_called = false
@@ -31,17 +33,26 @@ var coyote_timer_wall_already_called = false
 var loadout_selected = 1
 var loadouts = ["fire", "water", "lightning"]
 var currentloadout
+
+var near_wall = false
+var near_right_wall = false
+var near_left_wall = false
+
+var can_dash = true 
+var is_dashing_now = false
+
+var coyote_jump = false
+var previous_state = ""
 #var sword = sword_scene.instantiate()
 
 func _physics_process(delta):
-	print(movement_state)
 	# Handle Jump.
-	movement_states(delta)
 	basic_movement()
-	dash()
+	
 	weapon_spawn_location()
 	loadout()
 	abilities()
+	
 	healthcheck()
 	
 	move_and_slide()
@@ -49,88 +60,17 @@ func _physics_process(delta):
 
 
 func movement_states(delta):
-	
-	if is_on_floor() and movement_state != "dash" and movement_state != "swimming":
-		movement_state = "normal"
-	if ($wallcheckleft.is_colliding() == true or $wallcheckright.is_colliding() == true or $wallcheckleft2.is_colliding() == true or $wallcheckright2.is_colliding() == true) and !is_on_floor() and velocity.y > 0 and movement_state != "swimming":
-		movement_state = "wall"
-	
-	if movement_state == "normal":
-		can_dash = true
-		can_move = true
-#		velocity.x = clamp(velocity.x,-maxspeed,maxspeed)
-		
-		if is_on_floor():
-			can_jump = true
-			coyote_timer_floor_already_called = false
-		
-		if !is_on_floor():
-			velocity.y += gravity * delta
-			if velocity.y > 2000:
-				velocity.y = 2000
-			if coyote_timer_floor_already_called == false:
-				if velocity.y >= 0:
-					$coyote_timer_floor.start()
-					coyote_timer_floor_already_called = true  
-				elif velocity.y < 0:
-					can_jump = false
-		
-		if Input.is_action_just_pressed("jump") and can_jump == true:
-			velocity.y = -jump_force
-		if Input.is_action_just_released("jump") and velocity.y < 0:
-			velocity.y /= 2
-	
-	elif movement_state == "dash":
-		#stops movement in either direction while also increasing max x speed
-		can_move = false
-		
-		#no gravity
-		velocity.y = 0
-		
-		#makes hitting wall with dash more responsive
-		if is_on_wall():
-			movement_state = "wall"
-	
-	elif movement_state == "wall":
-		can_move = true
-		can_dash = true
-		if last_direction == -1:
-			velocity.x = clamp(velocity.x,-1*maxspeed,2*maxspeed)
-		elif last_direction == 1:
-			velocity.x = clamp(velocity.x,-2*maxspeed,1*maxspeed)
-		
-		if is_on_wall() and (Input.is_action_pressed("move_right") or Input.is_action_pressed("move_left")):
-			velocity.y = int(lerpf(velocity.y,0.0,0.25))
-			
-		if Input.is_action_just_pressed("jump"):
-			if $wallcheckleft.is_colliding() == true or $wallcheckleft2.is_colliding() == true:
-				velocity.x = 2 * maxspeed
-				velocity.y = -1 * jump_force
-			elif $wallcheckright.is_colliding() == true or $wallcheckright2.is_colliding() == true:
-				velocity.x = -2 * maxspeed
-				velocity.y = -1 * jump_force
-				
-		if Input.is_action_just_released("jump") and velocity.y < 0:
-			velocity.y /= 2
-			velocity.x /= 4
-		
-		#gravity
-		if !is_on_floor():
-			velocity.y += gravity * delta
-			if velocity.y > 2000:
-				velocity.y = 2000
+	if movement_state == "casting":
 
-	elif movement_state == "casting":
-		can_dash = false
-		can_move = false
+#		can_move = false
 		velocity.y = 0
 		velocity.x = 0
 		
 	elif movement_state == "swimming":
-		can_dash = false
+
 		velocity.x = clamp(velocity.x,(-0.25 *maxspeed),(0.25 *maxspeed))
 		velocity.y = clamp(velocity.y,(-0.25 *maxspeed),(0.25 *maxspeed))
-		can_jump = false
+#		can_jump = false
 		if Input.is_action_pressed("up") or Input.is_action_pressed("jump"):
 			velocity.y -= acceleration
 		elif Input.is_action_pressed("down"):
@@ -142,29 +82,19 @@ func basic_movement():
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("move_left", "move_right")
 	
-	if can_move == true:
+	if state_machine.check_if_can_move():
 		if direction:
 			last_direction = direction
 			if Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right"):
 				velocity.x += direction * acceleration
-				if movement_state != "wall":
-					velocity.x = clamp(velocity.x,-maxspeed,maxspeed)
 		else:
 			velocity.x = int(lerpf(velocity.x,0.0,0.2))
 
-func dash():
-	if Input.is_action_just_pressed("dash") and can_dash:
-		movement_state = "dash"
-		$is_dashing.start()
-		velocity.x += last_direction * 400
-		can_dash = false
 
 func weapon_spawn_location():
 	$weapon_spawn.position.x = 85 * last_direction
 	$weapon_spawn.position.y = -75
 
-func double_jump():
-	pass
 
 func loadout():
 	#selecting loadout position
@@ -229,19 +159,19 @@ func ranged_spawning(ball):
 	add_sibling(ball)
 	can_cast = false
 
+
+
 func healthcheck():
 	if health <= 0:
 		pass
 
-func _on_is_dashing_timeout():
-	movement_state = "normal"
-	$dash_cooldown.start()
 
-func _on_dash_cooldown_timeout():
-	can_dash = true
+
+
 
 func _on_coyote_timer_floor_timeout():
-	can_jump = false
+	pass
+#	can_jump = false
 
 func _on_melee_cooldown_timeout():
 	can_melee = true
@@ -255,8 +185,7 @@ func _on_casting_cooldown_timeout():
 
 func _on_enemyhitbox_area_entered(area):
 	if area.has_meta("enemy"):
-		velocity.x += 10 * (global_position.x - area.global_position.x)
-		velocity.y += 20 * (global_position.y - area.global_position.y)
+		velocity += 10 * (global_position - area.global_position)
 		health -= 100
 		if health > 0:
 			get_node("/root/testlevel/player/Control/healthtemp").text = "health: " + str(health)
@@ -270,3 +199,53 @@ func _on_enemyhitbox_area_exited(area):
 		movement_state = "normal"
 	else:
 		pass
+
+
+
+
+func wall_check():
+	var num_of_false_check = 0
+	
+	for check in right_wall_check_folder:
+		var ray : RayCast2D = check
+		if ray.is_colliding():
+			near_wall = true
+			near_right_wall = true
+			break
+		elif !ray.is_colliding():
+			num_of_false_check +=1
+			near_right_wall = false
+	
+	for check in left_wall_check_folder:
+		var ray : RayCast2D = check
+		if ray.is_colliding():
+			near_wall = true
+			near_left_wall = true
+			break
+		elif !ray.is_colliding():
+			num_of_false_check +=1
+			near_left_wall = false
+	
+	if num_of_false_check == 4:
+		near_wall = false
+
+
+func gravity_applying(delta):
+	if !is_on_floor():
+		velocity.y += gravity * delta
+		if velocity.y > 2000:
+			velocity.y = 2000
+
+
+func dash_start():
+	$timers/is_dashing.start()
+
+func _on_is_dashing_timeout():
+	is_dashing_now = false
+
+
+func coyote_time():
+	$timers/coyote_timer.start()
+
+func _on_coyote_timer_timeout():
+	coyote_jump = false
