@@ -12,7 +12,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	
 	boidonscreen = len(boidscreated)
 	if boidonscreen < numofboids:
 		var boid = boid_scene.instantiate()

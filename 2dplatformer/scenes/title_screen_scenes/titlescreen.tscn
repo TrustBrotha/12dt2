@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=3 uid="uid://delu1i6dkw5oo"]
+
+[ext_resource type="Script" path="res://scripts/titlescreen.gd" id="1_1ri3p"]
+[ext_resource type="Texture2D" uid="uid://dnxvrqpgkm3r7" path="res://pixil-frame-0 (10).png" id="2_58v3b"]
+
+[node name="title_sceen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1ri3p")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(61.75, 26.75)
+texture = ExtResource("2_58v3b")
+
+[node name="play" type="Button" parent="."]
+layout_mode = 0
+offset_left = -144.0
+offset_top = -88.0
+offset_right = 144.0
+offset_bottom = -40.0
+text = "play
+"
+
+[node name="settings" type="Button" parent="."]
+layout_mode = 0
+offset_left = -144.0
+offset_top = -24.0
+offset_right = 144.0
+offset_bottom = 24.0
+text = "settings"
+
+[node name="quit" type="Button" parent="."]
+layout_mode = 0
+offset_left = -144.0
+offset_top = 40.0
+offset_right = 144.0
+offset_bottom = 88.0
+text = "quit
+"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[connection signal="pressed" from="play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="settings" to="." method="_on_settings_pressed"]

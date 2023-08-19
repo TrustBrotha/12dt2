@@ -1,0 +1,45 @@
+[gd_scene load_steps=8 format=3 uid="uid://bnp47kw5d6qhb"]
+
+[ext_resource type="Texture2D" uid="uid://c83c1mcv80qdj" path="res://assets/spell_assets/fire_particle.png" id="3_iyftn"]
+[ext_resource type="Texture2D" uid="uid://cy7snttqxhm4" path="res://pixil-frame-0 (9).png" id="3_y3hjw"]
+[ext_resource type="Texture2D" uid="uid://ce3nsg8mnfh1b" path="res://assets/spell_assets/air_particle.png" id="4_4iir4"]
+[ext_resource type="Texture2D" uid="uid://dnxvrqpgkm3r7" path="res://pixil-frame-0 (10).png" id="4_bl8sc"]
+[ext_resource type="Texture2D" uid="uid://2mgp524u01xe" path="res://assets/spell_assets/water_particle_temp.png" id="5_0yvx5"]
+[ext_resource type="Script" path="res://scripts/character/spell_scripts/lightningstream.gd" id="6_hvhjh"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_f8jrt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_y3hjw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_bl8sc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_iyftn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_4iir4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_0yvx5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" groups=["lightning", "stream"]]
+sprite_frames = SubResource("SpriteFrames_f8jrt")
+frame = 1
+frame_progress = 0.158018
+script = ExtResource("6_hvhjh")
+
+[node name="Timer2" type="Timer" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

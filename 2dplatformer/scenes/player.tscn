@@ -1,21 +1,14 @@
-[gd_scene load_steps=20 format=3 uid="uid://b8yxshps1roge"]
+[gd_scene load_steps=12 format=3 uid="uid://c3uvr841yv2l5"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_sebs5"]
 [ext_resource type="Texture2D" uid="uid://bva6iihufen86" path="res://icon.svg" id="2_fa3lw"]
-[ext_resource type="PackedScene" uid="uid://b0m6ij051iod8" path="res://scenes/firesword.tscn" id="2_ppjs1"]
-[ext_resource type="PackedScene" uid="uid://cqphxjpt3moxm" path="res://scenes/fireball.tscn" id="3_angvt"]
-[ext_resource type="PackedScene" uid="uid://d71h112bpicd" path="res://scenes/watersword.tscn" id="3_wjp1s"]
-[ext_resource type="PackedScene" uid="uid://c48fq8g3n3hbx" path="res://scenes/waterball.tscn" id="4_ny7ny"]
-[ext_resource type="PackedScene" uid="uid://c66qy8rgvt65a" path="res://scenes/lightningsword.tscn" id="4_qns8r"]
-[ext_resource type="PackedScene" uid="uid://e2cbsn0reei1" path="res://scenes/lightningball.tscn" id="6_cj6on"]
-[ext_resource type="Script" path="res://scenes/state_debug_label.gd" id="9_a6hj2"]
 [ext_resource type="Script" path="res://scripts/character/state_scripts/character_state_machine.gd" id="9_t3a24"]
+[ext_resource type="Script" path="res://scripts/character/state_scripts/casting_state.gd" id="10_awmiu"]
 [ext_resource type="Script" path="res://scripts/character/state_scripts/ground_state.gd" id="10_bh4mh"]
 [ext_resource type="Script" path="res://scripts/character/state_scripts/air_state.gd" id="11_ri2tl"]
 [ext_resource type="Script" path="res://scripts/character/state_scripts/landing_state.gd" id="12_tmfp4"]
 [ext_resource type="Script" path="res://scripts/character/state_scripts/wall_state.gd" id="14_746o7"]
 [ext_resource type="Script" path="res://scripts/character/state_scripts/dash_state.gd" id="15_mg7lu"]
-[ext_resource type="Script" path="res://scripts/character/state_scripts/casting.gd" id="16_sd5rr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oac5m"]
 size = Vector2(127, 128.26)
@@ -23,17 +16,8 @@ size = Vector2(127, 128.26)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s87vr"]
 size = Vector2(139, 134.806)
 
-[sub_resource type="LabelSettings" id="LabelSettings_3yi6h"]
-font_size = 20
-
 [node name="player" type="CharacterBody2D"]
 script = ExtResource("1_sebs5")
-firesword_scene = ExtResource("2_ppjs1")
-watersword_scene = ExtResource("3_wjp1s")
-lightningsword_scene = ExtResource("4_qns8r")
-fireball_scene = ExtResource("3_angvt")
-waterball_scene = ExtResource("4_ny7ny")
-lightningball_scene = ExtResource("6_cj6on")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -85)
@@ -47,36 +31,35 @@ shape = SubResource("RectangleShape2D_oac5m")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, -76)
-zoom = Vector2(7, 7)
+zoom = Vector2(2, 2)
+limit_smoothed = true
+position_smoothing_enabled = true
+position_smoothing_speed = 15.0
 
 [node name="timers" type="Node" parent="."]
 
 [node name="coyote_timer" type="Timer" parent="timers"]
-wait_time = 0.05
+wait_time = 0.07
 one_shot = true
 
 [node name="is_dashing" type="Timer" parent="timers"]
 wait_time = 0.1
 one_shot = true
 
-[node name="melee_cooldown" type="Timer" parent="."]
-wait_time = 0.3
+[node name="spell_timer" type="Timer" parent="timers"]
 one_shot = true
 
-[node name="weapon_spawn" type="Node2D" parent="."]
+[node name="spell_cooldown" type="Timer" parent="timers"]
+wait_time = 0.2
+one_shot = true
+
+[node name="spell_spawn" type="Node2D" parent="."]
 position = Vector2(85, -75)
 metadata/_edit_group_ = true
 
-[node name="Sprite2D" type="Sprite2D" parent="weapon_spawn"]
+[node name="Sprite2D" type="Sprite2D" parent="spell_spawn"]
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("2_fa3lw")
-
-[node name="is_casting" type="Timer" parent="."]
-wait_time = 0.2
-one_shot = true
-
-[node name="casting_cooldown" type="Timer" parent="."]
-wait_time = 0.2
 
 [node name="enemyhitbox" type="Area2D" parent="."]
 
@@ -111,49 +94,24 @@ target_position = Vector2(0, 80)
 position = Vector2(-135, 0)
 target_position = Vector2(0, 80)
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="healthtemp" type="Label" parent="Control"]
-layout_mode = 0
-offset_left = -65.0
-offset_top = -228.0
-offset_right = 67.0
-offset_bottom = -185.0
-text = "Health: 2000"
-label_settings = SubResource("LabelSettings_3yi6h")
-horizontal_alignment = 1
-vertical_alignment = 2
-
-[node name="state_debug_label" type="Label" parent="Control" node_paths=PackedStringArray("state_machine")]
-layout_mode = 0
-offset_left = -55.0
-offset_top = -240.0
-offset_right = -2.0
-offset_bottom = -214.0
-text = "state = "
-script = ExtResource("9_a6hj2")
-state_machine = NodePath("../../character_state_machine")
-
 [node name="character_state_machine" type="Node" parent="." node_paths=PackedStringArray("character", "current_state")]
 script = ExtResource("9_t3a24")
 character = NodePath("..")
 current_state = NodePath("ground")
 
-[node name="ground" type="Node" parent="character_state_machine" node_paths=PackedStringArray("air_state_var", "dash_state_var")]
+[node name="ground" type="Node" parent="character_state_machine" node_paths=PackedStringArray("air_state_var", "dash_state_var", "casting_state_var")]
 script = ExtResource("10_bh4mh")
 air_state_var = NodePath("../air")
 dash_state_var = NodePath("../dash")
+casting_state_var = NodePath("../casting")
 
-[node name="air" type="Node" parent="character_state_machine" node_paths=PackedStringArray("ground_state_var", "landing_state_var", "wall_state_var", "dash_state_var")]
+[node name="air" type="Node" parent="character_state_machine" node_paths=PackedStringArray("ground_state_var", "landing_state_var", "wall_state_var", "dash_state_var", "casting_state_var")]
 script = ExtResource("11_ri2tl")
 ground_state_var = NodePath("../ground")
 landing_state_var = NodePath("../landing")
 wall_state_var = NodePath("../wall")
 dash_state_var = NodePath("../dash")
+casting_state_var = NodePath("../casting")
 
 [node name="landing" type="Node" parent="character_state_machine"]
 script = ExtResource("12_tmfp4")
@@ -169,14 +127,13 @@ ground_state_var = NodePath("../ground")
 air_state_var = NodePath("../air")
 can_move_state = false
 
-[node name="casting" type="Node" parent="character_state_machine"]
-script = ExtResource("16_sd5rr")
-can_move_state = false
+[node name="casting" type="Node" parent="character_state_machine" node_paths=PackedStringArray("air_state_var")]
+script = ExtResource("10_awmiu")
+air_state_var = NodePath("../air")
 
 [connection signal="timeout" from="timers/coyote_timer" to="." method="_on_coyote_timer_timeout"]
 [connection signal="timeout" from="timers/is_dashing" to="." method="_on_is_dashing_timeout"]
-[connection signal="timeout" from="melee_cooldown" to="." method="_on_melee_cooldown_timeout"]
-[connection signal="timeout" from="is_casting" to="." method="_on_is_casting_timeout"]
-[connection signal="timeout" from="casting_cooldown" to="." method="_on_casting_cooldown_timeout"]
+[connection signal="timeout" from="timers/spell_timer" to="." method="_on_spell_timer_timeout"]
+[connection signal="timeout" from="timers/spell_cooldown" to="." method="_on_spell_cooldown_timeout"]
 [connection signal="area_entered" from="enemyhitbox" to="." method="_on_enemyhitbox_area_entered"]
 [connection signal="area_exited" from="enemyhitbox" to="." method="_on_enemyhitbox_area_exited"]

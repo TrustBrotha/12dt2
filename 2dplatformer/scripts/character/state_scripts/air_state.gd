@@ -8,6 +8,7 @@ class_name air_state
 @export var landing_state_var : State
 @export var wall_state_var : State
 @export var dash_state_var : State
+@export var casting_state_var : State
 
 var max_hori_speed = 125
 var has_double_jumped = false
@@ -32,9 +33,22 @@ func state_input(event : InputEvent):
 		next_state = dash_state_var
 	if(event.is_action_released("jump") and character.velocity.y < 0):
 		character.velocity.y /= 2
+	
+	if(event.is_action_pressed("cast")):
+		if(event.is_action_pressed("spell1")):
+			character.saved_spell_input = "spell1"
+		elif(event.is_action_pressed("spell2")):
+			character.saved_spell_input = "spell2"
+		elif(event.is_action_pressed("spell3")):
+			character.saved_spell_input = "spell3"
+		elif(event.is_action_pressed("spell4")):
+			character.saved_spell_input = "spell4"
+		elif(event.is_action_pressed("spell5")):
+			character.saved_spell_input = "spell5"
+		next_state = casting_state_var
 
 func on_exit():
-	if(next_state == ground_state_var):
+	if(next_state == ground_state_var or next_state == wall_state_var):
 		has_double_jumped = false
 		character.previous_state = "air"
 	

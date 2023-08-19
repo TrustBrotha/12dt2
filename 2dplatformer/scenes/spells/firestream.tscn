@@ -1,0 +1,64 @@
+[gd_scene load_steps=9 format=3 uid="uid://crhdbcr6ru2hh"]
+
+[ext_resource type="Texture2D" uid="uid://c83c1mcv80qdj" path="res://assets/spell_assets/fire_particle.png" id="1_kbugp"]
+[ext_resource type="Script" path="res://scripts/character/spell_scripts/firestream.gd" id="2_s07o3"]
+[ext_resource type="PackedScene" uid="uid://dhtlk54r0jal6" path="res://scenes/spells/collision.tscn" id="3_744sk"]
+
+[sub_resource type="Gradient" id="Gradient_mh12f"]
+offsets = PackedFloat32Array(0, 0.251852, 0.72963, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.909804, 0.802019, 0.263359, 0, 0.796078, 0.559524, 0, 0, 0.603922)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nnbck"]
+gradient = SubResource("Gradient_mh12f")
+
+[sub_resource type="Curve" id="Curve_d5ak7"]
+_data = [Vector2(0, 0.81982), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_824sm"]
+curve = SubResource("Curve_d5ak7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ff5d5"]
+lifetime_randomness = 0.3
+emission_shape = 1
+emission_sphere_radius = 5.0
+particle_flag_disable_z = true
+spread = 4.0
+flatness = 0.5
+gravity = Vector3(0, -30, 0)
+initial_velocity_min = 200.0
+initial_velocity_max = 250.0
+angular_velocity_min = 1.0
+angular_velocity_max = 300.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+radial_accel_min = 100.0
+radial_accel_max = 100.0
+angle_max = 180.0
+scale_curve = SubResource("CurveTexture_824sm")
+color_ramp = SubResource("GradientTexture1D_nnbck")
+collision_mode = 1
+collision_friction = 0.0
+collision_bounce = 0.0
+
+[node name="firestream" type="GPUParticles2D" groups=["fire", "stream"]]
+modulate = Color(1, 1, 1, 0.843137)
+texture_filter = 1
+emitting = false
+amount = 150
+process_material = SubResource("ParticleProcessMaterial_ff5d5")
+texture = ExtResource("1_kbugp")
+randomness = 1.0
+script = ExtResource("2_s07o3")
+collision_scene = ExtResource("3_744sk")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="collision_timer" type="Timer" parent="."]
+wait_time = 0.09
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="collision_timer" to="." method="_on_collision_timer_timeout"]

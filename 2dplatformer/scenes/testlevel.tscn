@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://cls84onv5rykf"]
+[gd_scene load_steps=12 format=3 uid="uid://cls84onv5rykf"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_5gcav"]
 [ext_resource type="Texture2D" uid="uid://b4w7x4i7eliyi" path="res://assets/tilemaptest.png" id="1_h3chm"]
-[ext_resource type="PackedScene" uid="uid://b8yxshps1roge" path="res://scenes/player.tscn" id="2_0j2x7"]
+[ext_resource type="PackedScene" uid="uid://c3uvr841yv2l5" path="res://scenes/player.tscn" id="2_0j2x7"]
 [ext_resource type="PackedScene" uid="uid://bl1hug2vdm8ad" path="res://scenes/boid.tscn" id="2_4o5mx"]
 [ext_resource type="Texture2D" uid="uid://bkfq7sf8gokfd" path="res://assets/pixil-frame-0 (5).png" id="2_hlopq"]
+[ext_resource type="PackedScene" uid="uid://b253jsyqao2rg" path="res://scenes/HUD.tscn" id="6_4vesn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t4pfu"]
 texture = ExtResource("1_h3chm")
@@ -42,6 +43,9 @@ sources/2 = SubResource("TileSetAtlasSource_3xww6")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_we31w"]
 size = Vector2(316, 175)
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_adjxo"]
+polygon = PackedVector2Array(240, -78, 102, -74, 102, -7, 53, -8, 52, 7, -130, 6, -133, -10, -144, -16, -144, -32, -208, -32, -209, -48, -287, -48, -288, -96, -338, -95, -336, -145, -388, -144, -384, 47, 287, 48, 288, -239, 241, -239)
+
 [node name="testlevel" type="Node2D"]
 script = ExtResource("1_5gcav")
 boid_scene = ExtResource("2_4o5mx")
@@ -56,10 +60,6 @@ layer_0/tile_data = PackedInt32Array(65533, 0, 1, 65534, 0, 0, 65535, 0, 0, 0, 0
 [node name="player" parent="." instance=ExtResource("2_0j2x7")]
 position = Vector2(-42, -6)
 scale = Vector2(0.15, 0.15)
-jump_force = 250.0
-maxspeed = 125
-acceleration = 30
-health = 2000
 
 [node name="water" type="Area2D" parent="."]
 metadata/waterarea = true
@@ -67,3 +67,8 @@ metadata/waterarea = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="water"]
 position = Vector2(-556, -54.5)
 shape = SubResource("RectangleShape2D_we31w")
+
+[node name="HUD" parent="." instance=ExtResource("6_4vesn")]
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_adjxo")

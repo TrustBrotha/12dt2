@@ -10,7 +10,7 @@ class_name wall_state
 func state_process(delta):
 	character.wall_check()
 	character.gravity_applying(delta)
-	if(character.near_wall == false and character.is_on_floor()):
+	if(character.is_on_floor()):
 		next_state = ground_state_var
 	if(character.near_wall == false and !character.is_on_floor()):
 		next_state = air_state_var

@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://b253jsyqao2rg"]
+
+[node name="HUD" type="CanvasLayer"]
+
+[node name="spell_charge_bar_folder" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="spell1_charge_bar" type="ProgressBar" parent="spell_charge_bar_folder"]
+offset_left = 48.0
+offset_top = -160.0
+offset_right = 160.0
+offset_bottom = -133.0
+value = 100.0
+
+[node name="spell2_charge_bar" type="ProgressBar" parent="spell_charge_bar_folder"]
+offset_left = 48.0
+offset_top = -120.0
+offset_right = 160.0
+offset_bottom = -93.0
+value = 100.0
+
+[node name="spell3_charge_bar" type="ProgressBar" parent="spell_charge_bar_folder"]
+offset_left = 48.0
+offset_top = -80.0
+offset_right = 160.0
+offset_bottom = -53.0
+value = 100.0
+
+[node name="spell4_charge_bar" type="ProgressBar" parent="spell_charge_bar_folder"]
+offset_left = 48.0
+offset_top = -40.0
+offset_right = 160.0
+offset_bottom = -13.0
+value = 100.0
+
+[node name="spell5_charge_bar" type="ProgressBar" parent="spell_charge_bar_folder"]
+offset_left = 48.0
+offset_right = 160.0
+offset_bottom = 27.0
+value = 100.0
+
+[node name="state_debug_label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "hi
+"

@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://dhtlk54r0jal6"]
+
+[ext_resource type="Script" path="res://scripts/character/spell_scripts/collision.gd" id="1_qaqpf"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g6iwp"]
+radius = 14.0
+
+[node name="collision" type="Area2D"]
+script = ExtResource("1_qaqpf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_g6iwp")
+
+[node name="deletion_timer" type="Timer" parent="."]
+wait_time = 0.9
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="deletion_timer" to="." method="_on_deletion_timer_timeout"]
