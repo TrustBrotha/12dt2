@@ -7,16 +7,27 @@ class_name ground_state
 @export var air_state_var : State
 @export var dash_state_var : State
 @export var casting_state_var : State
+@export var immunity_state_var : State
 
 var max_hori_speed = 125
 var state_can_dash = true
 
 func state_process(delta):
-	
+	if character.moving == true and character.animation_lock == false:
+		character.animated_sprite.play("run")
+	elif character.moving == false and character.animation_lock == false:
+		character.animated_sprite.play("idle")
 	character.gravity_applying(delta)
 	if(!character.is_on_floor()):
 		next_state = air_state_var
 	character.velocity.x = clamp(character.velocity.x,-max_hori_speed,max_hori_speed)
+	
+	if(character.taken_damage == true):
+		next_state = immunity_state_var
+	
+	character.safe_ground_check()
+
+
 
 func on_enter():
 	character.can_dash = true
@@ -24,6 +35,9 @@ func on_enter():
 
 
 func state_input(event : InputEvent):
+	if(event.is_action_pressed("down")):
+		character.position.y += 1
+	
 	if(event.is_action_pressed("jump")):
 		jump()
 	if(event.is_action_pressed("dash") and character.can_dash and state_can_dash):
@@ -45,6 +59,7 @@ func state_input(event : InputEvent):
 func jump():
 	character.velocity.y = -jump_force
 	next_state = air_state_var
+	character.animated_sprite.play("jump")
 
 func on_exit():
 	character.previous_state = "ground"

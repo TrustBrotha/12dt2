@@ -35,10 +35,10 @@ func _process(_delta):
 	colour()
 
 func get_variables():
-	leftmargin = get_node("/root/testlevel/player").position.x - 40
-	rightmargin = get_node("/root/testlevel/player").position.x + 40
-	topmargin = get_node("/root/testlevel/player").position.y - 120
-	bottommargin = get_node("/root/testlevel/player").position.y - 60
+	leftmargin = get_parent().get_node("player").position.x - 40
+	rightmargin = get_parent().get_node("player").position.x + 40
+	topmargin = get_parent().get_node("player").position.y - 100
+	bottommargin = get_parent().get_node("player").position.y - 20
 
 func boid_calc():
 	if len(BoidsCanSee) <= 0:

@@ -18,7 +18,7 @@ func _process(delta):
 #		var boid_spawn_x = randf_range(margin, (screen_size.x - margin))
 #		var boid_spawn_y = randf_range(margin, (screen_size.y - margin))
 		var boid_spawn_x = $player.position.x
-		var boid_spawn_y = $player.position.y - 200
+		var boid_spawn_y = $player.position.y
 		boid.position.x = boid_spawn_x
 		boid.position.y = boid_spawn_y
 		boid.rotation = randf_range(0,2*PI)

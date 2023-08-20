@@ -69,4 +69,9 @@ wait_time = 0.1
 one_shot = true
 autostart = true
 
+[node name="collision_deletion" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
 [connection signal="timeout" from="collision_timer" to="." method="_on_collision_timer_timeout"]
+[connection signal="timeout" from="collision_deletion" to="." method="_on_collision_deletion_timeout"]

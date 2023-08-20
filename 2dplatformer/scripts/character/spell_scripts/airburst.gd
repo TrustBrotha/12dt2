@@ -17,3 +17,8 @@ func _process(delta):
 
 func _on_collision_timer_timeout():
 	$Area2D/CollisionShape2D.disabled = false
+	$collision_deletion.start()
+
+
+func _on_collision_deletion_timeout():
+	$Area2D/CollisionShape2D.disabled = true

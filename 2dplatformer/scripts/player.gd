@@ -10,6 +10,11 @@ extends CharacterBody2D
 @onready var right_wall_check_folder := $wall_check_folder/right_wall_check_folder.get_children()
 @onready var left_wall_check_folder := $wall_check_folder/left_wall_check_folder.get_children()
 @onready var chargerbar_folder = get_parent().get_node("HUD").get_node("spell_charge_bar_folder").get_children()
+@onready var animated_sprite : AnimatedSprite2D = $player_sprite
+@onready var hitbox_collision : CollisionShape2D = $enemyhitbox/hitbox_collision
+@onready var safe_floor_folder := $safe_floor_check_folder.get_children()
+
+
 @export var jump_force = 250.0
 @export var maxspeed = 125
 @export var acceleration = 30
@@ -17,6 +22,12 @@ extends CharacterBody2D
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity") # Get the gravity from the project settings to be synced with RigidBody nodes.
 var movement_state = "normal"
 var last_direction = 1
+var health_change
+var taken_damage = false
+
+var safe_ground = Vector2.ZERO
+var reset_position = false
+var screen_target_opacity = 1
 
 var saved_spell_input
 var equiped_spells = []
@@ -44,23 +55,29 @@ var is_dashing_now = false
 
 var coyote_jump = false
 var previous_state = ""
+
+var moving = false
+var animation_lock = false
+var combo1_called = false
+var combo2_called = false
+var combo3_called = false
 #var sword = sword_scene.instantiate()
 
 func _ready():
 	set_spells()
 
 func _physics_process(delta):
-	
 	HUD_update()
 	basic_movement()
+	sprite_position()
 	healthcheck()
+	screen_effects()
 	move_and_slide()
-
 
 
 func set_spells():
 	var all_spells = ["fireburst", "airburst", "firestream", "waterstream", "lightningstream"]
-	equiped_spells = ["firestream", "airburst", "firestream", "waterstream", "lightningstream"]
+	equiped_spells = ["fireburst", "airburst", "firestream", "waterstream", "lightningstream"]
 
 	spell1 = load("res://scenes/spells/%s.tscn" %equiped_spells[0])
 	spell2 = load("res://scenes/spells/%s.tscn" %equiped_spells[1])
@@ -72,7 +89,7 @@ func set_spells():
 
 func HUD_update():
 	get_parent().get_node("HUD").get_node("state_debug_label").text = "state = " + state_machine.current_state.name
-	
+	get_parent().get_node("HUD").get_node("fps_debug_label").text = "fps = " + str(Engine.get_frames_per_second())
 	
 	for bar in chargerbar_folder:
 #		var bar_temp : ProgressBar = bar
@@ -83,7 +100,6 @@ func HUD_update():
 			bar.show()
 		if bar.value <= 2:
 			cast_released()
-
 	if losing_charge == true:
 		if Input.is_action_pressed("spell1") and charge_lock == "spell1":
 			get_parent().get_node("HUD").get_node("spell_charge_bar_folder").get_node("spell1_charge_bar").value -= saved_spell.charge_decrease
@@ -138,21 +154,44 @@ func cast_released():
 		losing_charge = false
 
 func spell_creation(spell):
-	$spell_spawn.position.x = 200 * last_direction
-	$spell_spawn.position.y = -75
+	$spell_spawn.position.x = 16 * last_direction
+	$spell_spawn.position.y = -16
 	spell.global_position = $spell_spawn.global_position
 	spell.scale.x = last_direction
 	add_sibling(spell)
+	get_parent().move_child(spell,3)
 	created_spells.append(spell)
 	
 	if spell is GPUParticles2D:
 		spell.emitting = true
 	if spell.is_in_group("burst"):
+		can_cast = false
+		if animation_lock == false:
+			animation_lock = true
+			if combo1_called == false:
+				animated_sprite.play("combo1")
+				combo1_called = true
+				$timers/combo_timer.start()
+				
+			elif combo2_called == false and $timers/combo_timer.time_left > 0:
+				animated_sprite.play("combo2")
+				combo2_called = true
+				$timers/combo_timer.start()
+				
+			elif combo3_called == false and $timers/combo_timer.time_left > 0:
+				animated_sprite.play("combo3")
+				combo2_called = false
+				combo1_called = false
+				$timers/combo_timer.stop()
+		
 		$timers/spell_timer.wait_time = spell.deletion_wait_time
 		$timers/spell_timer.start()
-		$timers/spell_cooldown.start()
 		spell_type = "burst"
+
+
 	elif spell.is_in_group("stream"):
+		animated_sprite.play("combo3_start")
+		animation_lock = true
 		spell.hitbox_direction = last_direction
 		saved_spell = spell
 		spell_type = "stream"
@@ -168,25 +207,6 @@ func _on_spell_timer_timeout():
 			created_spells.erase(spell)
 			spell.extension_time = true
 
-
-func _on_spell_cooldown_timeout():
-	can_cast = true
-
-
-
-#func movement_states(delta):
-#	elif movement_state == "swimming":
-#
-#		velocity.x = clamp(velocity.x,(-0.25 *maxspeed),(0.25 *maxspeed))
-#		velocity.y = clamp(velocity.y,(-0.25 *maxspeed),(0.25 *maxspeed))
-##		can_jump = false
-#		if Input.is_action_pressed("up") or Input.is_action_pressed("jump"):
-#			velocity.y -= acceleration
-#		elif Input.is_action_pressed("down"):
-#			velocity.y += acceleration
-#		else:
-#			velocity.y = int(lerpf(velocity.y,0.0,0.2))
-
 func basic_movement():
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("move_left", "move_right")
@@ -196,46 +216,24 @@ func basic_movement():
 			last_direction = direction
 			if Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right"):
 				velocity.x += direction * acceleration
+				moving = true
+		
+		
 		else:
 			velocity.x = int(lerpf(velocity.x,0.0,0.2))
+			moving = false
 
-
-
-
-
-
-
-
-
-func healthcheck():
-	if health <= 0:
-		pass
-
-
-
-
-
-
-
-func _on_enemyhitbox_area_entered(area):
-	if area.has_meta("enemy"):
-		velocity += 10 * (global_position - area.global_position)
-		health -= 100
-		if health > 0:
-			get_node("/root/testlevel/player/Control/healthtemp").text = "health: " + str(health)
-		elif health <= 0:
-			get_node("/root/testlevel/player/Control/healthtemp").text = "epic death message"
-	if area.has_meta("waterarea"):
-		movement_state = "swimming"
-
-func _on_enemyhitbox_area_exited(area):
-	if area.has_meta("waterarea"):
-		movement_state = "normal"
+func sprite_position():
+	$player_sprite.scale.x = -last_direction
+	if last_direction == -1:
+		$player_sprite.position.x = 5
+	elif last_direction == 1:
+		$player_sprite.position.x = -5
+	
+	if $player_sprite.animation == "wall_slide":
+		$player_sprite.position.x -= 3 * last_direction
 	else:
-		pass
-
-
-
+		$player_sprite.position.x -= 0 * last_direction
 
 func wall_check():
 	var num_of_false_check = 0
@@ -264,11 +262,89 @@ func wall_check():
 		near_wall = false
 
 
+func safe_ground_check():
+	var num_of_safe_checks = 0
+	for check in safe_floor_folder:
+		if check.is_colliding():
+			num_of_safe_checks += 1
+		else:
+			pass
+	if num_of_safe_checks == 2:
+		safe_ground = global_position
+
 func gravity_applying(delta):
 	if !is_on_floor():
 		velocity.y += gravity * delta
 		if velocity.y > 2000:
 			velocity.y = 2000
+
+
+
+
+func healthcheck():
+	if get_parent().get_node("HUD").get_node("health_bar").value <= 0:
+		get_tree().change_scene_to_file("res://scenes/title_screen_scenes/titlescreen.tscn")
+
+
+func health_update():
+	if health_change != null:
+		get_parent().get_node("HUD").get_node("health_bar").value += health_change
+
+
+
+
+func _on_enemyhitbox_area_entered(area):
+	if area.is_in_group("enemy") and taken_damage == false:
+		health_change = area.get_parent().damage
+		var knockback = area.get_parent().knockback
+		velocity.x = -last_direction * knockback
+		velocity.y = -knockback
+		taken_damage = true
+		
+		health_update()
+	
+	elif area.is_in_group("environment_threat"):
+		health_change = -10
+		var knockback = 200
+		velocity.x = -last_direction * 2 * knockback
+		velocity.y = -knockback
+		taken_damage = true
+		health_update()
+		reset_position = true
+		
+
+func screen_effects():
+	if reset_position == true:
+		
+		get_parent().get_node("environment_effect").modulate.a = lerpf(get_parent().get_node("environment_effect").modulate.a, screen_target_opacity, 0.3)
+		
+		if get_parent().get_node("environment_effect").modulate.a > 0.3:
+			if safe_ground != null:
+				global_position = safe_ground
+				velocity.x = 0
+				velocity.y = 0
+		if get_parent().get_node("environment_effect").modulate.a > 0.95:
+			screen_target_opacity = 0
+			$timers/screen_effect_timer.start()
+
+func _on_screen_effect_timer_timeout():
+	get_parent().get_node("environment_effect").modulate.a = 0
+	reset_position = false
+	screen_target_opacity = 1
+
+
+func _on_enemyhitbox_area_exited(area):
+	pass
+
+
+
+
+
+
+
+
+#timing checks
+
 
 
 func dash_start():
@@ -277,12 +353,34 @@ func dash_start():
 func _on_is_dashing_timeout():
 	is_dashing_now = false
 
-
 func coyote_time():
 	$timers/coyote_timer.start()
 
 func _on_coyote_timer_timeout():
 	coyote_jump = false
+
+func _on_player_sprite_animation_finished():
+	animation_lock = false
+	if can_cast == false:
+		can_cast = true
+
+func _on_combo_timer_timeout():
+	combo3_called = false
+	combo2_called = false
+	combo1_called = false
+	animation_lock = false
+
+func _on_spell_cooldown_timeout():
+	can_cast = true
+
+
+func _on_immunity_frame_timer_timeout():
+	taken_damage = false
+	collision_layer = 2
+	collision_layer != 4
+	collision_mask = 3
+	if hitbox_collision.disabled == true:
+		hitbox_collision.disabled = false
 
 
 

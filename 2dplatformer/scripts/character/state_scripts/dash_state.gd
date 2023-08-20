@@ -6,11 +6,21 @@ class_name dash_state
 
 # Called when the node enters the scene tree for the first time.
 func on_enter():
+	character.collision_layer = 4
+	character.collision_layer != 2
+	character.collision_mask != 3
+	character.get_node("timers").get_node("immunity_frame_timer").start()
+	character.hitbox_collision.disabled = true
+	
+	character.animation_lock = false
+	character.animated_sprite.play("dash_loop")
 	character.can_dash = false
 	character.is_dashing_now = true
 	character.dash_start()
 
 func on_exit():
+	character.animated_sprite.play("dash_end")
+	character.animation_lock = true
 	character.velocity.x = character.last_direction * character.maxspeed
 	character.previous_state = "dash"
 
