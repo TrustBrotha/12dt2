@@ -2,8 +2,8 @@ extends GPUParticles2D
 var deletion_wait_time = 0.5
 
 #placeholder values
-var knockback = 100
-var damage = 50
+var knockback = 1000
+var damage = 10
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

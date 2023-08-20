@@ -1,8 +1,12 @@
 extends CharacterBody2D
 
 
-const speed = 50.0
+const accel = 10
 const jump_velocity = -400.0
+
+@onready var particle_effect_folder = $paricle_folder.get_children()
+
+
 var speedchange = 1
 var moving = true
 var direction = 1
@@ -10,6 +14,8 @@ var health = 1000
 var debuff = "clear"
 var damage = -10
 var knockback = 300
+var immune = false
+var immunity_frames_called = false
 
 var movement_state = "moving"
 var animation_lock = false
@@ -23,19 +29,21 @@ func _ready():
 
 
 func _physics_process(delta):
+#	print($Control/healthbar.value)
+#	print($AnimatedSprite2D.animation)
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	
-	if health <= 0:
-		queue_free()
-	
+	if $Control/healthbar.value <= 0:
+		$AnimatedSprite2D.play("death")
+		
 	
 	
 	pathfinding()
 	states()
-	
-	
+	immunity()
+	apply_debuffs()
 	move_and_slide()
 
 
@@ -50,9 +58,14 @@ func states():
 	if movement_state == "moving":
 		$raycastwallcheck.enabled = true
 		movement()
-	if movement_state == "attack":
+	elif movement_state == "attack":
 		$raycastwallcheck.enabled = false
 		attack()
+	elif movement_state == "damaged":
+		pass
+#		$raycastwallcheck.enabled = true
+#		movement()
+
 
 
 func movement():
@@ -64,16 +77,16 @@ func movement():
 		$AnimatedSprite2D.play("move")
 		animation_lock = true
 	
-	
-	
-	velocity.x = direction * speed * speedchange
-	
+	velocity.x += direction * accel * speedchange
+	velocity.x = lerpf(velocity.x, 0 , 0.1)
 
 func attack():
 	if attack_timer_called == false:
-		$attack_timer.start()
+		velocity.x = 0
+		$attack_timer.start() 
 		attack_timer_called = true
-	velocity.x += 10 * direction
+	if $attack_timer.time_left <= $attack_timer.wait_time / 2:
+		velocity.x += 40 * direction
 
 func _on_attack_timer_timeout():
 	movement_state = "moving"
@@ -93,66 +106,97 @@ func _on_vision_area_exited(area):
 
 
 
+func immunity():
+	if immune == true and immunity_frames_called == false:
+		immunity_frames_called = true
+		$immunity_frame_timer.start()
+		$hitbox/hitbox_collision.disabled = true
+	elif immune == false:
+		$hitbox/hitbox_collision.disabled = false
 
-
-
-func _on_area_2d_area_entered(area):
-	#note, the effect_tests will be replaced when animated sprites are added, thus the timer will also be removed and changed to on animation end.
+func _on_immunity_frame_timer_timeout():
+	immune = false
+	immunity_frames_called = false
 	
-	pass
+
+
+func _on_hitbox_area_entered(area):
+	if immune == false:
+		if area.is_in_group("stream_collision"):
+			immune = true
+			var spell_scene = area
+			apply_spell(spell_scene)
+			
+		elif area.is_in_group("burst_collision"):
+			immune = true
+			var spell_scene = area.get_parent()
+			apply_spell(spell_scene)
+
+
+func apply_spell(spell_scene):
+	$AnimatedSprite2D.play("damaged")
+	if spell_scene.global_position.x >= global_position.x:
+		velocity.x += -spell_scene.knockback
+	elif spell_scene.global_position.x < global_position.x:
+		velocity.x += spell_scene.knockback
 	
-#	if area.has_meta("weapon"):
-#		health -= 50
-#
-#	if area.has_meta("fire") and debuff == "clear":
-#		$fire_effect_test.visible = true
-#		$debuff_cooldown.start()
-#		debuff = "burning"
-#	elif area.has_meta("water") and debuff == "clear":
-#		$water_effect_test.visible = true
-#		$debuff_cooldown.start()
-#		debuff = "wet"
-#	elif area.has_meta("lightning") and debuff == "clear":
-#		$lightning_effect_test.visible = true
-#		$debuff_cooldown.start()
-#		debuff = "electrocuted"
-#	elif (area.has_meta("fire") and debuff == "wet") or (area.has_meta("water") and debuff == "burning"):
-#		$steam_effect_test.visible = true
-#		$debuff_cooldown.start()
-#		debuff = "steam"
-#	#more combos added here
-#
-#func manage_debuffs():
-#	if debuff == "burning":
-#		health -= 1
-#	elif debuff == "wet":
-#		speedchange = 0.3
-#	elif debuff == "electrocuted":
-#		speedchange = 0.5
-#	elif debuff == "steam":
-#		health -= 100
-#		debuff = "clear"
-#		$fire_effect_test.visible = false
-#		$water_effect_test.visible = false
-#
-#func _on_debuff_cooldown_timeout():
-#	debuff = "clear"
-#	$steam_effect_test.visible = false
-#	$fire_effect_test.visible = false
-#	$water_effect_test.visible = false
-#	$lightning_effect_test.visible = false
-#	speedchange = 1
-#
+	$Control/healthbar.value -= spell_scene.damage
+	
+	if debuff == "clear":
+		if spell_scene.is_in_group("fire"):
+			debuff = "burning"
+			$debuff_cooldown.start()
+		elif spell_scene.is_in_group("water"):
+			debuff = "wet"
+			$debuff_cooldown.start()
+		elif spell_scene.is_in_group("lightning"):
+			debuff = "shocked"
+			$debuff_cooldown.start()
+		elif spell_scene.is_in_group("earth"):
+			debuff = "stunned"
+			$debuff_cooldown.start()
+		elif spell_scene.is_in_group("ice"):
+			debuff = "frozen"
+			$debuff_cooldown.start()
+
+#func damaged():
+	
+	
+
+func apply_debuffs():
+	if debuff != "clear":
+		if debuff == "burning":
+			$Control/healthbar.value -= 0.25
+			$paricle_folder/burning_particles.emitting = true
+		elif debuff == "wet":
+			speedchange = 0.5
+			$paricle_folder/water_particles.emitting = true
+		elif debuff == "shocked":
+			pass
+		elif debuff == "stunned":
+			pass
+		elif debuff == "frozen":
+			pass
 
 
-
-
-
-
-
+func _on_debuff_cooldown_timeout():
+	debuff = "clear"
+	speedchange = 1
+	for effect in particle_effect_folder:
+		if effect.emitting == true:
+			effect.emitting = false
 
 func _on_animated_sprite_2d_animation_finished():
 	animation_lock = false
+	if movement_state == "damaged":
+		movement_state = "moving"
+	if $AnimatedSprite2D.animation == "death":
+		queue_free()
+
+
+
+
+
 
 
 

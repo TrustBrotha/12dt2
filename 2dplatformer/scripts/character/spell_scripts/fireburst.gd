@@ -3,7 +3,7 @@ var deletion_wait_time = 0.6
 
 #placeholder values
 var knockback = 0
-var damage = 50
+var damage = 30
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

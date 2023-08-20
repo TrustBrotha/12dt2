@@ -30,7 +30,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" groups=["lightning", "stream"]]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" groups=["lightning", "spell", "stream"]]
 sprite_frames = SubResource("SpriteFrames_f8jrt")
 frame = 1
 frame_progress = 0.158018

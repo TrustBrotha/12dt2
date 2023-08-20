@@ -1,13 +1,19 @@
-[gd_scene load_steps=22 format=3 uid="uid://cb3rl8rsbwaxm"]
+[gd_scene load_steps=26 format=3 uid="uid://cb3rl8rsbwaxm"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_5xtsh"]
 [ext_resource type="PackedScene" uid="uid://ctyju6sh4srpg" path="res://scenes/player.tscn" id="1_yqmuj"]
 [ext_resource type="Texture2D" uid="uid://fng46ecvpkut" path="res://assets/tileset.png" id="2_11shd"]
 [ext_resource type="PackedScene" uid="uid://bl1hug2vdm8ad" path="res://scenes/boid.tscn" id="2_8615r"]
+[ext_resource type="Texture2D" uid="uid://cls5g7n01p7xx" path="res://assets/background_0.png" id="3_mxbjm"]
 [ext_resource type="Texture2D" uid="uid://bbaxf2bo3aeo5" path="res://assets/thorns_above.png" id="3_svdjc"]
 [ext_resource type="PackedScene" uid="uid://b253jsyqao2rg" path="res://scenes/HUD.tscn" id="3_wuj3e"]
 [ext_resource type="Texture2D" uid="uid://wyrom4gg4ur3" path="res://assets/thorns_below.png" id="4_i4488"]
 [ext_resource type="PackedScene" uid="uid://cxg1m1njkwwc5" path="res://scenes/enemytest.tscn" id="4_otwqv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0uofw"]
+size = Vector2(31, 48)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ie6ct"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m8vos"]
 texture = ExtResource("2_11shd")
@@ -808,6 +814,9 @@ polygon = PackedVector2Array(-325, -85, -245, -85, -245, -117, -197, -117, -196,
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_yl1tr"]
 polygon = PackedVector2Array(230, -255, 233, -248, 236, -326, 313, -325, 316, -357, 333, -356, 333, -373, 363, -372, 364, -389, 485, -388, 485, -374, 515, -373, 516, -357, 534, -355, 533, -340, 549, -340, 548, -309, 567, -307, 565, -292, 583, -293, 580, -260, 617, -259, 613, -214, 632, -210, 630, -200, 661, -198, 661, -180, 710, -179, 710, -164, 747, -162, 747, -437, 216, -412, 210, -246, 234, -247, 233, -247)
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_1nbg7"]
+polygon = PackedVector2Array(420, -189, 508, -189, 509, -147, 494, -146, 493, -83, 483, -83, 482, -117, 468, -117, 468, -148, 451, -148, 451, -164, 436, -163, 436, -179, 419, -179)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jp2ob"]
 size = Vector2(80, 11)
 
@@ -816,6 +825,23 @@ size = Vector2(80, 11)
 [node name="forest_level" type="Node2D"]
 script = ExtResource("1_5xtsh")
 boid_scene = ExtResource("2_8615r")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.462745, 0.462745, 0.462745, 1)
+position = Vector2(223.5, -167)
+scale = Vector2(4.40625, 2.85556)
+texture = ExtResource("3_mxbjm")
+
+[node name="finish" type="Area2D" parent="." groups=["finish_line"]]
+
+[node name="finish_line_collision" type="CollisionShape2D" parent="finish"]
+position = Vector2(720.5, -136)
+shape = SubResource("RectangleShape2D_0uofw")
+
+[node name="Sprite2D" type="Sprite2D" parent="finish"]
+position = Vector2(726.5, -136.5)
+scale = Vector2(21, 51)
+texture = SubResource("PlaceholderTexture2D_ie6ct")
 
 [node name="details" type="TileMap" parent="."]
 texture_filter = 1
@@ -855,6 +881,9 @@ occluder = SubResource("OccluderPolygon2D_6vjd8")
 
 [node name="LightOccluder2D3" type="LightOccluder2D" parent="Node"]
 occluder = SubResource("OccluderPolygon2D_yl1tr")
+
+[node name="LightOccluder2D4" type="LightOccluder2D" parent="Node"]
+occluder = SubResource("OccluderPolygon2D_1nbg7")
 
 [node name="HUD" parent="." instance=ExtResource("3_wuj3e")]
 

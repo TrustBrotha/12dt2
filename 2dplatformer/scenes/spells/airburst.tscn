@@ -45,7 +45,7 @@ collision_bounce = 0.0
 radius = 24.0
 height = 112.0
 
-[node name="airburst" type="GPUParticles2D" groups=["air", "burst"]]
+[node name="airburst" type="GPUParticles2D" groups=["air", "burst", "spell"]]
 texture_filter = 1
 emitting = false
 amount = 100
@@ -56,7 +56,7 @@ one_shot = true
 explosiveness = 1.0
 script = ExtResource("2_tu5o4")
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." groups=["burst_collision"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(56, 0)

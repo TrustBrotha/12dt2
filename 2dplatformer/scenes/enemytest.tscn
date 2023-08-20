@@ -1,8 +1,7 @@
-[gd_scene load_steps=29 format=3 uid="uid://cxg1m1njkwwc5"]
+[gd_scene load_steps=32 format=3 uid="uid://cxg1m1njkwwc5"]
 
 [ext_resource type="Script" path="res://scripts/enemytest.gd" id="1_v6o0j"]
 [ext_resource type="Texture2D" uid="uid://dcrwlaorbp65x" path="res://assets/slime-Sheet.png" id="2_cil7e"]
-[ext_resource type="Texture2D" uid="uid://bva6iihufen86" path="res://icon.svg" id="2_ocb4c"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_imgih"]
 atlas = ExtResource("2_cil7e")
@@ -179,6 +178,44 @@ animations = [{
 "speed": 8.0
 }]
 
+[sub_resource type="Gradient" id="Gradient_1gnb0"]
+offsets = PackedFloat32Array(0, 0.423645, 0.729064, 1)
+colors = PackedColorArray(0.664438, 0.527476, 3.85046e-07, 1, 0.879109, 0.337774, 0, 1, 0.541031, 0.266497, 0.0951971, 0.936219, 0.193154, 0.193154, 0.193154, 0.870588)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_it1ag"]
+gradient = SubResource("Gradient_1gnb0")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ejsgl"]
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_box_extents = Vector3(10, 4, 1)
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 20.0
+gravity = Vector3(0, -50, 0)
+initial_velocity_min = 20.0
+initial_velocity_max = 50.0
+angular_velocity_min = -50.0
+angular_velocity_max = 50.0
+orbit_velocity_min = -0.05
+orbit_velocity_max = 0.05
+angle_min = -360.0
+angle_max = 360.0
+scale_min = 2.0
+scale_max = 3.0
+color_ramp = SubResource("GradientTexture1D_it1ag")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5i283"]
+emission_shape = 3
+emission_box_extents = Vector3(12, 4, 1)
+particle_flag_disable_z = true
+gravity = Vector3(0, 20, 0)
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 2.0
+scale_max = 4.0
+color = Color(0, 0, 1, 1)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ywvyw"]
 size = Vector2(24, 12)
 
@@ -201,9 +238,20 @@ animation = &"attack"
 frame = 4
 frame_progress = 1.0
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-visible = false
-texture = ExtResource("2_ocb4c")
+[node name="paricle_folder" type="Node2D" parent="."]
+
+[node name="burning_particles" type="GPUParticles2D" parent="paricle_folder"]
+position = Vector2(0, -6)
+emitting = false
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_ejsgl")
+lifetime = 0.7
+
+[node name="water_particles" type="GPUParticles2D" parent="paricle_folder"]
+position = Vector2(0, -6)
+emitting = false
+amount = 12
+process_material = SubResource("ParticleProcessMaterial_5i283")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -6)
@@ -221,7 +269,7 @@ target_position = Vector2(-5.76973e-05, 16)
 [node name="hitbox" type="Area2D" parent="." groups=["enemy"]]
 metadata/enemy = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="hitbox"]
+[node name="hitbox_collision" type="CollisionShape2D" parent="hitbox"]
 position = Vector2(0, -6)
 shape = SubResource("RectangleShape2D_finxi")
 
@@ -252,12 +300,19 @@ position = Vector2(26, -9)
 shape = SubResource("RectangleShape2D_26xib")
 
 [node name="attack_timer" type="Timer" parent="."]
-wait_time = 0.4
+wait_time = 0.3
 one_shot = true
 
+[node name="immunity_frame_timer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="Timer" type="Timer" parent="."]
+
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
-[connection signal="area_entered" from="hitbox" to="." method="_on_area_2d_area_entered"]
+[connection signal="area_entered" from="hitbox" to="." method="_on_hitbox_area_entered"]
 [connection signal="timeout" from="debuff_cooldown" to="." method="_on_debuff_cooldown_timeout"]
 [connection signal="area_entered" from="vision" to="." method="_on_vision_area_entered"]
 [connection signal="area_exited" from="vision" to="." method="_on_vision_area_exited"]
 [connection signal="timeout" from="attack_timer" to="." method="_on_attack_timer_timeout"]
+[connection signal="timeout" from="immunity_frame_timer" to="." method="_on_immunity_frame_timer_timeout"]

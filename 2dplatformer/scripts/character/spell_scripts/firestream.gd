@@ -6,7 +6,7 @@ var timer_called = false
 var charge_decrease = 2
 #placeholder values
 var knockback = 0
-var damage = 50
+var damage = 10
 var hitbox_speed = 4
 var hitbox_direction = 1
 
@@ -17,6 +17,9 @@ func _ready():
 	hitbox.rotation = rotation
 	hitbox.speed = hitbox_speed * hitbox_direction
 	hitbox.position = position
+	hitbox.add_to_group("fire")
+	hitbox.damage = damage
+	hitbox.knockback = knockback
 	add_sibling(hitbox)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -35,4 +38,7 @@ func _on_collision_timer_timeout():
 		hitbox.rotation = rotation
 		hitbox.speed = hitbox_speed * hitbox_direction
 		hitbox.position = position
+		hitbox.add_to_group("fire")
+		hitbox.damage = damage
+		hitbox.knockback = knockback
 		add_sibling(hitbox)

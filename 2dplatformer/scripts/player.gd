@@ -159,36 +159,33 @@ func spell_creation(spell):
 	spell.global_position = $spell_spawn.global_position
 	spell.scale.x = last_direction
 	add_sibling(spell)
-	get_parent().move_child(spell,3)
+#	get_parent().move_child(spell,3)
 	created_spells.append(spell)
 	
 	if spell is GPUParticles2D:
 		spell.emitting = true
 	if spell.is_in_group("burst"):
 		can_cast = false
-		if animation_lock == false:
-			animation_lock = true
-			if combo1_called == false:
-				animated_sprite.play("combo1")
-				combo1_called = true
-				$timers/combo_timer.start()
-				
-			elif combo2_called == false and $timers/combo_timer.time_left > 0:
-				animated_sprite.play("combo2")
-				combo2_called = true
-				$timers/combo_timer.start()
-				
-			elif combo3_called == false and $timers/combo_timer.time_left > 0:
-				animated_sprite.play("combo3")
-				combo2_called = false
-				combo1_called = false
-				$timers/combo_timer.stop()
+		animation_lock = true
+		if combo1_called == false:
+			animated_sprite.play("combo1")
+			combo1_called = true
+			$timers/combo_timer.start()
+			
+		elif combo2_called == false and $timers/combo_timer.time_left > 0:
+			animated_sprite.play("combo2")
+			combo2_called = true
+			$timers/combo_timer.start()
+			
+		elif combo3_called == false and $timers/combo_timer.time_left > 0:
+			animated_sprite.play("combo3")
+			combo2_called = false
+			combo1_called = false
+			$timers/combo_timer.stop()
 		
 		$timers/spell_timer.wait_time = spell.deletion_wait_time
 		$timers/spell_timer.start()
 		spell_type = "burst"
-
-
 	elif spell.is_in_group("stream"):
 		animated_sprite.play("combo3_start")
 		animation_lock = true
@@ -312,6 +309,8 @@ func _on_enemyhitbox_area_entered(area):
 		health_update()
 		reset_position = true
 		
+	elif area.is_in_group("finish_line"):
+		get_tree().change_scene_to_file("res://scenes/title_screen_scenes/titlescreen.tscn")
 
 func screen_effects():
 	if reset_position == true:

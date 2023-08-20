@@ -70,7 +70,7 @@ collision_mode = 1
 collision_friction = 0.0
 collision_bounce = 0.0
 
-[node name="waterstream" type="GPUParticles2D" groups=["stream", "water"]]
+[node name="waterstream" type="GPUParticles2D" groups=["spell", "stream", "water"]]
 texture_filter = 1
 emitting = false
 amount = 50

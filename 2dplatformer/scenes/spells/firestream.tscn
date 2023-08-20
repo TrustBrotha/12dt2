@@ -41,7 +41,7 @@ collision_mode = 1
 collision_friction = 0.0
 collision_bounce = 0.0
 
-[node name="firestream" type="GPUParticles2D" groups=["fire", "stream"]]
+[node name="firestream" type="GPUParticles2D" groups=["fire", "spell", "stream"]]
 modulate = Color(1, 1, 1, 0.843137)
 texture_filter = 1
 emitting = false

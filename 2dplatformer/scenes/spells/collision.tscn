@@ -5,7 +5,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_g6iwp"]
 radius = 14.0
 
-[node name="collision" type="Area2D"]
+[node name="collision" type="Area2D" groups=["spell", "stream_collision"]]
 script = ExtResource("1_qaqpf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

@@ -76,5 +76,6 @@ func on_enter():
 		character.coyote_jump = true
 		character.coyote_time()
 	if(character.previous_state == "casting" or character.previous_state == "wall"):
-		if character.animated_sprite.animation != "jump":
+#		if character.animated_sprite.animation != "jump":
+		if character.animation_lock == false:
 			character.animated_sprite.play("fall_start")

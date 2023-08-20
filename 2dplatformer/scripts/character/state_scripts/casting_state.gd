@@ -23,6 +23,7 @@ func state_process(delta):
 		character.velocity.x = 0
 		character.velocity.y = 0
 	if character.spell_type == "burst":
+		
 		if character.is_on_floor():
 			next_state = ground_state_var
 		elif !character.is_on_floor():
