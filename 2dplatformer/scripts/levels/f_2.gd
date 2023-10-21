@@ -8,9 +8,8 @@ var camera_limit_down = 9999999
 var fade_to_black = false
 var fade_from_black = true
 var target_level = "none"
-
-@export var inventory_scene: PackedScene
-
+@export var pickup_scene : PackedScene
+@onready var room_change_areas = $room_changes.get_children()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$player.get_node("Camera2D").position_smoothing_enabled = false
@@ -19,8 +18,18 @@ func _ready():
 		$player.global_position = Vector2(-115,0)
 	elif GlobalVar.last_level == "f3":
 		$player.global_position = Vector2(1096,-88)
+	if "fireburst" not in GlobalVar.discovered_spells:
+		create_pickup()
 	get_node("HUD").get_node("screen_effect").modulate.a = 1
 
+func create_pickup():
+	var pickup = pickup_scene.instantiate()
+	pickup.type = "spell"
+	pickup.unlock = "fireburst"
+	pickup.name = "fireburst"
+	pickup.global_position = Vector2(520,-43)
+	add_child(pickup)
+	move_child(get_node("fireburst"),get_node("walls_floor").get_index())
 
 func _process(delta):
 	$player.get_node("Camera2D").position_smoothing_enabled = true
@@ -58,3 +67,8 @@ func _on_f_2_f_3_area_entered(area):
 		GlobalVar.last_level = "f2"
 		fade_to_black = true
 		target_level = "res://scenes/levels/f_3.tscn"
+
+
+func _on_change_room_timer_timeout():
+	for area in room_change_areas:
+		area.get_node("CollisionShape2D").disabled = false

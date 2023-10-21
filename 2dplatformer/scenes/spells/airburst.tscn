@@ -45,7 +45,7 @@ collision_bounce = 0.0
 radius = 24.0
 height = 112.0
 
-[node name="Node2D" type="Node2D" groups=["air", "burst", "spell"]]
+[node name="airburst" type="Node2D" groups=["air", "burst", "spell"]]
 script = ExtResource("2_tu5o4")
 
 [node name="airburst" type="GPUParticles2D" parent="."]

@@ -32,7 +32,6 @@ func state_process(delta):
 
 func on_enter():
 	character.can_dash = true
-	
 
 
 func state_input(event : InputEvent):
@@ -44,7 +43,7 @@ func state_input(event : InputEvent):
 	
 	if(event.is_action_pressed("jump")):
 		jump()
-	if(event.is_action_pressed("dash") and character.can_dash and state_can_dash):
+	if(event.is_action_pressed("dash") and character.can_dash and state_can_dash and GlobalVar.dash_unlocked):
 		next_state = dash_state_var
 	if(event.is_action_pressed("cast")):
 		if(event.is_action_pressed("spell1")):

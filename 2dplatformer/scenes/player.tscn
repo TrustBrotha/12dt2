@@ -1,9 +1,10 @@
-[gd_scene load_steps=85 format=3 uid="uid://ctyju6sh4srpg"]
+[gd_scene load_steps=86 format=3 uid="uid://ctyju6sh4srpg"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_sebs5"]
 [ext_resource type="PackedScene" uid="uid://cfhwywy2f5fv2" path="res://scenes/UI/spell_selection_scene1.tscn" id="2_0fnwd"]
 [ext_resource type="Texture2D" uid="uid://bva6iihufen86" path="res://icon.svg" id="2_fa3lw"]
 [ext_resource type="Texture2D" uid="uid://bkfiso83i75ca" path="res://assets/sprite_sheet.png" id="2_x8fd7"]
+[ext_resource type="PackedScene" uid="uid://lcvthx42m62s" path="res://scenes/spell_audio.tscn" id="3_n243r"]
 [ext_resource type="Script" path="res://scripts/character/state_scripts/character_state_machine.gd" id="9_t3a24"]
 [ext_resource type="Script" path="res://scripts/character/state_scripts/casting_state.gd" id="10_awmiu"]
 [ext_resource type="Script" path="res://scripts/character/state_scripts/ground_state.gd" id="10_bh4mh"]
@@ -569,12 +570,13 @@ collision_layer = 2
 collision_mask = 15
 script = ExtResource("1_sebs5")
 inventory_scene = ExtResource("2_0fnwd")
+spell_audio_scene = ExtResource("3_n243r")
 
 [node name="player_sprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(5, -15)
 sprite_frames = SubResource("SpriteFrames_jtxed")
-animation = &"jump"
+animation = &"combo3"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 visible = false
@@ -604,10 +606,6 @@ one_shot = true
 wait_time = 0.1
 one_shot = true
 
-[node name="spell_timer" type="Timer" parent="timers"]
-wait_time = 1.11
-one_shot = true
-
 [node name="combo_timer" type="Timer" parent="timers"]
 wait_time = 0.8
 one_shot = true
@@ -622,6 +620,9 @@ one_shot = true
 
 [node name="screen_effect_timer" type="Timer" parent="timers"]
 wait_time = 0.3
+one_shot = true
+
+[node name="can_cast_combo_timer" type="Timer" parent="timers"]
 one_shot = true
 
 [node name="spell_spawn" type="Node2D" parent="."]
@@ -738,10 +739,10 @@ position = Vector2(0, -19)
 [connection signal="animation_finished" from="player_sprite" to="." method="_on_player_sprite_animation_finished"]
 [connection signal="timeout" from="timers/coyote_timer" to="." method="_on_coyote_timer_timeout"]
 [connection signal="timeout" from="timers/is_dashing" to="." method="_on_is_dashing_timeout"]
-[connection signal="timeout" from="timers/spell_timer" to="." method="_on_spell_timer_timeout"]
 [connection signal="timeout" from="timers/combo_timer" to="." method="_on_combo_timer_timeout"]
 [connection signal="timeout" from="timers/spell_cooldown" to="." method="_on_spell_cooldown_timeout"]
 [connection signal="timeout" from="timers/immunity_frame_timer" to="." method="_on_immunity_frame_timer_timeout"]
 [connection signal="timeout" from="timers/screen_effect_timer" to="." method="_on_screen_effect_timer_timeout"]
+[connection signal="timeout" from="timers/can_cast_combo_timer" to="." method="_on_can_cast_combo_timer_timeout"]
 [connection signal="area_entered" from="enemyhitbox" to="." method="_on_enemyhitbox_area_entered"]
 [connection signal="area_exited" from="enemyhitbox" to="." method="_on_enemyhitbox_area_exited"]

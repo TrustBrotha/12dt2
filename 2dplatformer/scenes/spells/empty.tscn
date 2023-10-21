@@ -1,3 +1,6 @@
-[gd_scene format=3 uid="uid://e7v0t88wfanl"]
+[gd_scene load_steps=2 format=3 uid="uid://e7v0t88wfanl"]
 
-[node name="F_start" type="Node2D" groups=["burst", "spell"]]
+[ext_resource type="Script" path="res://scripts/character/spell_scripts/empty.gd" id="1_ocuhg"]
+
+[node name="empty" type="Node2D" groups=["burst", "spell"]]
+script = ExtResource("1_ocuhg")

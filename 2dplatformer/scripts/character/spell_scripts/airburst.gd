@@ -4,7 +4,6 @@ extends Node2D
 var knockback = 500
 var damage = 10
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$airburst.emitting = true

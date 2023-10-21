@@ -2,7 +2,7 @@ extends CanvasLayer
 @onready var spell_type_button_folder := $Control/spell_select_buttons.get_children()
 @onready var spell_button_folder := $Control/spell_buttons.get_children()
 
-var discovered_spells = ["fireburst", "airburst", "firestream", "waterstream"]
+@onready var discovered_spells = []
 
 @onready var selected_spells = GlobalVar.equipped_spells
 
@@ -11,6 +11,7 @@ var spell_listening = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	discovered_spells = GlobalVar.discovered_spells
 	for i in range(len(selected_spells)):
 		var sprite = get_node("Control").get_node("spell_select_buttons").get_node("spell%s" %(i+1)).get_node("spell%s_sprite" %(i+1))
 		sprite.set_texture(load("res://scenes/UI/icons/%s_icon.png" %selected_spells[i]))
@@ -44,17 +45,35 @@ func change_text():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-#	print(selected_spells)
 	if $Control/spell_buttons/airburst.is_hovered():
-		$Control/Label.spell_text = "airburst"
+		if $Control/spell_buttons/airburst.disabled == false:
+			$Control/Label.spell_text = "airburst"
+		else:
+			$Control/Label.spell_text = "undiscovered"
+	
 	elif $Control/spell_buttons/fireburst.is_hovered():
-		$Control/Label.spell_text = "fireburst"
+		if $Control/spell_buttons/fireburst.disabled == false:
+			$Control/Label.spell_text = "fireburst"
+		else:
+			$Control/Label.spell_text = "undiscovered"
+	
 	elif $Control/spell_buttons/waterstream.is_hovered():
-		$Control/Label.spell_text = "waterstream"
+		if $Control/spell_buttons/waterstream.disabled == false:
+			$Control/Label.spell_text = "waterstream"
+		else:
+			$Control/Label.spell_text = "undiscovered"
+	
 	elif $Control/spell_buttons/firestream.is_hovered():
-		$Control/Label.spell_text = "firestream"
+		if $Control/spell_buttons/firestream.disabled == false:
+			$Control/Label.spell_text = "firestream"
+		else:
+			$Control/Label.spell_text = "undiscovered"
+	
 	elif $Control/spell_buttons/lightningstream.is_hovered():
-		$Control/Label.spell_text = "lightningstream"
+		if $Control/spell_buttons/lightningstream.disabled == false:
+			$Control/Label.spell_text = "lightningstream"
+		else:
+			$Control/Label.spell_text = "undiscovered"
 	
 	
 	

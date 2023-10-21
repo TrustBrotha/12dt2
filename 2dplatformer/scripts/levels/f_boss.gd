@@ -9,7 +9,7 @@ var fade_to_black = false
 var fade_from_black = true
 var target_level = "none"
 
-@export var inventory_scene: PackedScene
+@onready var room_change_areas = $room_changes.get_children()
 var zoom = "in"
 var zoom_lock = false
 # Called when the node enters the scene tree for the first time.
@@ -66,7 +66,6 @@ func _process(delta):
 		camera_limit_left = -880
 		camera_limit_right = 415
 		$player.camera_update()
-	print(zoom_lock)
 
 
 func _on_fboss_f_4_area_entered(area):
@@ -81,3 +80,8 @@ func _on_fboss_ffinal_area_entered(area):
 		GlobalVar.last_level = "fboss"
 		fade_to_black = true
 		target_level = "res://scenes/levels/f_final.tscn"
+
+
+func _on_change_room_timer_timeout():
+	for area in room_change_areas:
+		area.get_node("CollisionShape2D").disabled = false

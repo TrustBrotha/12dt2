@@ -9,7 +9,7 @@ var fade_to_black = false
 var fade_from_black = true
 var target_level = "none"
 @onready var room_change_areas = $room_changes.get_children()
-@export var inventory_scene: PackedScene
+@export var pickup_scene : PackedScene
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -19,8 +19,18 @@ func _ready():
 		$player.global_position = Vector2(40,0)
 	elif GlobalVar.last_level == "flarge":
 		$player.global_position = Vector2(192,0)
+	if "firestream" not in GlobalVar.discovered_spells:
+		create_pickup()
 	get_node("HUD").get_node("screen_effect").modulate.a = 1
-
+	
+func create_pickup():
+	var pickup = pickup_scene.instantiate()
+	pickup.type = "spell"
+	pickup.unlock = "firestream"
+	pickup.name = "firestream"
+	pickup.global_position = Vector2(-470,-30)
+	add_child(pickup)
+	move_child(get_node("firestream"),get_node("walls_floor").get_index())
 
 func _process(delta):
 	$player.get_node("Camera2D").position_smoothing_enabled = true

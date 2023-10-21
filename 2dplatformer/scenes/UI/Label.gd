@@ -13,7 +13,9 @@ func _process(delta):
 
 func change_text():
 	if spell_text == "clear":
-		text = "spell description"
+		text = "Spell description"
+	if spell_text == "undiscovered":
+		text = "Spell undiscovered"
 	elif spell_text == "airburst":
 		text = "Air Burst \n\nProduces a burst of air \nwhich pushes enemies away with \na mediocre amount of force \n\nPushes"
 	elif spell_text == "fireburst":

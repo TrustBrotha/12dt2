@@ -20,7 +20,7 @@ func state_process(delta):
 	
 	character.wall_check()
 	
-	if(character.near_wall == true and character.velocity.y > 0):
+	if(character.near_wall == true and character.velocity.y > 0 and GlobalVar.wall_jump_unlocked):
 		next_state = wall_state_var
 	
 	character.gravity_applying(delta)
@@ -39,7 +39,7 @@ func state_input(event : InputEvent):
 			character.velocity.y = -coyote_jump_force
 			character.animated_sprite.play("jump")
 	
-	if(event.is_action_pressed("dash") and character.can_dash):
+	if(event.is_action_pressed("dash") and character.can_dash and GlobalVar.dash_unlocked):
 		next_state = dash_state_var
 	if(event.is_action_released("jump") and character.velocity.y < 0):
 		character.velocity.y /= 2
@@ -64,10 +64,11 @@ func on_exit():
 	
 
 func double_jump():
-	character.velocity.y = -double_jump_force
-	has_double_jumped = true
-	character.animated_sprite.stop()
-	character.animated_sprite.play("jump")
+	if GlobalVar.double_jump_unlocked:
+		character.velocity.y = -double_jump_force
+		has_double_jumped = true
+		character.animated_sprite.stop()
+		character.animated_sprite.play("jump")
 
 func on_enter():
 	if(character.previous_state == "ground" and character.velocity.y >0):

@@ -5,7 +5,7 @@ extends State
 var knockback = 200
 
 func on_enter():
-	character.velocity.x = -character.last_direction * character.knockback
+	character.velocity.x = character.knockback_direction * character.knockback
 	character.velocity.y = -1.5 * character.knockback
 	
 	

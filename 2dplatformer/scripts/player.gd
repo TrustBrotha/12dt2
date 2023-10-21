@@ -15,6 +15,7 @@ extends CharacterBody2D
 @onready var safe_floor_folder := $safe_floor_check_folder.get_children()
 
 @export var inventory_scene : PackedScene
+@export var spell_audio_scene : PackedScene
 
 @export var jump_force = 250.0
 @export var maxspeed = 125
@@ -26,6 +27,7 @@ var last_direction = 1
 var health_change
 var taken_damage = false
 var knockback
+var knockback_direction = 1
 
 var safe_ground = Vector2.ZERO
 var reset_position = false
@@ -88,7 +90,6 @@ func _physics_process(delta):
 
 
 func set_spells():
-	var all_spells = ["fireburst", "airburst", "firestream", "waterstream", "lightningstream"]
 	equiped_spells = GlobalVar.equipped_spells
 
 	spell1 = load("res://scenes/spells/%s.tscn" %equiped_spells[0])
@@ -156,14 +157,21 @@ func cast_released():
 	
 	elif saved_spell.is_in_group("stream"):
 		saved_spell.emit = false
-		$timers/spell_timer.start()
 		$timers/spell_cooldown.start()
+		get_node("stream_sound").queue_free()
 		saved_spell = null
 		losing_charge = false
 		exit_cast = true
 
 
 func spell_creation(spell):
+	if spell.name != "empty":
+		var spell_audio_player = spell_audio_scene.instantiate()
+		
+		spell_audio_player.stream = load("res://assets/sounds/%s_sound.mp3"%spell.name)
+		if spell.is_in_group("stream"):
+			spell_audio_player.name = "stream_sound"
+		add_child(spell_audio_player)
 	$spell_spawn.position.x = 16 * last_direction
 	$spell_spawn.position.y = -16
 	spell.global_position = $spell_spawn.global_position
@@ -176,21 +184,25 @@ func spell_creation(spell):
 		animation_lock = true
 		if combo1_called == false:
 			animated_sprite.play("combo1")
+			$timers/can_cast_combo_timer.wait_time = 0.42
+			$timers/can_cast_combo_timer.start()
 			combo1_called = true
 			$timers/combo_timer.start()
 
 		elif combo2_called == false and $timers/combo_timer.time_left > 0:
 			animated_sprite.play("combo2")
+			$timers/can_cast_combo_timer.wait_time = 0.5
+			$timers/can_cast_combo_timer.start()
 			combo2_called = true
 			$timers/combo_timer.start()
 
 		elif combo3_called == false and $timers/combo_timer.time_left > 0:
 			animated_sprite.play("combo3")
+			$timers/can_cast_combo_timer.wait_time = 0.66667
+			$timers/can_cast_combo_timer.start()
 			combo2_called = false
 			combo1_called = false
 			$timers/combo_timer.stop()
-
-		$timers/spell_timer.start()
 		spell_type = "burst"
 	elif spell.is_in_group("stream"):
 		animated_sprite.play("combo3_start")
@@ -200,15 +212,6 @@ func spell_creation(spell):
 		spell_type = "stream"
 		losing_charge = true
 
-func _on_spell_timer_timeout():
-	for spell in created_spells:
-		if spell.is_in_group("burst"):
-			spell.queue_free()
-			created_spells.erase(spell)
-
-		elif spell.is_in_group("stream"):
-			created_spells.erase(spell)
-			spell.extension_time = true
 
 func basic_movement():
 	# Get the input direction and handle the movement/deceleration.
@@ -303,7 +306,10 @@ func _on_enemyhitbox_area_entered(area):
 	if area.is_in_group("enemy") and taken_damage == false:
 		health_change = area.get_parent().damage
 		knockback = area.get_parent().knockback
-		
+		if area.global_position.x < global_position.x:
+			knockback_direction = 1
+		elif area.global_position.x >= global_position.x:
+			knockback_direction = -1
 		taken_damage = true
 		
 		health_update()
@@ -317,7 +323,10 @@ func _on_enemyhitbox_area_entered(area):
 		health_update()
 		reset_position = true
 		
-	
+	elif area.is_in_group("updraft"):
+		velocity.y = -1100
+		$player_sprite.play("fall_start")
+		animation_lock = true
 
 func screen_effects():
 	if reset_position == true:
@@ -366,8 +375,7 @@ func _on_coyote_timer_timeout():
 
 func _on_player_sprite_animation_finished():
 	animation_lock = false
-	if can_cast == false:
-		can_cast = true
+	
 
 func _on_combo_timer_timeout():
 	combo3_called = false
@@ -391,3 +399,6 @@ func _on_immunity_frame_timer_timeout():
 
 
 
+func _on_can_cast_combo_timer_timeout():
+	if can_cast == false:
+		can_cast = true

@@ -33,7 +33,7 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_e1bmj"]
 radius = 17.8885
 
-[node name="Node2D" type="Node2D" groups=["lightning", "spell", "stream"]]
+[node name="lightningstream" type="Node2D" groups=["lightning", "spell", "stream"]]
 script = ExtResource("6_hvhjh")
 
 [node name="Timer" type="Timer" parent="."]

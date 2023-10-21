@@ -95,7 +95,6 @@ texture_under = ExtResource("2_5albg")
 texture_progress = ExtResource("3_o452j")
 
 [node name="state_debug_label" type="Label" parent="."]
-visible = false
 offset_left = 296.0
 offset_top = 576.0
 offset_right = 349.0
@@ -104,7 +103,6 @@ text = "state =
 "
 
 [node name="fps_debug_label" type="Label" parent="."]
-visible = false
 offset_left = 304.0
 offset_top = 544.0
 offset_right = 344.0

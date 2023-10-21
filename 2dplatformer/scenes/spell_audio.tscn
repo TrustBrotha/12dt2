@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://lcvthx42m62s"]
+
+[ext_resource type="Script" path="res://scripts/spell_audio.gd" id="1_dn2kw"]
+
+[node name="spell_audio" type="AudioStreamPlayer2D"]
+script = ExtResource("1_dn2kw")
+
+[connection signal="finished" from="." to="." method="_on_finished"]

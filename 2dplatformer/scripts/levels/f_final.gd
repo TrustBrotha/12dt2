@@ -9,8 +9,7 @@ var fade_to_black = false
 var fade_from_black = true
 var target_level = "none"
 
-@export var inventory_scene: PackedScene
-
+@onready var room_change_areas = $room_changes.get_children()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$player.get_node("Camera2D").position_smoothing_enabled = false
@@ -49,3 +48,8 @@ func _on_ffinal_titlescreen_area_entered(area):
 		GlobalVar.last_level = "ffinal"
 		fade_to_black = true
 		target_level = "res://scenes/title_screen_scenes/titlescreen.tscn"
+
+
+func _on_change_room_timer_timeout():
+	for area in room_change_areas:
+		area.get_node("CollisionShape2D").disabled = false

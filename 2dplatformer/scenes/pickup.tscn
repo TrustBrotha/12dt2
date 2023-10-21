@@ -1,0 +1,134 @@
+[gd_scene load_steps=12 format=3 uid="uid://dlr7melo270ua"]
+
+[ext_resource type="Script" path="res://scripts/pickup.gd" id="1_s57n7"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_f1ixy"]
+lifetime_randomness = 0.3
+emission_shape = 1
+emission_sphere_radius = 5.0
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 90.0
+gravity = Vector3(0, 98, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 120.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 2.0
+scale_max = 4.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fhs0e"]
+lifetime_randomness = 0.25
+emission_shape = 1
+emission_sphere_radius = 10.0
+particle_flag_disable_z = true
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 40.0
+initial_velocity_max = 40.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+tangential_accel_min = -100.0
+tangential_accel_max = 100.0
+scale_min = 2.0
+scale_max = 4.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yvppe"]
+lifetime_randomness = 0.25
+emission_shape = 1
+emission_sphere_radius = 10.0
+particle_flag_disable_z = true
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 40.0
+initial_velocity_max = 40.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+tangential_accel_min = -30.0
+tangential_accel_max = 30.0
+scale_min = 2.0
+scale_max = 4.0
+
+[sub_resource type="Gradient" id="Gradient_8ueuv"]
+offsets = PackedFloat32Array(0, 0.635193, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_xkea5"]
+gradient = SubResource("Gradient_8ueuv")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_u3qwu"]
+offsets = PackedFloat32Array(0, 0.549356, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ranh1"]
+gradient = SubResource("Gradient_u3qwu")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_hmgie"]
+offsets = PackedFloat32Array(0, 0.433476, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_aetkb"]
+gradient = SubResource("Gradient_hmgie")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ls47k"]
+radius = 10.0499
+
+[node name="pickup" type="Node2D"]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_s57n7")
+
+[node name="GPUParticles2D3" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 15
+process_material = SubResource("ParticleProcessMaterial_f1ixy")
+lifetime = 0.6
+one_shot = true
+explosiveness = 1.0
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_fhs0e")
+
+[node name="GPUParticles2D2" type="GPUParticles2D" parent="."]
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_yvppe")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+texture_filter = 1
+position = Vector2(0.5, -0.5)
+scale = Vector2(2, 2)
+texture = SubResource("GradientTexture2D_xkea5")
+
+[node name="PointLight2D2" type="PointLight2D" parent="."]
+texture_filter = 1
+scale = Vector2(2, 2)
+texture = SubResource("GradientTexture2D_ranh1")
+
+[node name="PointLight2D3" type="PointLight2D" parent="."]
+texture_filter = 1
+scale = Vector2(2, 2)
+texture = SubResource("GradientTexture2D_aetkb")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(5, 5)
+
+[node name="deletion_timer" type="Timer" parent="."]
+
+[node name="Area2D" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_ls47k")
+
+[connection signal="timeout" from="deletion_timer" to="." method="_on_deletion_timer_timeout"]
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

@@ -38,7 +38,7 @@ func state_input(event : InputEvent):
 	if(event.is_action_released("jump") and character.velocity.y < 0):
 		character.velocity.y /= 2
 		character.velocity.x /= 2
-	if(event.is_action_pressed("dash")):
+	if(event.is_action_pressed("dash") and GlobalVar.dash_unlocked):
 		next_state = dash_state_var
 
 func on_exit():
