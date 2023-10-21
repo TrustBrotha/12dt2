@@ -1,0 +1,172 @@
+[gd_scene load_steps=9 format=3 uid="uid://cfhwywy2f5fv2"]
+
+[ext_resource type="Script" path="res://scenes/UI/spell_selection_scene1.gd" id="1_cytnc"]
+[ext_resource type="Texture2D" uid="uid://b7xn4t4ipqkwn" path="res://scenes/UI/icons/airburst_icon.png" id="2_1x2gn"]
+[ext_resource type="Texture2D" uid="uid://c0vrsr15kh4kj" path="res://scenes/UI/icons/firestream_icon.png" id="2_5n46m"]
+[ext_resource type="Script" path="res://scenes/UI/Label.gd" id="2_gohyj"]
+[ext_resource type="Texture2D" uid="uid://m7m8cu4meb0u" path="res://scenes/UI/icons/fireburst_icon.png" id="2_qrvll"]
+[ext_resource type="Texture2D" uid="uid://cjylgblaahhky" path="res://scenes/UI/icons/waterstream_icon.png" id="4_1ij27"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bjxp3"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_pa4af"]
+
+[node name="spell_selection_page" type="CanvasLayer"]
+script = ExtResource("1_cytnc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 0.0784314)
+position = Vector2(642.5, 352.5)
+scale = Vector2(1435, 805)
+texture = SubResource("PlaceholderTexture2D_bjxp3")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="spell_select_buttons" type="Node" parent="Control"]
+
+[node name="spell1" type="Button" parent="Control/spell_select_buttons"]
+offset_left = 200.0
+offset_top = 75.0
+offset_right = 300.0
+offset_bottom = 175.0
+
+[node name="spell1_sprite" type="Sprite2D" parent="Control/spell_select_buttons/spell1"]
+
+[node name="spell2" type="Button" parent="Control/spell_select_buttons"]
+offset_left = 325.0
+offset_top = 75.0
+offset_right = 425.0
+offset_bottom = 175.0
+
+[node name="spell2_sprite" type="Sprite2D" parent="Control/spell_select_buttons/spell2"]
+
+[node name="spell3" type="Button" parent="Control/spell_select_buttons"]
+offset_left = 450.0
+offset_top = 75.0
+offset_right = 550.0
+offset_bottom = 175.0
+
+[node name="spell3_sprite" type="Sprite2D" parent="Control/spell_select_buttons/spell3"]
+
+[node name="spell4" type="Button" parent="Control/spell_select_buttons"]
+offset_left = 575.0
+offset_top = 75.0
+offset_right = 675.0
+offset_bottom = 175.0
+
+[node name="spell4_sprite" type="Sprite2D" parent="Control/spell_select_buttons/spell4"]
+
+[node name="spell5" type="Button" parent="Control/spell_select_buttons"]
+offset_left = 700.0
+offset_top = 75.0
+offset_right = 800.0
+offset_bottom = 175.0
+
+[node name="spell5_sprite" type="Sprite2D" parent="Control/spell_select_buttons/spell5"]
+
+[node name="spell_buttons" type="Node" parent="Control"]
+
+[node name="airburst" type="Button" parent="Control/spell_buttons"]
+visible = false
+offset_left = 100.0
+offset_top = 75.0
+offset_right = 200.0
+offset_bottom = 175.0
+disabled = true
+
+[node name="icon" type="Sprite2D" parent="Control/spell_buttons/airburst"]
+texture_filter = 1
+position = Vector2(50, 50)
+scale = Vector2(3, 3)
+texture = ExtResource("2_1x2gn")
+
+[node name="firestream" type="Button" parent="Control/spell_buttons"]
+visible = false
+offset_left = 225.0
+offset_top = 75.0
+offset_right = 325.0
+offset_bottom = 175.0
+disabled = true
+
+[node name="icon" type="Sprite2D" parent="Control/spell_buttons/firestream"]
+texture_filter = 1
+position = Vector2(50, 50)
+scale = Vector2(3, 3)
+texture = ExtResource("2_5n46m")
+
+[node name="airstream" type="Button" parent="Control/spell_buttons"]
+visible = false
+offset_left = 350.0
+offset_top = 75.0
+offset_right = 450.0
+offset_bottom = 175.0
+disabled = true
+
+[node name="waterstream" type="Button" parent="Control/spell_buttons"]
+visible = false
+offset_left = 475.0
+offset_top = 75.0
+offset_right = 575.0
+offset_bottom = 175.0
+disabled = true
+
+[node name="icon" type="Sprite2D" parent="Control/spell_buttons/waterstream"]
+texture_filter = 1
+position = Vector2(50, 50)
+scale = Vector2(3, 3)
+texture = ExtResource("4_1ij27")
+
+[node name="fireburst" type="Button" parent="Control/spell_buttons"]
+visible = false
+offset_left = 600.0
+offset_top = 75.0
+offset_right = 700.0
+offset_bottom = 175.0
+disabled = true
+
+[node name="icon" type="Sprite2D" parent="Control/spell_buttons/fireburst"]
+texture_filter = 1
+position = Vector2(50, 50)
+scale = Vector2(3, 3)
+texture = ExtResource("2_qrvll")
+
+[node name="lightningstream" type="Button" parent="Control/spell_buttons"]
+visible = false
+offset_left = 100.0
+offset_top = 200.0
+offset_right = 200.0
+offset_bottom = 300.0
+disabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Control"]
+visible = false
+modulate = Color(0, 0, 0, 0.211765)
+position = Vector2(1048.63, 261.25)
+scale = Vector2(324.75, 413.5)
+texture = SubResource("PlaceholderTexture2D_pa4af")
+
+[node name="Label" type="Label" parent="Control"]
+visible = false
+layout_mode = 0
+offset_left = 900.0
+offset_top = 60.0
+offset_right = 1200.0
+offset_bottom = 460.0
+text = "spell description"
+script = ExtResource("2_gohyj")
+
+[connection signal="pressed" from="Control/spell_select_buttons/spell1" to="." method="_on_spell_1_pressed"]
+[connection signal="pressed" from="Control/spell_select_buttons/spell2" to="." method="_on_spell_2_pressed"]
+[connection signal="pressed" from="Control/spell_select_buttons/spell3" to="." method="_on_spell_3_pressed"]
+[connection signal="pressed" from="Control/spell_select_buttons/spell4" to="." method="_on_spell_4_pressed"]
+[connection signal="pressed" from="Control/spell_select_buttons/spell5" to="." method="_on_spell_5_pressed"]
+[connection signal="pressed" from="Control/spell_buttons/airburst" to="." method="_on_airburst_pressed"]
+[connection signal="pressed" from="Control/spell_buttons/firestream" to="." method="_on_firestream_pressed"]
+[connection signal="pressed" from="Control/spell_buttons/airstream" to="." method="_on_airstream_pressed"]
+[connection signal="pressed" from="Control/spell_buttons/waterstream" to="." method="_on_waterstream_pressed"]
+[connection signal="pressed" from="Control/spell_buttons/fireburst" to="." method="_on_fireburst_pressed"]
+[connection signal="pressed" from="Control/spell_buttons/lightningstream" to="." method="_on_lightningstream_pressed"]

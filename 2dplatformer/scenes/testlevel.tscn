@@ -5,13 +5,20 @@
 [ext_resource type="PackedScene" uid="uid://ctyju6sh4srpg" path="res://scenes/player.tscn" id="2_0j2x7"]
 [ext_resource type="PackedScene" uid="uid://bl1hug2vdm8ad" path="res://scenes/boid.tscn" id="2_4o5mx"]
 [ext_resource type="Texture2D" uid="uid://bkfq7sf8gokfd" path="res://assets/pixil-frame-0 (5).png" id="2_hlopq"]
-[ext_resource type="Texture2D" uid="uid://h7n72nd00eor" path="res://assets/parallax_forest/parallax-00.png" id="3_by7if"]
-[ext_resource type="Texture2D" uid="uid://ca5oltxjlfmy5" path="res://assets/parallax_forest/parallax-01.png" id="4_yqpvf"]
-[ext_resource type="Texture2D" uid="uid://cai3w03lg1emd" path="res://assets/parallax_forest/parallax-02.png" id="5_cn4b3"]
 [ext_resource type="PackedScene" uid="uid://b253jsyqao2rg" path="res://scenes/HUD.tscn" id="6_4vesn"]
-[ext_resource type="Texture2D" uid="uid://c3u78pja6btjw" path="res://assets/parallax_forest/parallax-03.png" id="6_esj2q"]
 [ext_resource type="PackedScene" uid="uid://cxg1m1njkwwc5" path="res://scenes/enemytest.tscn" id="7_1dhqh"]
-[ext_resource type="Texture2D" uid="uid://xmgm3ug8ooke" path="res://assets/parallax_forest/parallax-04.png" id="12_vwgi2"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0cvk2"]
+load_path = "res://.godot/imported/parallax-00.png-434db6e8586d38234635656670ad51f2.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_42tek"]
+load_path = "res://.godot/imported/parallax-01.png-5c9ff97876b1dd90bfeb692ad1c11a88.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tuoqn"]
+load_path = "res://.godot/imported/parallax-02.png-c1afbc8f6269ce943060aad84ec66f2f.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_gw5hs"]
+load_path = "res://.godot/imported/parallax-03.png-48f99c08ab5a588d11a7a35ca3e9cb81.ctex"
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t4pfu"]
 texture = ExtResource("1_h3chm")
@@ -53,6 +60,9 @@ size = Vector2(316, 175)
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_adjxo"]
 polygon = PackedVector2Array(240, -78, 102, -74, 102, -7, 53, -8, 52, 7, -130, 6, -133, -10, -144, -16, -144, -32, -208, -32, -209, -48, -287, -48, -288, -96, -338, -95, -336, -145, -388, -144, -384, 47, 287, 48, 288, -239, 241, -239)
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_11dqt"]
+load_path = "res://.godot/imported/parallax-04.png-c590e6a45a313f6b9fbd44570e565837.ctex"
+
 [node name="testlevel" type="Node2D"]
 script = ExtResource("1_5gcav")
 boid_scene = ExtResource("2_4o5mx")
@@ -67,7 +77,7 @@ motion_mirroring = Vector2(1440, 360)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
 texture_filter = 1
-texture = ExtResource("3_by7if")
+texture = SubResource("CompressedTexture2D_0cvk2")
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_scale = Vector2(0, 1)
@@ -75,7 +85,7 @@ motion_mirroring = Vector2(1440, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2"]
 texture_filter = 1
-texture = ExtResource("4_yqpvf")
+texture = SubResource("CompressedTexture2D_42tek")
 
 [node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_scale = Vector2(0.15, 1)
@@ -83,7 +93,7 @@ motion_mirroring = Vector2(1440, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3"]
 texture_filter = 1
-texture = ExtResource("5_cn4b3")
+texture = SubResource("CompressedTexture2D_tuoqn")
 
 [node name="ParallaxLayer4" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_scale = Vector2(0.2, 1)
@@ -92,7 +102,7 @@ motion_mirroring = Vector2(1440, 0)
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer4"]
 texture_filter = 1
 position = Vector2(0, -1)
-texture = ExtResource("6_esj2q")
+texture = SubResource("CompressedTexture2D_gw5hs")
 
 [node name="player" parent="." instance=ExtResource("2_0j2x7")]
 position = Vector2(-37, 1)
@@ -130,4 +140,4 @@ motion_mirroring = Vector2(1440, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer5"]
 texture_filter = 1
-texture = ExtResource("12_vwgi2")
+texture = SubResource("CompressedTexture2D_11dqt")

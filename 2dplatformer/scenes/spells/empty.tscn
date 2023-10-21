@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://e7v0t88wfanl"]
+
+[node name="F_start" type="Node2D" groups=["burst", "spell"]]

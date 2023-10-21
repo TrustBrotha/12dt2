@@ -1,7 +1,8 @@
-[gd_scene load_steps=32 format=3 uid="uid://cxg1m1njkwwc5"]
+[gd_scene load_steps=34 format=3 uid="uid://cxg1m1njkwwc5"]
 
 [ext_resource type="Script" path="res://scripts/enemytest.gd" id="1_v6o0j"]
 [ext_resource type="Texture2D" uid="uid://dcrwlaorbp65x" path="res://assets/slime-Sheet.png" id="2_cil7e"]
+[ext_resource type="Texture2D" uid="uid://beam12uctby7e" path="res://assets/slime-Sheet_2.png" id="3_y4af7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_imgih"]
 atlas = ExtResource("2_cil7e")
@@ -22,6 +23,10 @@ region = Rect2(96, 25, 32, 25)
 [sub_resource type="AtlasTexture" id="AtlasTexture_5322k"]
 atlas = ExtResource("2_cil7e")
 region = Rect2(128, 25, 32, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0m0dy"]
+atlas = ExtResource("3_y4af7")
+region = Rect2(160, 25, 32, 25)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0p8re"]
 atlas = ExtResource("2_cil7e")
@@ -110,6 +115,9 @@ animations = [{
 "speed": 8.0
 }, {
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0m0dy")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_0p8re")
 }, {
@@ -234,9 +242,7 @@ script = ExtResource("1_v6o0j")
 texture_filter = 1
 position = Vector2(0, -11.5)
 sprite_frames = SubResource("SpriteFrames_2fmvl")
-animation = &"attack"
-frame = 4
-frame_progress = 1.0
+animation = &"damaged"
 
 [node name="paricle_folder" type="Node2D" parent="."]
 
@@ -287,9 +293,9 @@ modulate = Color(1, 0, 0, 1)
 texture_filter = 1
 layout_mode = 0
 offset_left = -15.0
-offset_top = 4.0
+offset_top = -19.0
 offset_right = 15.0
-offset_bottom = 8.0
+offset_bottom = -15.0
 value = 100.0
 show_percentage = false
 
@@ -304,10 +310,14 @@ wait_time = 0.3
 one_shot = true
 
 [node name="immunity_frame_timer" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 0.65
 one_shot = true
 
 [node name="attack_cooldown_timer" type="Timer" parent="."]
+
+[node name="hit_effect_timer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="area_entered" from="hitbox" to="." method="_on_hitbox_area_entered"]
@@ -316,3 +326,4 @@ one_shot = true
 [connection signal="timeout" from="attack_timer" to="." method="_on_attack_timer_timeout"]
 [connection signal="timeout" from="immunity_frame_timer" to="." method="_on_immunity_frame_timer_timeout"]
 [connection signal="timeout" from="attack_cooldown_timer" to="." method="_on_attack_cooldown_timer_timeout"]
+[connection signal="timeout" from="hit_effect_timer" to="." method="_on_hit_effect_timer_timeout"]

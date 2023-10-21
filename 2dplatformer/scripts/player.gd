@@ -14,6 +14,7 @@ extends CharacterBody2D
 @onready var hitbox_collision : CollisionShape2D = $enemyhitbox/hitbox_collision
 @onready var safe_floor_folder := $safe_floor_check_folder.get_children()
 
+@export var inventory_scene : PackedScene
 
 @export var jump_force = 250.0
 @export var maxspeed = 125
@@ -67,10 +68,14 @@ var combo3_called = false
 
 func _ready():
 	set_spells()
+	camera_update()
+
+func camera_update():
 	$Camera2D.limit_left = get_parent().camera_limit_left
 	$Camera2D.limit_right = get_parent().camera_limit_right
 	$Camera2D.limit_top = get_parent().camera_limit_up
 	$Camera2D.limit_bottom = get_parent().camera_limit_down
+
 
 func _physics_process(delta):
 	HUD_update()
@@ -274,8 +279,8 @@ func safe_ground_check(): #searches for safe ground to return to if hit by envir
 func gravity_applying(delta):
 	if !is_on_floor(): #checks if player is in the air
 		velocity.y += gravity * delta #if true accelerates player down
-		if velocity.y > 2000:
-			velocity.y = 2000
+		if velocity.y > 750:
+			velocity.y = 750
 
 
 
@@ -316,19 +321,19 @@ func _on_enemyhitbox_area_entered(area):
 
 func screen_effects():
 	if reset_position == true:
-		get_parent().get_node("environment_effect").modulate.a = lerpf(get_parent().get_node("environment_effect").modulate.a, screen_target_opacity, 0.3)
+		get_parent().get_node("HUD").get_node("screen_effect").modulate.a = lerpf(get_parent().get_node("HUD").get_node("screen_effect").modulate.a, screen_target_opacity, 0.3)
 		
-		if get_parent().get_node("environment_effect").modulate.a > 0.3:
+		if get_parent().get_node("HUD").get_node("screen_effect").modulate.a > 0.3:
 			if safe_ground != null:
 				global_position = safe_ground
 				velocity.x = 0
 				velocity.y = 0
-		if get_parent().get_node("environment_effect").modulate.a > 0.95:
+		if get_parent().get_node("HUD").get_node("screen_effect").modulate.a > 0.95:
 			screen_target_opacity = 0
 			$timers/screen_effect_timer.start()
 
 func _on_screen_effect_timer_timeout():
-	get_parent().get_node("environment_effect").modulate.a = 0
+	get_parent().get_node("HUD").get_node("screen_effect").modulate.a = 0
 	reset_position = false
 	screen_target_opacity = 1
 

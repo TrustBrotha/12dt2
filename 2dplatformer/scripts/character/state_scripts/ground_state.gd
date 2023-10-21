@@ -2,7 +2,7 @@ extends State
 
 class_name ground_state
 
-@export var jump_force = 250.0
+@export var jump_force = 275.0
 
 @export var air_state_var : State
 @export var dash_state_var : State

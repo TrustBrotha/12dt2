@@ -23,16 +23,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if can_open_inventory == true:
-		if Input.is_action_just_pressed("inventory") and inventory_open == false:
-			var inventory = inventory_scene.instantiate()
-			inventory.set_name("inventory")
-			add_child(inventory)
-			inventory_open = true
-	elif inventory_open == true:
-		if Input.is_action_just_pressed("inventory") or Input.is_action_just_pressed("exit") or force_leave == true:
-			get_node("inventory").queue_free()
-			inventory_open = false
+	pass
 	
 	
 	

@@ -200,7 +200,5 @@ func _on_animated_sprite_2d_animation_finished():
 
 
 
-
-
-
-
+func _on_hit_effect_timer_timeout():
+	pass # Replace with function body.

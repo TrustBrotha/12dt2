@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b253jsyqao2rg"]
+[gd_scene load_steps=12 format=3 uid="uid://b253jsyqao2rg"]
 
 [ext_resource type="Texture2D" uid="uid://evqobg3jinw0" path="res://assets/healthbar_under.png" id="1_cfrp3"]
 [ext_resource type="Script" path="res://scripts/HUD.gd" id="1_uxdc7"]
@@ -15,6 +15,8 @@
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tu36w"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_6ailn"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tt1u1"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_uxdc7")
@@ -93,6 +95,7 @@ texture_under = ExtResource("2_5albg")
 texture_progress = ExtResource("3_o452j")
 
 [node name="state_debug_label" type="Label" parent="."]
+visible = false
 offset_left = 296.0
 offset_top = 576.0
 offset_right = 349.0
@@ -101,6 +104,7 @@ text = "state =
 "
 
 [node name="fps_debug_label" type="Label" parent="."]
+visible = false
 offset_left = 304.0
 offset_top = 544.0
 offset_right = 344.0
@@ -171,3 +175,9 @@ scale = Vector2(28, 28)
 [node name="spell_icon5" type="Sprite2D" parent="spell_icons"]
 position = Vector2(40, 360)
 scale = Vector2(28, 28)
+
+[node name="screen_effect" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 0)
+position = Vector2(740, 404)
+scale = Vector2(1688, 1032)
+texture = SubResource("PlaceholderTexture2D_tt1u1")

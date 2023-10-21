@@ -1,6 +1,7 @@
-[gd_scene load_steps=83 format=3 uid="uid://ctyju6sh4srpg"]
+[gd_scene load_steps=85 format=3 uid="uid://ctyju6sh4srpg"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_sebs5"]
+[ext_resource type="PackedScene" uid="uid://cfhwywy2f5fv2" path="res://scenes/UI/spell_selection_scene1.tscn" id="2_0fnwd"]
 [ext_resource type="Texture2D" uid="uid://bva6iihufen86" path="res://icon.svg" id="2_fa3lw"]
 [ext_resource type="Texture2D" uid="uid://bkfiso83i75ca" path="res://assets/sprite_sheet.png" id="2_x8fd7"]
 [ext_resource type="Script" path="res://scripts/character/state_scripts/character_state_machine.gd" id="9_t3a24"]
@@ -204,6 +205,10 @@ region = Rect2(128, 160, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ki6sb"]
 atlas = ExtResource("2_x8fd7")
 region = Rect2(160, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q8eif"]
+atlas = ExtResource("2_x8fd7")
+region = Rect2(192, 160, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hpfwe"]
 atlas = ExtResource("2_x8fd7")
@@ -479,6 +484,9 @@ animations = [{
 "texture": SubResource("AtlasTexture_ki6sb")
 }, {
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_q8eif")
+}, {
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_hpfwe")
 }],
 "loop": false,
@@ -560,13 +568,13 @@ size = Vector2(12, 24.3717)
 collision_layer = 2
 collision_mask = 15
 script = ExtResource("1_sebs5")
+inventory_scene = ExtResource("2_0fnwd")
 
 [node name="player_sprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(5, -15)
 sprite_frames = SubResource("SpriteFrames_jtxed")
-animation = &"damaged"
-frame_progress = 0.741212
+animation = &"jump"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 visible = false
@@ -580,11 +588,11 @@ scale = Vector2(1, 1.313)
 shape = SubResource("RectangleShape2D_oac5m")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(0, -76)
-zoom = Vector2(3, 3)
+position = Vector2(0, -67)
+zoom = Vector2(2.75, 2.75)
 limit_smoothed = true
 position_smoothing_enabled = true
-position_smoothing_speed = 10.0
+position_smoothing_speed = 15.0
 
 [node name="timers" type="Node" parent="."]
 
