@@ -1,11 +1,12 @@
+res://scripts/character/spell_scripts
+res://scenes/spells
+res://assets/spell_assets
+res://assets
 res://scripts/shaders
 res://scripts
 res://scenes
 res://scenes/title_screen_scenes
-res://assets
 res://scripts/character/state_scripts
-res://scripts/character/spell_scripts
 res://scripts/levels
 res://scenes/levels
-res://scenes/spells
 res://scenes/UI

@@ -1,57 +1,85 @@
 [gd_scene load_steps=9 format=3 uid="uid://bnp47kw5d6qhb"]
 
-[ext_resource type="Texture2D" uid="uid://c83c1mcv80qdj" path="res://assets/spell_assets/fire_particle.png" id="3_iyftn"]
-[ext_resource type="Texture2D" uid="uid://cy7snttqxhm4" path="res://pixil-frame-0 (9).png" id="3_y3hjw"]
-[ext_resource type="Texture2D" uid="uid://ce3nsg8mnfh1b" path="res://assets/spell_assets/air_particle.png" id="4_4iir4"]
-[ext_resource type="Texture2D" uid="uid://dnxvrqpgkm3r7" path="res://pixil-frame-0 (10).png" id="4_bl8sc"]
-[ext_resource type="Texture2D" uid="uid://2mgp524u01xe" path="res://assets/spell_assets/water_particle_temp.png" id="5_0yvx5"]
+[ext_resource type="Texture2D" uid="uid://b10x52j81ety3" path="res://assets/spell_assets/lightning_sprites.png" id="2_vbgj3"]
 [ext_resource type="Script" path="res://scripts/character/spell_scripts/lightningstream.gd" id="6_hvhjh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_isr8h"]
+atlas = ExtResource("2_vbgj3")
+region = Rect2(0, 0, 32, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s1w7o"]
+atlas = ExtResource("2_vbgj3")
+region = Rect2(32, 0, 32, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4y8xw"]
+atlas = ExtResource("2_vbgj3")
+region = Rect2(0, 96, 32, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_puhro"]
+atlas = ExtResource("2_vbgj3")
+region = Rect2(32, 96, 32, 96)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_f8jrt"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_y3hjw")
+"texture": SubResource("AtlasTexture_isr8h")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_bl8sc")
+"texture": SubResource("AtlasTexture_s1w7o")
 }, {
 "duration": 1.0,
-"texture": ExtResource("3_iyftn")
+"texture": SubResource("AtlasTexture_4y8xw")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_4iir4")
-}, {
-"duration": 1.0,
-"texture": ExtResource("5_0yvx5")
+"texture": SubResource("AtlasTexture_puhro")
 }],
 "loop": true,
 "name": &"default",
-"speed": 5.0
+"speed": 12.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_e1bmj"]
-radius = 17.8885
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qxo30"]
+size = Vector2(288, 20)
 
 [node name="lightningstream" type="Node2D" groups=["lightning", "spell", "stream"]]
 script = ExtResource("6_hvhjh")
 
-[node name="Timer" type="Timer" parent="."]
+[node name="deletion_timer" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="animated_sprites" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="animated_sprites"]
+texture_filter = 1
+position = Vector2(47, -2)
+rotation = -1.5708
 sprite_frames = SubResource("SpriteFrames_f8jrt")
-frame = 1
-frame_progress = 0.158018
+frame_progress = 0.460826
+
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="animated_sprites"]
+texture_filter = 1
+position = Vector2(119, -2)
+rotation = -1.5708
+sprite_frames = SubResource("SpriteFrames_f8jrt")
+frame = 2
+frame_progress = 0.335084
+
+[node name="AnimatedSprite2D3" type="AnimatedSprite2D" parent="animated_sprites"]
+texture_filter = 1
+position = Vector2(191, -2)
+rotation = -1.5708
+sprite_frames = SubResource("SpriteFrames_f8jrt")
+frame = 2
+frame_progress = 0.631146
 
 [node name="Timer2" type="Timer" parent="."]
 
-[node name="Camera2D" type="Camera2D" parent="."]
-
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." groups=["burst_collision"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("CircleShape2D_e1bmj")
+position = Vector2(144, 0)
+shape = SubResource("RectangleShape2D_qxo30")
 
-[connection signal="timeout" from="Timer" to="AnimatedSprite2D" method="_on_timer_timeout"]
+[connection signal="timeout" from="deletion_timer" to="." method="_on_deletion_timer_timeout"]

@@ -55,6 +55,8 @@ func _process(delta):
 	if $player.global_position.y > $zoom_down.global_position.y:
 		zoom = "normal"
 		$ParallaxBackground2/updraft/GPUParticles2D2.emitting = false
+		if "inventory" in GlobalVar.tutorials_to_go:
+			get_node("HUD").tutorial("inventory")
 	elif $player.global_position.y < $zoom_down.global_position.y and $player.global_position.x > $zoom_down.global_position.x:
 		zoom = "down"
 	

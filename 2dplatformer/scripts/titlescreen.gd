@@ -4,11 +4,13 @@ var page = "title"
 
 @onready var screens = $screens.get_children()
 
-
+var screen_modes = ["FULLSCREEN","MAXIMIZED","WINDOWED"]
+var selected_mode_position = 0
+var selected_mode : String
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
+	theme.default_font_size = GlobalVar.font_size
 	GlobalVar.speed_run_timer_on = false
 	MusicPlayer.play_menu_music()
 	GlobalVar.character_health = 100
@@ -28,18 +30,25 @@ func _process(delta):
 		page_visibility("key_binds")
 	elif page == "audio_settings":
 		page_visibility("audio_settings")
+	elif page == "visual_settings":
+		page_visibility("visual_settings")
+	elif page == "credits":
+		page_visibility("credits")
 	
 	
 	$screens/audio_settings/GridContainer/music_volume.text = "Volume: " + str(GlobalVar.music_volume + 15)
 	$screens/audio_settings/GridContainer/sfx_volume.text = "Volume: " + str(GlobalVar.sound_effect_volume)
+	$screens/visual_settings/GridContainer/font_size2.text = "Size: " + str(GlobalVar.font_size - 20)
+	theme.default_font_size = GlobalVar.font_size
+	$screens/visual_settings/GridContainer/change_screen_mode.text
 
 
 func page_visibility(wanted_screen):
 	for screen in screens:
-			if screen.name != wanted_screen:
-				screen.visible = false
-			elif screen.name == wanted_screen:
-				screen.visible = true
+		if screen.name != wanted_screen:
+			screen.visible = false
+		elif screen.name == wanted_screen:
+			screen.visible = true
 
 
 
@@ -75,7 +84,8 @@ func _on_quit_pressed():
 func _on_back_pressed():
 	page = "title"
 
-
+func _on_credits_back_pressed():
+	page = "title"
 
 func _on_key_binds_pressed():
 	page = "key_binds"
@@ -92,7 +102,15 @@ func _on_audio_pressed():
 func _on_audio_back_pressed():
 	page = "settings"
 
+func _on_visual_pressed():
+	page = "visual_settings"
 
+
+func _on_back_visual_pressed():
+	page = "settings"
+
+func _on_credits_pressed():
+	page = "credits"
 
 func _on_music_volume_down_pressed():
 	GlobalVar.music_volume -=3
@@ -111,4 +129,40 @@ func _on_sfx_volume_down_pressed():
 
 func _on_sfx_volume_up_pressed():
 	GlobalVar.sound_effect_volume +=3
+
+
+
+
+
+
+func _on_font_size_down_pressed():
+	GlobalVar.font_size -= 2
+
+
+func _on_font_size_up_pressed():
+	GlobalVar.font_size += 2
+
+
+
+
+func _on_change_screen_mode_pressed():
+	selected_mode_position += 1
+	if selected_mode_position >= 3:
+		selected_mode_position = 0
+	$screens/visual_settings/GridContainer/change_screen_mode.text = screen_modes[selected_mode_position]
+	selected_mode = screen_modes[selected_mode_position]
+
+
+func _on_apply_screen_mode_pressed():
+	if selected_mode == "FULLSCREEN":
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	elif selected_mode == "MAXIMIZED":
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)
+	elif selected_mode == "WINDOWED":
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+
+
+
+
+
 

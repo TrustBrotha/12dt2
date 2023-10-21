@@ -26,6 +26,7 @@ var player_to_the_left = false
 var wait_timer_called = false
 var health = 1000
 var dead = false
+var frost_buildup = 0
 @onready var current_sound_effect_nodes = $audio.get_children()
 var current_sound_effects = []
 func _ready():
@@ -73,9 +74,21 @@ func _process(delta):
 			velocity.x = lerpf(velocity.x, 0 , 0.1)
 	elif moving == false:
 		velocity.x = lerpf(velocity.x, 0 , 0.1)
+	
+	if frost_buildup >= 100:
+		debuff = "frozen"
+		$debuff_cooldown.wait_time = 4
+		$debuff_cooldown.start()
+		$particle_folder/frozen_particles1.emitting = true
+		$particle_folder/frozen_particles2.emitting = true
+		$particle_folder/frozen_particles3.emitting = true
+		frost_buildup = 0
+	
+	
 	immunity()
 	apply_debuffs()
 	get_parent().get_node("HUD").get_node("boss_health_bar").value = (float(health)/10)
+	
 	
 	move_and_slide()
 
@@ -316,19 +329,21 @@ func apply_spell(spell_scene):
 	if debuff == "clear":
 		if spell_scene.is_in_group("fire"):
 			debuff = "burning"
+			$debuff_cooldown.wait_time = 1
 			$debuff_cooldown.start()
 		elif spell_scene.is_in_group("water"):
 			debuff = "wet"
+			$debuff_cooldown.wait_time = 2
 			$debuff_cooldown.start()
 		elif spell_scene.is_in_group("lightning"):
 			debuff = "shocked"
+			$debuff_cooldown.wait_time = 0.5
 			$debuff_cooldown.start()
 		elif spell_scene.is_in_group("earth"):
 			debuff = "stunned"
 			$debuff_cooldown.start()
 		elif spell_scene.is_in_group("ice"):
-			debuff = "frozen"
-			$debuff_cooldown.start()
+			frost_buildup += 10
 
 func apply_debuffs():
 	if debuff != "clear":
@@ -339,19 +354,23 @@ func apply_debuffs():
 			speedchange = 0.5
 			$particle_folder/water_particles.emitting = true
 		elif debuff == "shocked":
-			pass
+			$particle_folder/shocked_particles.emitting = true
+			$turnables/vision_hitboxes/infront/infront_collision.disabled = true
+			$turnables/vision_hitboxes/under/under_collision.disabled = true
 		elif debuff == "stunned":
 			pass
 		elif debuff == "frozen":
-			pass
-
-
+			speedchange = 0
+			$turnables/vision_hitboxes/infront/infront_collision.disabled = true
+			$turnables/vision_hitboxes/under/under_collision.disabled = true
 
 
 
 func _on_debuff_timer_timeout():
 	debuff = "clear"
 	speedchange = 1
+	$turnables/vision_hitboxes/infront/infront_collision.disabled = false
+	$turnables/vision_hitboxes/under/under_collision.disabled = false
 	for effect in particle_effect_folder:
 		if effect.emitting == true:
 			effect.emitting = false

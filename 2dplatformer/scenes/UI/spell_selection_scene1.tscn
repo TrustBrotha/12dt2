@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cfhwywy2f5fv2"]
+[gd_scene load_steps=14 format=3 uid="uid://cfhwywy2f5fv2"]
 
 [ext_resource type="Script" path="res://scenes/UI/spell_selection_scene1.gd" id="1_cytnc"]
 [ext_resource type="Texture2D" uid="uid://b7xn4t4ipqkwn" path="res://scenes/UI/icons/airburst_icon.png" id="2_1x2gn"]
@@ -6,10 +6,17 @@
 [ext_resource type="Script" path="res://scenes/UI/Label.gd" id="2_gohyj"]
 [ext_resource type="Texture2D" uid="uid://m7m8cu4meb0u" path="res://scenes/UI/icons/fireburst_icon.png" id="2_qrvll"]
 [ext_resource type="Texture2D" uid="uid://cjylgblaahhky" path="res://scenes/UI/icons/waterstream_icon.png" id="4_1ij27"]
+[ext_resource type="Texture2D" uid="uid://d3ms06jgmqx4p" path="res://scenes/UI/icons/icespikefrombelow_icon.png" id="4_sks7f"]
+[ext_resource type="Texture2D" uid="uid://bg0xywrdvmwc3" path="res://scenes/UI/icons/lightningstream_icon.png" id="6_lcjy5"]
+[ext_resource type="Texture2D" uid="uid://urugwqedoy4x" path="res://scenes/UI/icons/icespear_icon.png" id="8_amshf"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bjxp3"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_pa4af"]
+
+[sub_resource type="Theme" id="Theme_d3c2y"]
+
+[sub_resource type="Theme" id="Theme_gais0"]
 
 [node name="spell_selection_page" type="CanvasLayer"]
 script = ExtResource("1_cytnc")
@@ -26,7 +33,7 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="spell_select_buttons" type="Node" parent="Control"]
+[node name="spell_select_buttons" type="Node2D" parent="Control"]
 
 [node name="spell1" type="Button" parent="Control/spell_select_buttons"]
 offset_left = 200.0
@@ -68,7 +75,7 @@ offset_bottom = 175.0
 
 [node name="spell5_sprite" type="Sprite2D" parent="Control/spell_select_buttons/spell5"]
 
-[node name="spell_buttons" type="Node" parent="Control"]
+[node name="spell_buttons" type="Node2D" parent="Control"]
 
 [node name="airburst" type="Button" parent="Control/spell_buttons"]
 visible = false
@@ -100,13 +107,20 @@ position = Vector2(50, 50)
 scale = Vector2(3, 3)
 texture = ExtResource("2_5n46m")
 
-[node name="airstream" type="Button" parent="Control/spell_buttons"]
+[node name="icespikefrombelow" type="Button" parent="Control/spell_buttons"]
 visible = false
 offset_left = 350.0
 offset_top = 75.0
 offset_right = 450.0
 offset_bottom = 175.0
 disabled = true
+
+[node name="icon" type="Sprite2D" parent="Control/spell_buttons/icespikefrombelow"]
+visible = false
+texture_filter = 1
+position = Vector2(50, 50)
+scale = Vector2(3, 3)
+texture = ExtResource("4_sks7f")
 
 [node name="waterstream" type="Button" parent="Control/spell_buttons"]
 visible = false
@@ -146,6 +160,28 @@ offset_right = 200.0
 offset_bottom = 300.0
 disabled = true
 
+[node name="icon" type="Sprite2D" parent="Control/spell_buttons/lightningstream"]
+visible = false
+texture_filter = 1
+position = Vector2(50, 50)
+scale = Vector2(3, 3)
+texture = ExtResource("6_lcjy5")
+
+[node name="icespear" type="Button" parent="Control/spell_buttons"]
+visible = false
+offset_left = 225.0
+offset_top = 200.0
+offset_right = 325.0
+offset_bottom = 300.0
+disabled = true
+
+[node name="icon" type="Sprite2D" parent="Control/spell_buttons/icespear"]
+visible = false
+texture_filter = 1
+position = Vector2(50, 50)
+scale = Vector2(3, 3)
+texture = ExtResource("8_amshf")
+
 [node name="Sprite2D" type="Sprite2D" parent="Control"]
 visible = false
 modulate = Color(0, 0, 0, 0.211765)
@@ -160,6 +196,7 @@ offset_left = 900.0
 offset_top = 60.0
 offset_right = 1200.0
 offset_bottom = 460.0
+theme = SubResource("Theme_d3c2y")
 text = "spell description"
 script = ExtResource("2_gohyj")
 
@@ -168,6 +205,7 @@ offset_left = 1184.0
 offset_top = 640.0
 offset_right = 1264.0
 offset_bottom = 704.0
+theme = SubResource("Theme_gais0")
 text = "MENU"
 
 [connection signal="pressed" from="Control/spell_select_buttons/spell1" to="." method="_on_spell_1_pressed"]
@@ -177,8 +215,9 @@ text = "MENU"
 [connection signal="pressed" from="Control/spell_select_buttons/spell5" to="." method="_on_spell_5_pressed"]
 [connection signal="pressed" from="Control/spell_buttons/airburst" to="." method="_on_airburst_pressed"]
 [connection signal="pressed" from="Control/spell_buttons/firestream" to="." method="_on_firestream_pressed"]
-[connection signal="pressed" from="Control/spell_buttons/airstream" to="." method="_on_airstream_pressed"]
+[connection signal="pressed" from="Control/spell_buttons/icespikefrombelow" to="." method="_on_icespikefrombelow_pressed"]
 [connection signal="pressed" from="Control/spell_buttons/waterstream" to="." method="_on_waterstream_pressed"]
 [connection signal="pressed" from="Control/spell_buttons/fireburst" to="." method="_on_fireburst_pressed"]
 [connection signal="pressed" from="Control/spell_buttons/lightningstream" to="." method="_on_lightningstream_pressed"]
+[connection signal="pressed" from="Control/spell_buttons/icespear" to="." method="_on_icespear_pressed"]
 [connection signal="pressed" from="menu_button" to="." method="_on_menu_button_pressed"]

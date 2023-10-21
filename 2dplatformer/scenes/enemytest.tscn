@@ -1,8 +1,10 @@
-[gd_scene load_steps=34 format=3 uid="uid://cxg1m1njkwwc5"]
+[gd_scene load_steps=42 format=3 uid="uid://cxg1m1njkwwc5"]
 
 [ext_resource type="Script" path="res://scripts/enemytest.gd" id="1_v6o0j"]
 [ext_resource type="Texture2D" uid="uid://dcrwlaorbp65x" path="res://assets/slime-Sheet.png" id="2_cil7e"]
 [ext_resource type="Texture2D" uid="uid://beam12uctby7e" path="res://assets/slime-Sheet_2.png" id="3_y4af7"]
+[ext_resource type="Texture2D" uid="uid://v1nb2fxfvdy0" path="res://assets/spell_assets/snow_particle.png" id="4_lcik6"]
+[ext_resource type="Texture2D" uid="uid://bafqtbse1ucdf" path="res://assets/spell_assets/snow_particle2.png" id="5_c05kr"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_imgih"]
 atlas = ExtResource("2_cil7e")
@@ -24,12 +26,8 @@ region = Rect2(96, 25, 32, 25)
 atlas = ExtResource("2_cil7e")
 region = Rect2(128, 25, 32, 25)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0m0dy"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_vwbq4"]
 atlas = ExtResource("3_y4af7")
-region = Rect2(160, 25, 32, 25)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0p8re"]
-atlas = ExtResource("2_cil7e")
 region = Rect2(160, 25, 32, 25)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_aismo"]
@@ -116,10 +114,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_0m0dy")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0p8re")
+"texture": SubResource("AtlasTexture_vwbq4")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_aismo")
@@ -132,7 +127,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"damaged",
-"speed": 8.0
+"speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -224,6 +219,50 @@ scale_min = 2.0
 scale_max = 4.0
 color = Color(0, 0, 1, 1)
 
+[sub_resource type="Gradient" id="Gradient_265h2"]
+colors = PackedColorArray(0, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_46hp0"]
+gradient = SubResource("Gradient_265h2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5oabc"]
+emission_shape = 3
+emission_box_extents = Vector3(12, 4, 1)
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 90.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 50.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+color_ramp = SubResource("GradientTexture1D_46hp0")
+
+[sub_resource type="Gradient" id="Gradient_fj450"]
+offsets = PackedFloat32Array(0, 0.295566, 0.753695, 1)
+colors = PackedColorArray(0, 1, 1, 1, 0.574324, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_dll1n"]
+gradient = SubResource("Gradient_fj450")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cbk1t"]
+emission_shape = 3
+emission_box_extents = Vector3(14, 4, 1)
+particle_flag_disable_z = true
+gravity = Vector3(0, 10, 0)
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+color_initial_ramp = SubResource("GradientTexture1D_dll1n")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cseay"]
+emission_shape = 3
+emission_box_extents = Vector3(16, 8, 1)
+particle_flag_disable_z = true
+gravity = Vector3(0, 2, 0)
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+color_initial_ramp = SubResource("GradientTexture1D_dll1n")
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ywvyw"]
 size = Vector2(24, 12)
 
@@ -242,7 +281,7 @@ script = ExtResource("1_v6o0j")
 texture_filter = 1
 position = Vector2(0, -11.5)
 sprite_frames = SubResource("SpriteFrames_2fmvl")
-animation = &"damaged"
+animation = &"attack"
 
 [node name="paricle_folder" type="Node2D" parent="."]
 
@@ -259,7 +298,38 @@ emitting = false
 amount = 12
 process_material = SubResource("ParticleProcessMaterial_5i283")
 
+[node name="shocked_particles" type="GPUParticles2D" parent="paricle_folder"]
+position = Vector2(0, -6)
+emitting = false
+amount = 12
+process_material = SubResource("ParticleProcessMaterial_5oabc")
+lifetime = 0.1
+
+[node name="frozen_particles1" type="GPUParticles2D" parent="paricle_folder"]
+texture_filter = 1
+position = Vector2(0, -18)
+emitting = false
+amount = 3
+process_material = SubResource("ParticleProcessMaterial_cbk1t")
+texture = ExtResource("4_lcik6")
+
+[node name="frozen_particles2" type="GPUParticles2D" parent="paricle_folder"]
+texture_filter = 1
+position = Vector2(0, -18)
+emitting = false
+amount = 3
+process_material = SubResource("ParticleProcessMaterial_cbk1t")
+texture = ExtResource("5_c05kr")
+
+[node name="frozen_particles3" type="GPUParticles2D" parent="paricle_folder"]
+texture_filter = 1
+position = Vector2(0, -6)
+emitting = false
+amount = 10
+process_material = SubResource("ParticleProcessMaterial_cseay")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, -6)
 shape = SubResource("RectangleShape2D_ywvyw")
 
@@ -273,6 +343,7 @@ rotation = -1.5708
 target_position = Vector2(-5.76973e-05, 16)
 
 [node name="hitbox" type="Area2D" parent="." groups=["enemy"]]
+visible = false
 metadata/enemy = true
 
 [node name="hitbox_collision" type="CollisionShape2D" parent="hitbox"]
@@ -300,6 +371,7 @@ value = 100.0
 show_percentage = false
 
 [node name="vision" type="Area2D" parent="."]
+visible = false
 
 [node name="vision_shape" type="CollisionShape2D" parent="vision"]
 position = Vector2(26, -9)
@@ -310,7 +382,7 @@ wait_time = 0.3
 one_shot = true
 
 [node name="immunity_frame_timer" type="Timer" parent="."]
-wait_time = 0.65
+wait_time = 0.41
 one_shot = true
 
 [node name="attack_cooldown_timer" type="Timer" parent="."]

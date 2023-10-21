@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://b253jsyqao2rg"]
+[gd_scene load_steps=17 format=3 uid="uid://b253jsyqao2rg"]
 
 [ext_resource type="Texture2D" uid="uid://evqobg3jinw0" path="res://assets/healthbar_under.png" id="1_cfrp3"]
 [ext_resource type="Script" path="res://scripts/HUD.gd" id="1_uxdc7"]
@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://cjrffjf50beqs" path="res://assets/died of cringe.png" id="6_8ewle"]
 
 [sub_resource type="Theme" id="Theme_2k0be"]
-default_font_size = 20
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_c2vtk"]
 
@@ -21,6 +20,14 @@ default_font_size = 20
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_6ailn"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tt1u1"]
+
+[sub_resource type="Gradient" id="Gradient_ksjxk"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_oiewh"]
+gradient = SubResource("Gradient_ksjxk")
+
+[sub_resource type="Theme" id="Theme_ciduq"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_uxdc7")
@@ -41,9 +48,9 @@ layout_mode = 1
 anchors_preset = -1
 anchor_top = -0.2
 anchor_bottom = -0.2
-offset_left = 72.0
+offset_left = 80.0
 offset_top = -480.0
-offset_right = 104.0
+offset_right = 112.0
 offset_bottom = -472.0
 scale = Vector2(4, 4)
 value = 100.0
@@ -53,9 +60,9 @@ texture_progress = ExtResource("3_o452j")
 [node name="spell2_charge_bar" type="TextureProgressBar" parent="spell_charge_bar_folder"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 72.0
+offset_left = 80.0
 offset_top = -432.0
-offset_right = 104.0
+offset_right = 112.0
 offset_bottom = -424.0
 scale = Vector2(4, 4)
 value = 100.0
@@ -65,9 +72,9 @@ texture_progress = ExtResource("3_o452j")
 [node name="spell3_charge_bar" type="TextureProgressBar" parent="spell_charge_bar_folder"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 72.0
+offset_left = 80.0
 offset_top = -376.0
-offset_right = 104.0
+offset_right = 112.0
 offset_bottom = -368.0
 scale = Vector2(4, 4)
 value = 100.0
@@ -77,9 +84,9 @@ texture_progress = ExtResource("3_o452j")
 [node name="spell4_charge_bar" type="TextureProgressBar" parent="spell_charge_bar_folder"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 72.0
+offset_left = 80.0
 offset_top = -320.0
-offset_right = 104.0
+offset_right = 112.0
 offset_bottom = -312.0
 scale = Vector2(4, 4)
 value = 100.0
@@ -89,9 +96,9 @@ texture_progress = ExtResource("3_o452j")
 [node name="spell5_charge_bar" type="TextureProgressBar" parent="spell_charge_bar_folder"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 72.0
+offset_left = 80.0
 offset_top = -264.0
-offset_right = 104.0
+offset_right = 112.0
 offset_bottom = -256.0
 scale = Vector2(4, 4)
 value = 100.0
@@ -99,6 +106,7 @@ texture_under = ExtResource("2_5albg")
 texture_progress = ExtResource("3_o452j")
 
 [node name="state_debug_label" type="Label" parent="."]
+visible = false
 offset_left = 296.0
 offset_top = 576.0
 offset_right = 349.0
@@ -107,6 +115,7 @@ text = "state =
 "
 
 [node name="fps_debug_label" type="Label" parent="."]
+visible = false
 offset_left = 304.0
 offset_top = 544.0
 offset_right = 344.0
@@ -151,59 +160,59 @@ text = "------"
 
 [node name="icon_background1" type="Sprite2D" parent="spell_icon_background"]
 modulate = Color(0, 0, 0, 0.294118)
-position = Vector2(40, 136)
+position = Vector2(48, 136)
 scale = Vector2(48, 48)
 texture = SubResource("PlaceholderTexture2D_c2vtk")
 
 [node name="icon_background2" type="Sprite2D" parent="spell_icon_background"]
 modulate = Color(0, 0, 0, 0.294118)
-position = Vector2(40, 192)
+position = Vector2(48, 192)
 scale = Vector2(48, 48)
 texture = SubResource("PlaceholderTexture2D_qq66q")
 
 [node name="icon_background3" type="Sprite2D" parent="spell_icon_background"]
 modulate = Color(0, 0, 0, 0.294118)
-position = Vector2(40, 248)
+position = Vector2(48, 248)
 scale = Vector2(48, 48)
 texture = SubResource("PlaceholderTexture2D_a181o")
 
 [node name="icon_background4" type="Sprite2D" parent="spell_icon_background"]
 modulate = Color(0, 0, 0, 0.294118)
-position = Vector2(40, 304)
+position = Vector2(48, 304)
 scale = Vector2(48, 48)
 texture = SubResource("PlaceholderTexture2D_tu36w")
 
 [node name="icon_background5" type="Sprite2D" parent="spell_icon_background"]
 modulate = Color(0, 0, 0, 0.294118)
-position = Vector2(40, 360)
+position = Vector2(48, 360)
 scale = Vector2(48, 48)
 texture = SubResource("PlaceholderTexture2D_6ailn")
 
 [node name="spell_icons" type="Node" parent="."]
 
 [node name="spell_icon1" type="Sprite2D" parent="spell_icons"]
-position = Vector2(40, 136)
+position = Vector2(48, 136)
 scale = Vector2(28, 28)
 
 [node name="spell_icon2" type="Sprite2D" parent="spell_icons"]
-position = Vector2(40, 192)
+position = Vector2(48, 192)
 scale = Vector2(28, 28)
 
 [node name="spell_icon3" type="Sprite2D" parent="spell_icons"]
-position = Vector2(40, 248)
+position = Vector2(48, 248)
 scale = Vector2(28, 28)
 
 [node name="spell_icon4" type="Sprite2D" parent="spell_icons"]
-position = Vector2(40, 304)
+position = Vector2(48, 304)
 scale = Vector2(28, 28)
 
 [node name="spell_icon5" type="Sprite2D" parent="spell_icons"]
-position = Vector2(40, 360)
+position = Vector2(48, 360)
 scale = Vector2(28, 28)
 
 [node name="screen_effect" type="Sprite2D" parent="."]
 modulate = Color(0, 0, 0, 0)
-position = Vector2(740, 404)
+position = Vector2(656, 344)
 scale = Vector2(1688, 1032)
 texture = SubResource("PlaceholderTexture2D_tt1u1")
 
@@ -217,4 +226,32 @@ texture = ExtResource("6_8ewle")
 wait_time = 5.0
 one_shot = true
 
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Control"]
+visible = false
+position = Vector2(276, -16)
+scale = Vector2(8.625, 1)
+texture = SubResource("GradientTexture2D_oiewh")
+
+[node name="tutorials" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = -30.0
+offset_right = 70.0
+offset_bottom = -2.0
+theme = SubResource("Theme_ciduq")
+
+[node name="tutorial_timer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+
 [connection signal="timeout" from="death_timer" to="." method="_on_death_timer_timeout"]
+[connection signal="timeout" from="tutorial_timer" to="." method="_on_tutorial_timer_timeout"]

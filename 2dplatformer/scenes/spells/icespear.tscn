@@ -1,0 +1,133 @@
+[gd_scene load_steps=18 format=3 uid="uid://cs0meqfqb2vtv"]
+
+[ext_resource type="Script" path="res://scripts/character/spell_scripts/icespear.gd" id="1_233hn"]
+[ext_resource type="Texture2D" uid="uid://bxpewfiecx5v1" path="res://assets/spell_assets/ice_spear.png" id="1_wfje1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xlp1q"]
+atlas = ExtResource("1_wfje1")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_82kpl"]
+atlas = ExtResource("1_wfje1")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n1t20"]
+atlas = ExtResource("1_wfje1")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6xk7q"]
+atlas = ExtResource("1_wfje1")
+region = Rect2(576, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4l3o3"]
+atlas = ExtResource("1_wfje1")
+region = Rect2(768, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ajhux"]
+atlas = ExtResource("1_wfje1")
+region = Rect2(960, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u4wkw"]
+atlas = ExtResource("1_wfje1")
+region = Rect2(1152, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oycal"]
+atlas = ExtResource("1_wfje1")
+region = Rect2(1344, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_crn4m"]
+atlas = ExtResource("1_wfje1")
+region = Rect2(1536, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i1x24"]
+atlas = ExtResource("1_wfje1")
+region = Rect2(1728, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ci0vn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xlp1q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_82kpl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n1t20")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6xk7q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4l3o3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ajhux")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u4wkw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oycal")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_crn4m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i1x24")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ijk00"]
+size = Vector2(43, 10)
+
+[sub_resource type="Gradient" id="Gradient_7qu5a"]
+colors = PackedColorArray(0, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1l283"]
+gradient = SubResource("Gradient_7qu5a")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mebxf"]
+lifetime_randomness = 0.4
+particle_flag_disable_z = true
+direction = Vector3(-1, 0, 0)
+gravity = Vector3(0, 0, 0)
+initial_velocity_max = 75.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_max = 2.0
+color_initial_ramp = SubResource("GradientTexture1D_1l283")
+
+[node name="icespear" type="Node2D" groups=["burst", "ice", "spell"]]
+script = ExtResource("1_233hn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_ci0vn")
+frame_progress = 0.657123
+
+[node name="Area2D" type="Area2D" parent="." groups=["burst_collision"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(6.5, 0)
+shape = SubResource("RectangleShape2D_ijk00")
+
+[node name="deletion_timer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+autostart = true
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+position = Vector2(24, 0)
+emitting = false
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_mebxf")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="timeout" from="deletion_timer" to="." method="_on_deletion_timer_timeout"]

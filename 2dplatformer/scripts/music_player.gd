@@ -1,8 +1,8 @@
 extends Node
 
-var forest_music = load("res://assets/music/King's Field IV OST - Dark Reality - Extended.mp3")
+var forest_music = load("res://assets/music/Thunderbird.mp3")
 var menu_music = load("res://assets/music/Korok Forest (Night) - The Legend of Zelda_ Tears of the Kingdom OST.mp3")
-var boss_music = load("res://assets/sounds/切爾諾伯格.mp3")
+var boss_music = load("res://assets/music/切爾諾伯格.mp3")
 
 var fade_in = false
 var fade_out = false

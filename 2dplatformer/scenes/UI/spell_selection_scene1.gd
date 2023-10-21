@@ -11,6 +11,7 @@ var spell_listening = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$menu_button.theme.default_font_size = GlobalVar.font_size
 	discovered_spells = GlobalVar.discovered_spells
 	for i in range(len(selected_spells)):
 		var sprite = get_node("Control").get_node("spell_select_buttons").get_node("spell%s" %(i+1)).get_node("spell%s_sprite" %(i+1))
@@ -109,6 +110,8 @@ func change_to_spell_type_select():
 	$Control/Sprite2D.visible = false
 	get_parent().get_node("HUD").sprite_update()
 
+
+
 func _on_spell_1_pressed():
 	spell_listening = 1
 	change_to_spell_select()
@@ -163,20 +166,34 @@ func _on_fireburst_pressed():
 	change_to_spell_type_select()
 	spell_listening = 0
 
-
 func _on_lightningstream_pressed():
 	selected_spells[spell_listening-1] = "lightningstream"
 	change_text()
 	change_to_spell_type_select()
 	spell_listening = 0
 
+func _on_icespikefrombelow_pressed():
+	selected_spells[spell_listening-1] = "icespikefrombelow"
+	change_text()
+	change_to_spell_type_select()
+	spell_listening = 0
 
-func _on_airstream_pressed():
-	selected_spells[spell_listening-1] = "airstream"
+func _on_icespear_pressed():
+	selected_spells[spell_listening-1] = "icespear"
 	change_text()
 	change_to_spell_type_select()
 	spell_listening = 0
 
 
+
+
+
+
 func _on_menu_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/title_screen_scenes/titlescreen.tscn")
+
+
+
+
+
+

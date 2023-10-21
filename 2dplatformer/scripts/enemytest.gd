@@ -6,7 +6,7 @@ const jump_velocity = -400.0
 
 @onready var particle_effect_folder = $paricle_folder.get_children()
 
-
+var frost_buildup = 0
 var speedchange = 1
 var moving = true
 var direction = 1
@@ -39,14 +39,27 @@ func _physics_process(delta):
 		velocity.y += gravity * delta
 	
 	if $Control/healthbar.value <= 0:
+		$hitbox/hitbox_collision.disabled = true
+		$vision/vision_shape.disabled = true
 		$AnimatedSprite2D.play("death")
 		
-	
-	
-	pathfinding()
-	states()
-	immunity()
-	apply_debuffs()
+	if frost_buildup >= 50:
+		debuff = "frozen"
+		$debuff_cooldown.wait_time = 2
+		$debuff_cooldown.start()
+		$paricle_folder/frozen_particles1.emitting = true
+		$paricle_folder/frozen_particles2.emitting = true
+		$paricle_folder/frozen_particles3.emitting = true
+		frost_buildup = 0
+	if $Control/healthbar.value <= 0:
+		$hitbox/hitbox_collision.disabled = true
+		$vision/vision_shape.disabled = true
+		$AnimatedSprite2D.play("death")
+	elif $Control/healthbar.value > 0:
+		pathfinding()
+		states()
+		immunity()
+		apply_debuffs()
 	move_and_slide()
 
 
@@ -157,19 +170,22 @@ func apply_spell(spell_scene):
 	if debuff == "clear":
 		if spell_scene.is_in_group("fire"):
 			debuff = "burning"
+			$debuff_cooldown.wait_time = 1
 			$debuff_cooldown.start()
 		elif spell_scene.is_in_group("water"):
 			debuff = "wet"
+			$debuff_cooldown.wait_time = 2
 			$debuff_cooldown.start()
 		elif spell_scene.is_in_group("lightning"):
 			debuff = "shocked"
+			$debuff_cooldown.wait_time = 1
 			$debuff_cooldown.start()
 		elif spell_scene.is_in_group("earth"):
 			debuff = "stunned"
 			$debuff_cooldown.start()
 		elif spell_scene.is_in_group("ice"):
-			debuff = "frozen"
-			$debuff_cooldown.start()
+			frost_buildup += 10
+			
 
 #func damaged():
 	
@@ -184,16 +200,20 @@ func apply_debuffs():
 			speedchange = 0.5
 			$paricle_folder/water_particles.emitting = true
 		elif debuff == "shocked":
-			pass
+			$paricle_folder/shocked_particles.emitting = true
+			$vision/vision_shape.disabled = true
 		elif debuff == "stunned":
 			pass
 		elif debuff == "frozen":
-			pass
+			speedchange = 0
+			$vision/vision_shape.disabled = true
 
 
 func _on_debuff_cooldown_timeout():
 	debuff = "clear"
 	speedchange = 1
+	if $vision/vision_shape.disabled == true:
+		$vision/vision_shape.disabled = false
 	for effect in particle_effect_folder:
 		if effect.emitting == true:
 			effect.emitting = false

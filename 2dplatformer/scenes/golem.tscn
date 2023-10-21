@@ -1,4 +1,4 @@
-[gd_scene load_steps=198 format=3 uid="uid://b4g0i8m0fissu"]
+[gd_scene load_steps=207 format=3 uid="uid://b4g0i8m0fissu"]
 
 [ext_resource type="Script" path="res://scripts/golem.gd" id="1_u1o51"]
 [ext_resource type="Texture2D" uid="uid://cxs6abswkdxch" path="res://assets/boss_sprite.png" id="2_3bqfs"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://dc1bkduqxfjfv" path="res://scenes/2d_audio_scene.tscn" id="3_3a4p6"]
 [ext_resource type="Shader" path="res://scripts/shaders/golem.gdshader" id="4_7t1hl"]
 [ext_resource type="AudioStream" uid="uid://c888cua6tvvjq" path="res://assets/sounds/golem_hover_sound.mp3" id="5_trgdy"]
+[ext_resource type="Texture2D" uid="uid://v1nb2fxfvdy0" path="res://assets/spell_assets/snow_particle.png" id="6_rdpaw"]
+[ext_resource type="Texture2D" uid="uid://bafqtbse1ucdf" path="res://assets/spell_assets/snow_particle2.png" id="7_kxe1p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kinpv"]
 size = Vector2(50, 62)
@@ -1396,7 +1398,51 @@ scale_min = 2.0
 scale_max = 4.0
 color = Color(0, 0, 1, 1)
 
-[node name="golem" type="CharacterBody2D"]
+[sub_resource type="Gradient" id="Gradient_vpvs5"]
+colors = PackedColorArray(0, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_v6cjp"]
+gradient = SubResource("Gradient_vpvs5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_t30rk"]
+emission_shape = 3
+emission_box_extents = Vector3(12, 4, 1)
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 90.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 50.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+color_ramp = SubResource("GradientTexture1D_v6cjp")
+
+[sub_resource type="Gradient" id="Gradient_ulviv"]
+offsets = PackedFloat32Array(0, 0.295566, 0.753695, 1)
+colors = PackedColorArray(0, 1, 1, 1, 0.574324, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_yus12"]
+gradient = SubResource("Gradient_ulviv")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_boowi"]
+emission_shape = 3
+emission_box_extents = Vector3(14, 4, 1)
+particle_flag_disable_z = true
+gravity = Vector3(0, 10, 0)
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+color_initial_ramp = SubResource("GradientTexture1D_yus12")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8p8tv"]
+emission_shape = 3
+emission_box_extents = Vector3(16, 8, 1)
+particle_flag_disable_z = true
+gravity = Vector3(0, 2, 0)
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+color_initial_ramp = SubResource("GradientTexture1D_yus12")
+
+[node name="golem" type="CharacterBody2D" groups=["boss"]]
 collision_layer = 32
 script = ExtResource("1_u1o51")
 boulder_scene = ExtResource("2_05568")
@@ -1509,6 +1555,36 @@ position = Vector2(0, -6)
 emitting = false
 amount = 12
 process_material = SubResource("ParticleProcessMaterial_whx2h")
+
+[node name="shocked_particles" type="GPUParticles2D" parent="particle_folder"]
+position = Vector2(0, -6)
+emitting = false
+amount = 12
+process_material = SubResource("ParticleProcessMaterial_t30rk")
+lifetime = 0.1
+
+[node name="frozen_particles1" type="GPUParticles2D" parent="particle_folder"]
+texture_filter = 1
+position = Vector2(0, -18)
+emitting = false
+amount = 3
+process_material = SubResource("ParticleProcessMaterial_boowi")
+texture = ExtResource("6_rdpaw")
+
+[node name="frozen_particles2" type="GPUParticles2D" parent="particle_folder"]
+texture_filter = 1
+position = Vector2(0, -18)
+emitting = false
+amount = 3
+process_material = SubResource("ParticleProcessMaterial_boowi")
+texture = ExtResource("7_kxe1p")
+
+[node name="frozen_particles3" type="GPUParticles2D" parent="particle_folder"]
+texture_filter = 1
+position = Vector2(0, -6)
+emitting = false
+amount = 10
+process_material = SubResource("ParticleProcessMaterial_8p8tv")
 
 [node name="golem_hover" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_trgdy")

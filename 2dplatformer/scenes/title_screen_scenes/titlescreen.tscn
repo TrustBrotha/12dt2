@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://delu1i6dkw5oo"]
+[gd_scene load_steps=12 format=3 uid="uid://delu1i6dkw5oo"]
 
 [ext_resource type="Script" path="res://scripts/titlescreen.gd" id="1_1ri3p"]
 [ext_resource type="Texture2D" uid="uid://b64huftt26msl" path="res://assets/parallax_forest/background.png" id="2_fdtw2"]
@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://bnuwryv434d34" path="res://assets/parallax_forest/trees.png" id="8_xkxqb"]
 [ext_resource type="PackedScene" uid="uid://ci4ls2rhr7adk" path="res://scenes/remap_button.tscn" id="9_1o741"]
 
+[sub_resource type="Theme" id="Theme_0iofr"]
+
 [sub_resource type="Theme" id="Theme_58uqc"]
 default_font_size = 20
 
@@ -20,6 +22,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource("Theme_0iofr")
 script = ExtResource("1_1ri3p")
 
 [node name="ParallaxBackground2" type="ParallaxBackground" parent="."]
@@ -102,7 +105,8 @@ texture = ExtResource("8_xkxqb")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
-[node name="screens" type="Node" parent="."]
+[node name="screens" type="Control" parent="."]
+anchors_preset = 0
 
 [node name="title" type="Control" parent="screens"]
 visible = false
@@ -115,7 +119,7 @@ offset_left = -144.0
 offset_top = -88.0
 offset_right = 144.0
 offset_bottom = -40.0
-text = "play
+text = "Play
 "
 
 [node name="settings" type="Button" parent="screens/title"]
@@ -124,16 +128,24 @@ offset_left = -144.0
 offset_top = -24.0
 offset_right = 144.0
 offset_bottom = 24.0
-text = "settings"
+text = "Settings"
 
 [node name="quit" type="Button" parent="screens/title"]
+layout_mode = 0
+offset_left = -144.0
+offset_top = 104.0
+offset_right = 144.0
+offset_bottom = 152.0
+text = "Quit
+"
+
+[node name="credits" type="Button" parent="screens/title"]
 layout_mode = 0
 offset_left = -144.0
 offset_top = 40.0
 offset_right = 144.0
 offset_bottom = 88.0
-text = "quit
-"
+text = "Credits"
 
 [node name="speed_run_time_label" type="Label" parent="screens/title"]
 layout_mode = 0
@@ -316,33 +328,101 @@ text = "back
 
 [node name="visual_settings" type="Control" parent="screens"]
 visible = false
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="HUD_scale" type="Button" parent="screens/visual_settings"]
+[node name="back_visual" type="Button" parent="screens/visual_settings"]
 layout_mode = 0
-offset_left = -144.0
-offset_top = -152.0
-offset_right = 144.0
-offset_bottom = -104.0
-text = "audio
+offset_left = -124.0
+offset_top = 124.0
+offset_right = 164.0
+offset_bottom = 172.0
+text = "back
 "
+
+[node name="GridContainer" type="GridContainer" parent="screens/visual_settings"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -88.0
+offset_top = -16.0
+offset_right = 84.0
+offset_bottom = 33.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 4
+
+[node name="font_size" type="Label" parent="screens/visual_settings/GridContainer"]
+layout_mode = 2
+text = "Font Size:"
+horizontal_alignment = 2
+
+[node name="font_size_down" type="Button" parent="screens/visual_settings/GridContainer"]
+layout_mode = 2
+text = " - "
+
+[node name="font_size2" type="Label" parent="screens/visual_settings/GridContainer"]
+layout_mode = 2
+text = "Size: 0"
+
+[node name="font_size_up" type="Button" parent="screens/visual_settings/GridContainer"]
+layout_mode = 2
+text = "+"
+
+[node name="Label" type="Label" parent="screens/visual_settings/GridContainer"]
+layout_mode = 2
+text = "Screen Mode:"
+
+[node name="change_screen_mode" type="Button" parent="screens/visual_settings/GridContainer"]
+layout_mode = 2
+text = "DEFAULT
+"
+
+[node name="apply_screen_mode" type="Button" parent="screens/visual_settings/GridContainer"]
+layout_mode = 2
+text = "APPLY"
 
 [node name="audio_settings" type="Control" parent="screens"]
 visible = false
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="GridContainer" type="GridContainer" parent="screens/audio_settings"]
-layout_mode = 0
-offset_left = -108.0
-offset_top = -144.0
-offset_right = 114.0
-offset_bottom = -78.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -33.0
+offset_right = 120.0
+offset_bottom = 33.0
+grow_horizontal = 2
+grow_vertical = 2
 columns = 4
 
 [node name="music" type="Label" parent="screens/audio_settings/GridContainer"]
@@ -415,22 +495,115 @@ text = "on
 
 [node name="audio_back" type="Button" parent="screens/audio_settings"]
 layout_mode = 0
-offset_left = -144.0
-offset_top = 40.0
-offset_right = 144.0
-offset_bottom = 88.0
+offset_left = -124.0
+offset_top = 84.0
+offset_right = 164.0
+offset_bottom = 132.0
 text = "back
 "
+
+[node name="credits" type="Control" parent="screens"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="screens/credits"]
+layout_mode = 0
+offset_left = -616.0
+offset_top = -300.0
+offset_right = -192.0
+offset_bottom = 164.0
+theme_override_font_sizes/font_size = 15
+text = "Sprites:
+Slime: rvros (itch)
+Player: Me, Bundy Kim and Dahoon Lee (Contingent99)
+Forest tileset: Trixie (itch)
+Stone pillars: Goodlyay (deviant art)
+Under Trees background: Pixel Overload (itch)
+Mountain background: ansimuz (itch)
+Roots background: Me
+Spell sprites: Me, War (itch), ppeldo (itch), ansimuz (itch)
+golem: Penusbmic
+"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="screens/credits"]
+layout_mode = 0
+offset_left = -176.0
+offset_top = -300.0
+offset_right = 176.0
+offset_bottom = 175.0
+theme_override_font_sizes/font_size = 15
+text = "Sfx:
+Steam,water:Me
+Death scream: Mafon2 (freesound)
+Ice effect: InspectorJ (freesound)
+Jump,walk,dash,damaged sounds: team cherry
+Air burst sound: florianreichelt (freesound)
+Fire burst sound: SilverIllusionist (freesound)
+Fire stream sound: Aegersum (freesound)
+Slime move sound: iampagan (freesound)
+Slime hiss: Reitanna (freesound)
+Slime hit sound: original_sound (freesound)
+Rock power on: themfish (freesound)
+Golem hover sound: BRYANSMOSH (freesound)
+Golem lazer sound: Erokia (freesound)
+Rock noises: adamgryu (freesound)
+Rock smash: NeoSpica (freesound)
+Pickup sound: ToxicFilmzSRsounds (freesound)
+Respawn sound: harrisonlace (freesound)
+Electricity sound: newlocknew (freesound)
+"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="screens/credits"]
+layout_mode = 0
+offset_left = 192.0
+offset_top = -300.0
+offset_right = 512.0
+offset_bottom = 148.0
+theme_override_font_sizes/font_size = 15
+text = "
+Music:
+Menu:
+Forest:
+Boss:
+"
+horizontal_alignment = 1
+
+[node name="credits_back" type="Button" parent="screens/credits"]
+layout_mode = 0
+offset_left = -144.0
+offset_top = 212.0
+offset_right = 144.0
+offset_bottom = 260.0
+text = "Back"
 
 [connection signal="pressed" from="screens/title/play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="screens/title/settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="screens/title/quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="screens/title/credits" to="." method="_on_credits_pressed"]
 [connection signal="pressed" from="screens/settings/audio" to="." method="_on_audio_pressed"]
+[connection signal="pressed" from="screens/settings/visual" to="." method="_on_visual_pressed"]
 [connection signal="pressed" from="screens/settings/key_binds" to="." method="_on_key_binds_pressed"]
 [connection signal="pressed" from="screens/settings/back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="screens/key_binds/back_kebind" to="." method="_on_back_kebind_pressed"]
+[connection signal="pressed" from="screens/visual_settings/back_visual" to="." method="_on_back_visual_pressed"]
+[connection signal="pressed" from="screens/visual_settings/GridContainer/font_size_down" to="." method="_on_font_size_down_pressed"]
+[connection signal="pressed" from="screens/visual_settings/GridContainer/font_size_up" to="." method="_on_font_size_up_pressed"]
+[connection signal="pressed" from="screens/visual_settings/GridContainer/change_screen_mode" to="." method="_on_change_screen_mode_pressed"]
+[connection signal="pressed" from="screens/visual_settings/GridContainer/apply_screen_mode" to="." method="_on_apply_screen_mode_pressed"]
 [connection signal="pressed" from="screens/audio_settings/GridContainer/music_volume_down" to="." method="_on_music_volume_down_pressed"]
 [connection signal="pressed" from="screens/audio_settings/GridContainer/music_volume_up" to="." method="_on_music_volume_up_pressed"]
 [connection signal="pressed" from="screens/audio_settings/GridContainer/sfx_volume_down" to="." method="_on_sfx_volume_down_pressed"]
 [connection signal="pressed" from="screens/audio_settings/GridContainer/sfx_volume_up" to="." method="_on_sfx_volume_up_pressed"]
 [connection signal="pressed" from="screens/audio_settings/audio_back" to="." method="_on_audio_back_pressed"]
+[connection signal="pressed" from="screens/credits/credits_back" to="." method="_on_credits_back_pressed"]
