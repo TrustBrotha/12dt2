@@ -13,7 +13,7 @@ var direction = 1
 var health = 1000
 var debuff = "clear"
 var damage = -10
-var knockback = 300
+var knockback = 150
 var immune = false
 var immunity_frames_called = false
 
@@ -90,6 +90,11 @@ func attack():
 
 func _on_attack_timer_timeout():
 	movement_state = "moving"
+	attack_timer_called = false
+	$attack_cooldown_timer.start()
+
+func _on_attack_cooldown_timer_timeout():
+	attack_lock = false
 
 func _on_vision_area_entered(area):
 	if area.is_in_group("player") and attack_lock == false:
@@ -97,12 +102,6 @@ func _on_vision_area_entered(area):
 		movement_state = "attack"
 		velocity.x = 0.1 * direction
 		$AnimatedSprite2D.play("attack")
-
-func _on_vision_area_exited(area):
-	if area.is_in_group("player"):
-		attack_timer_called = false
-		attack_lock = false
-		movement_state = "moving"
 
 
 
@@ -131,6 +130,8 @@ func _on_hitbox_area_entered(area):
 			immune = true
 			var spell_scene = area.get_parent()
 			apply_spell(spell_scene)
+	if area.is_in_group("environment_threat"):
+		$Control/healthbar.value = 0
 
 
 func apply_spell(spell_scene):
@@ -192,6 +193,9 @@ func _on_animated_sprite_2d_animation_finished():
 		movement_state = "moving"
 	if $AnimatedSprite2D.animation == "death":
 		queue_free()
+
+
+
 
 
 

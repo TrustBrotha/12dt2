@@ -5,6 +5,10 @@ extends State
 var knockback = 200
 
 func on_enter():
+	character.velocity.x = -character.last_direction * character.knockback
+	character.velocity.y = -1.5 * character.knockback
+	
+	
 #	character.collision_layer
 	character.collision_layer = 4
 	character.collision_layer != 2

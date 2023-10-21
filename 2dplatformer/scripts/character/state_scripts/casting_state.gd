@@ -6,9 +6,10 @@ extends State
 
 # Called when the node enters the scene tree for the first time.
 func on_enter():
+	character.exit_cast = false
 	if character.can_cast == true:
 		character.start_spells()
-		character.can_cast = false
+#		character.can_cast = false
 	else:
 		if character.is_on_floor():
 			next_state = ground_state_var
@@ -22,7 +23,7 @@ func state_process(delta):
 		can_move_state = false
 		character.velocity.x = 0
 		character.velocity.y = 0
-	if character.spell_type == "burst":
+	if character.spell_type == "burst" or character.exit_cast == true:
 		
 		if character.is_on_floor():
 			next_state = ground_state_var
@@ -44,3 +45,4 @@ func state_input(event : InputEvent):
 
 func on_exit():
 	character.previous_state = "casting"
+	character.cast_released()

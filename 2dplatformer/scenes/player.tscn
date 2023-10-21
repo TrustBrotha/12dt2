@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=3 uid="uid://ctyju6sh4srpg"]
+[gd_scene load_steps=83 format=3 uid="uid://ctyju6sh4srpg"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_sebs5"]
 [ext_resource type="Texture2D" uid="uid://bva6iihufen86" path="res://icon.svg" id="2_fa3lw"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/character/state_scripts/ground_state.gd" id="10_bh4mh"]
 [ext_resource type="Script" path="res://scripts/character/state_scripts/immunity_state.gd" id="11_6rjt5"]
 [ext_resource type="Script" path="res://scripts/character/state_scripts/air_state.gd" id="11_ri2tl"]
+[ext_resource type="Script" path="res://scripts/character/state_scripts/inventory.gd" id="12_qq6ub"]
 [ext_resource type="Script" path="res://scripts/character/state_scripts/landing_state.gd" id="12_tmfp4"]
 [ext_resource type="Script" path="res://scripts/character/state_scripts/wall_state.gd" id="14_746o7"]
 [ext_resource type="Script" path="res://scripts/character/state_scripts/dash_state.gd" id="15_mg7lu"]
@@ -580,10 +581,10 @@ shape = SubResource("RectangleShape2D_oac5m")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, -76)
-zoom = Vector2(2, 2)
+zoom = Vector2(3, 3)
 limit_smoothed = true
 position_smoothing_enabled = true
-position_smoothing_speed = 15.0
+position_smoothing_speed = 10.0
 
 [node name="timers" type="Node" parent="."]
 
@@ -662,12 +663,13 @@ script = ExtResource("9_t3a24")
 character = NodePath("..")
 current_state = NodePath("ground")
 
-[node name="ground" type="Node" parent="character_state_machine" node_paths=PackedStringArray("air_state_var", "dash_state_var", "casting_state_var", "immunity_state_var")]
+[node name="ground" type="Node" parent="character_state_machine" node_paths=PackedStringArray("air_state_var", "dash_state_var", "casting_state_var", "immunity_state_var", "inventory_state_var")]
 script = ExtResource("10_bh4mh")
 air_state_var = NodePath("../air")
 dash_state_var = NodePath("../dash")
 casting_state_var = NodePath("../casting")
 immunity_state_var = NodePath("../immunity")
+inventory_state_var = NodePath("../inventory")
 
 [node name="air" type="Node" parent="character_state_machine" node_paths=PackedStringArray("ground_state_var", "landing_state_var", "wall_state_var", "dash_state_var", "casting_state_var", "immunity_state_var")]
 script = ExtResource("11_ri2tl")
@@ -681,11 +683,12 @@ immunity_state_var = NodePath("../immunity")
 [node name="landing" type="Node" parent="character_state_machine"]
 script = ExtResource("12_tmfp4")
 
-[node name="wall" type="Node" parent="character_state_machine" node_paths=PackedStringArray("immunity_state_var", "ground_state_var", "air_state_var")]
+[node name="wall" type="Node" parent="character_state_machine" node_paths=PackedStringArray("immunity_state_var", "ground_state_var", "air_state_var", "dash_state_var")]
 script = ExtResource("14_746o7")
 immunity_state_var = NodePath("../immunity")
 ground_state_var = NodePath("../ground")
 air_state_var = NodePath("../air")
+dash_state_var = NodePath("../dash")
 
 [node name="dash" type="Node" parent="character_state_machine" node_paths=PackedStringArray("ground_state_var", "air_state_var")]
 script = ExtResource("15_mg7lu")
@@ -705,6 +708,12 @@ ground_state_var = NodePath("../ground")
 air_state_var = NodePath("../air")
 can_move_state = false
 
+[node name="inventory" type="Node" parent="character_state_machine" node_paths=PackedStringArray("ground_state_var", "immunity_state_var")]
+script = ExtResource("12_qq6ub")
+ground_state_var = NodePath("../ground")
+immunity_state_var = NodePath("../immunity")
+can_move_state = false
+
 [node name="safe_floor_check_folder" type="Node2D" parent="."]
 
 [node name="left_floor_check" type="RayCast2D" parent="safe_floor_check_folder"]
@@ -714,6 +723,9 @@ target_position = Vector2(0, 8)
 [node name="right_floor_check" type="RayCast2D" parent="safe_floor_check_folder"]
 position = Vector2(-24, 0)
 target_position = Vector2(0, 8)
+
+[node name="boid_target" type="Node2D" parent="."]
+position = Vector2(0, -19)
 
 [connection signal="animation_finished" from="player_sprite" to="." method="_on_player_sprite_animation_finished"]
 [connection signal="timeout" from="timers/coyote_timer" to="." method="_on_coyote_timer_timeout"]

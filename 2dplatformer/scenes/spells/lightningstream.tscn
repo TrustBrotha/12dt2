@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bnp47kw5d6qhb"]
+[gd_scene load_steps=9 format=3 uid="uid://bnp47kw5d6qhb"]
 
 [ext_resource type="Texture2D" uid="uid://c83c1mcv80qdj" path="res://assets/spell_assets/fire_particle.png" id="3_iyftn"]
 [ext_resource type="Texture2D" uid="uid://cy7snttqxhm4" path="res://pixil-frame-0 (9).png" id="3_y3hjw"]
@@ -30,16 +30,28 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" groups=["lightning", "spell", "stream"]]
-sprite_frames = SubResource("SpriteFrames_f8jrt")
-frame = 1
-frame_progress = 0.158018
-script = ExtResource("6_hvhjh")
+[sub_resource type="CircleShape2D" id="CircleShape2D_e1bmj"]
+radius = 17.8885
 
-[node name="Timer2" type="Timer" parent="."]
+[node name="Node2D" type="Node2D" groups=["lightning", "spell", "stream"]]
+script = ExtResource("6_hvhjh")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
 
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_f8jrt")
+frame = 1
+frame_progress = 0.158018
+
+[node name="Timer2" type="Timer" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_e1bmj")
+
+[connection signal="timeout" from="Timer" to="AnimatedSprite2D" method="_on_timer_timeout"]

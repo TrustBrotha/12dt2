@@ -41,7 +41,19 @@ collision_mode = 1
 collision_friction = 0.0
 collision_bounce = 0.0
 
-[node name="firestream" type="GPUParticles2D" groups=["fire", "spell", "stream"]]
+[node name="Node2D" type="Node2D" groups=["fire", "spell", "stream"]]
+script = ExtResource("2_s07o3")
+collision_scene = ExtResource("3_744sk")
+
+[node name="collision_timer" type="Timer" parent="."]
+wait_time = 0.09
+autostart = true
+
+[node name="deletion_timer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="firestream" type="GPUParticles2D" parent="."]
 modulate = Color(1, 1, 1, 0.843137)
 texture_filter = 1
 emitting = false
@@ -49,16 +61,8 @@ amount = 150
 process_material = SubResource("ParticleProcessMaterial_ff5d5")
 texture = ExtResource("1_kbugp")
 randomness = 1.0
-script = ExtResource("2_s07o3")
-collision_scene = ExtResource("3_744sk")
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 0.5
-one_shot = true
+[node name="Camera2D" type="Camera2D" parent="."]
 
-[node name="collision_timer" type="Timer" parent="."]
-wait_time = 0.09
-autostart = true
-
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="collision_timer" to="." method="_on_collision_timer_timeout"]
+[connection signal="timeout" from="deletion_timer" to="." method="_on_deletion_timer_timeout"]

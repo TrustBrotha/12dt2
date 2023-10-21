@@ -8,6 +8,7 @@ class_name ground_state
 @export var dash_state_var : State
 @export var casting_state_var : State
 @export var immunity_state_var : State
+@export var inventory_state_var : State
 
 var max_hori_speed = 125
 var state_can_dash = true
@@ -37,6 +38,9 @@ func on_enter():
 func state_input(event : InputEvent):
 	if(event.is_action_pressed("down")):
 		character.position.y += 1
+	
+	if(event.is_action_pressed("inventory")):
+		next_state = inventory_state_var
 	
 	if(event.is_action_pressed("jump")):
 		jump()

@@ -1,11 +1,12 @@
 extends State
 
 class_name wall_state
-@export var vert_jump_force = -250.0
+@export var vert_jump_force = -300.0
 @export var hori_jump_force = 250
 @export var immunity_state_var : State
 @export var ground_state_var : State
 @export var air_state_var : State
+@export var dash_state_var : State
 
 func state_process(delta):
 	character.wall_check()
@@ -37,6 +38,8 @@ func state_input(event : InputEvent):
 	if(event.is_action_released("jump") and character.velocity.y < 0):
 		character.velocity.y /= 2
 		character.velocity.x /= 2
+	if(event.is_action_pressed("dash")):
+		next_state = dash_state_var
 
 func on_exit():
 	character.previous_state = "wall"

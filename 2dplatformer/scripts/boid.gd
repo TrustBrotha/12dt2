@@ -5,13 +5,13 @@ var BoidsCanSee = []
 @onready var rayfolder := $rayfolder.get_children()
 
 var vel := Vector2(randf_range(-1,1), randf_range(-1,1))
-var matchingfactor = 0.04
-var centeringfactor = 0.010
-var avoidingfactor = 0.004
-var turnfactor = 0.05
+var matchingfactor = 0.025
+var centeringfactor = 0.007
+var avoidingfactor = 0.01
+var turnfactor = 0.002
 var randomnessenabled = 1
 var randomnessfactor = 0.05
-var collisionfactor = 0.003
+var collisionfactor = 0.006
 
 var leftmargin = 300
 var rightmargin = 2260
@@ -19,10 +19,12 @@ var topmargin = 300
 var bottommargin = 1140
 var border = 1
 var margin = 400
-
+var target = Vector2.ZERO
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	get_parent().move_child(self,1)
+	$AnimatedSprite2D.play("default")
+	$GPUParticles2D.emitting = true
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -39,6 +41,7 @@ func get_variables():
 	rightmargin = get_parent().get_node("player").position.x + 40
 	topmargin = get_parent().get_node("player").position.y - 100
 	bottommargin = get_parent().get_node("player").position.y - 20
+	target = get_parent().get_node("player").get_node("boid_target").global_position
 
 func boid_calc():
 	if len(BoidsCanSee) <= 0:
@@ -79,16 +82,16 @@ func collision():
 		pass
 
 func move():
-	if border == 1:
-		if global_position.x < leftmargin:
-			vel.x = vel.x + turnfactor
-		if global_position.x > rightmargin:
-			vel.x = vel.x - turnfactor
-		if global_position.y > bottommargin:
-			vel.y = vel.y - turnfactor
-		if global_position.y < topmargin:
-			vel.y = vel.y + turnfactor
-	
+#	vel += (target-global_position) * turnfactor
+#	if global_position.x < leftmargin:
+#		vel.x = vel.x + turnfactor
+#	if global_position.x > rightmargin:
+#		vel.x = vel.x - turnfactor
+#	if global_position.y > bottommargin:
+#		vel.y = vel.y - turnfactor
+#	if global_position.y < topmargin:
+#		vel.y = vel.y + turnfactor
+	$AnimatedSprite2D.global_rotation = 0
 	vel = vel.normalized() * speed
 	rotation = vel.angle() 
 	global_position += vel

@@ -70,24 +70,11 @@ collision_mode = 1
 collision_friction = 0.0
 collision_bounce = 0.0
 
-[node name="waterstream" type="GPUParticles2D" groups=["spell", "stream", "water"]]
-texture_filter = 1
-emitting = false
-amount = 50
-sub_emitter = NodePath("mist")
-process_material = SubResource("ParticleProcessMaterial_6u454")
-texture = ExtResource("1_obh18")
+[node name="Node2D" type="Node2D" groups=["spell", "stream", "water"]]
 script = ExtResource("2_hhbpy")
 collision_scene = ExtResource("3_cxpod")
 
-[node name="mist" type="GPUParticles2D" parent="."]
-emitting = false
-amount = 50
-process_material = SubResource("ParticleProcessMaterial_oyy70")
-texture = ExtResource("1_obh18")
-lifetime = 0.3
-
-[node name="Timer" type="Timer" parent="."]
+[node name="deletion_timer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
 
@@ -95,5 +82,20 @@ one_shot = true
 wait_time = 0.09
 autostart = true
 
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[node name="waterstream" type="GPUParticles2D" parent="."]
+texture_filter = 1
+emitting = false
+amount = 50
+sub_emitter = NodePath("mist")
+process_material = SubResource("ParticleProcessMaterial_6u454")
+texture = ExtResource("1_obh18")
+
+[node name="mist" type="GPUParticles2D" parent="waterstream"]
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_oyy70")
+texture = ExtResource("1_obh18")
+lifetime = 0.3
+
+[connection signal="timeout" from="deletion_timer" to="." method="_on_deletion_timer_timeout"]
 [connection signal="timeout" from="collision_timer" to="." method="_on_collision_timer_timeout"]

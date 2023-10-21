@@ -1,20 +1,23 @@
-extends GPUParticles2D
-var deletion_wait_time = 0.2
-var extension_time = false
+extends Node2D
 @export var collision_scene:PackedScene
+
 var timer_called = false
+
 var charge_decrease = 2
+
 #placeholder values
 var knockback = 0
 var damage = 10
 var hitbox_speed = 4
 var hitbox_direction = 1
 
+var emit = true
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var hitbox_direction = get_parent().get_node("player").last_direction
+	$firestream.emitting = true
+	hitbox_direction = get_parent().get_node("player").last_direction
 	var hitbox = collision_scene.instantiate()
-	hitbox.rotation = rotation
 	hitbox.speed = hitbox_speed * hitbox_direction
 	hitbox.position = position
 	hitbox.add_to_group("fire")
@@ -24,21 +27,32 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if extension_time == true and timer_called == false:
+	if Input.is_action_just_pressed("dash"):
+		emit = false
+	
+	
+	if emit == false and timer_called == false:
+		cancel()
 		timer_called = true
-		$Timer.start()
-#	print($Timer.time_left)
 
-func _on_timer_timeout():
+
+func cancel():
+	$firestream.emitting = false
+	$deletion_timer.wait_time = $firestream.lifetime
+	$deletion_timer.start()
+
+
+func _on_deletion_timer_timeout():
 	queue_free()
 
 func _on_collision_timer_timeout():
-	if emitting == true:
+	if $firestream.emitting == true:
 		var hitbox = collision_scene.instantiate()
-		hitbox.rotation = rotation
 		hitbox.speed = hitbox_speed * hitbox_direction
 		hitbox.position = position
 		hitbox.add_to_group("fire")
 		hitbox.damage = damage
 		hitbox.knockback = knockback
 		add_sibling(hitbox)
+
+

@@ -1,19 +1,139 @@
-[gd_scene load_steps=6 format=3 uid="uid://bl1hug2vdm8ad"]
+[gd_scene load_steps=25 format=3 uid="uid://bl1hug2vdm8ad"]
 
 [ext_resource type="Script" path="res://scripts/boid.gd" id="1_mg0v1"]
 [ext_resource type="Texture2D" uid="uid://bxlwcer8c4gx0" path="res://pixil-frame-0 (11).png" id="2_a5nkb"]
+[ext_resource type="Texture2D" uid="uid://bvf7iq58wor6l" path="res://assets/spritesheet.png" id="2_u6bww"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0gqwb"]
 radius = 120.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s3b2r"]
-size = Vector2(153.333, 96)
+size = Vector2(54, 31)
+
+[sub_resource type="Gradient" id="Gradient_vd0rl"]
+offsets = PackedFloat32Array(0, 0.261084, 0.660098, 0.881773, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 0, 0.482353, 1, 1, 0, 0.482353, 1, 1, 0, 0.482353, 1, 0.294118)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_12vkj"]
+gradient = SubResource("Gradient_vd0rl")
+
+[sub_resource type="Curve" id="Curve_p1h80"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.765182, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_imous"]
+curve = SubResource("Curve_p1h80")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ah0u2"]
+particle_flag_disable_z = true
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+tangential_accel_min = 10.0
+tangential_accel_max = 10.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_imous")
+color_ramp = SubResource("GradientTexture1D_12vkj")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sfra4"]
+atlas = ExtResource("2_u6bww")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ahtki"]
+atlas = ExtResource("2_u6bww")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6533a"]
+atlas = ExtResource("2_u6bww")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hpcpr"]
+atlas = ExtResource("2_u6bww")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_syus5"]
+atlas = ExtResource("2_u6bww")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4wfty"]
+atlas = ExtResource("2_u6bww")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hkbcm"]
+atlas = ExtResource("2_u6bww")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k45bb"]
+atlas = ExtResource("2_u6bww")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ojpnf"]
+atlas = ExtResource("2_u6bww")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a6wso"]
+atlas = ExtResource("2_u6bww")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6gfe4"]
+atlas = ExtResource("2_u6bww")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f3it0"]
+atlas = ExtResource("2_u6bww")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vqvye"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sfra4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ahtki")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6533a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hpcpr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_syus5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4wfty")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hkbcm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k45bb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ojpnf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a6wso")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6gfe4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f3it0")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g78yb"]
-size = Vector2(37, 16)
+size = Vector2(5.5, 5.5)
 
 [node name="boid" type="Area2D" groups=["boid"]]
-scale = Vector2(0.15, 0.15)
 script = ExtResource("1_mg0v1")
 metadata/boid = true
 
@@ -28,14 +148,27 @@ visible = false
 polygon = PackedVector2Array(0, -168, 48, -160, 96, -136, 136, -96, 160, -48, 168, 0, 160, 48, 136, 96, 96, 136, 48, 160, 0, 168)
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="vision"]
-position = Vector2(43.3333, 0)
+position = Vector2(14, -0.5)
 shape = SubResource("RectangleShape2D_s3b2r")
 
 [node name="sprite" type="Polygon2D" parent="."]
 visible = false
 polygon = PackedVector2Array(24, 0, 16, -8, 8, -8, 0, 0, -8, -8, -16, -8, -16, -5, -8, -5, -4, 0, -8, 5, -16, 5, -16, 8, -8, 8, 0, 0, 8, 8, 16, 8)
 
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+rotation = 1.5708
+scale = Vector2(3, 3)
+process_material = SubResource("ParticleProcessMaterial_ah0u2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-1, 0)
+rotation = 1.5708
+sprite_frames = SubResource("SpriteFrames_vqvye")
+frame_progress = 0.793473
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 texture_filter = 1
 position = Vector2(2, 1)
 rotation = 1.5708
@@ -43,23 +176,23 @@ scale = Vector2(3, 3)
 texture = ExtResource("2_a5nkb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(3.5, 0)
+position = Vector2(-0.5, -0.5)
 scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_g78yb")
 
 [node name="rayfolder" type="Node2D" parent="."]
 
 [node name="RayCast2D" type="RayCast2D" parent="rayfolder"]
-target_position = Vector2(500, -10)
+target_position = Vector2(65, -4)
 
 [node name="RayCast2D2" type="RayCast2D" parent="rayfolder"]
-target_position = Vector2(490, 10)
+target_position = Vector2(60, 5)
 
 [node name="RayCast2D3" type="RayCast2D" parent="rayfolder"]
-target_position = Vector2(170, 170)
+target_position = Vector2(23, 38)
 
 [node name="RayCast2D4" type="RayCast2D" parent="rayfolder"]
-target_position = Vector2(170, -170)
+target_position = Vector2(23, -38)
 
 [connection signal="area_entered" from="vision" to="." method="_on_vision_area_entered"]
 [connection signal="area_exited" from="vision" to="." method="_on_vision_area_exited"]

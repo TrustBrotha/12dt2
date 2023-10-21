@@ -1,75 +1,173 @@
-[gd_scene format=3 uid="uid://b253jsyqao2rg"]
+[gd_scene load_steps=11 format=3 uid="uid://b253jsyqao2rg"]
+
+[ext_resource type="Texture2D" uid="uid://evqobg3jinw0" path="res://assets/healthbar_under.png" id="1_cfrp3"]
+[ext_resource type="Script" path="res://scripts/HUD.gd" id="1_uxdc7"]
+[ext_resource type="Texture2D" uid="uid://dq5mhdi8axd4s" path="res://assets/chargebar_empty.png" id="2_5albg"]
+[ext_resource type="Texture2D" uid="uid://cl1n0onebk80p" path="res://assets/healthbar_bar.png" id="2_8aj7y"]
+[ext_resource type="Texture2D" uid="uid://pirl2irfrjvn" path="res://assets/chargebar_bar.png" id="3_o452j"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_c2vtk"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_qq66q"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_a181o"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tu36w"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_6ailn"]
 
 [node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_uxdc7")
 
 [node name="spell_charge_bar_folder" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -40.0
+offset_top = -112.0
 offset_right = 40.0
+offset_bottom = -72.0
 grow_vertical = 0
 
-[node name="spell1_charge_bar" type="ProgressBar" parent="spell_charge_bar_folder"]
-layout_mode = 0
-offset_left = 48.0
-offset_top = -160.0
-offset_right = 160.0
-offset_bottom = -133.0
+[node name="spell1_charge_bar" type="TextureProgressBar" parent="spell_charge_bar_folder"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.2
+anchor_bottom = -0.2
+offset_left = 72.0
+offset_top = -480.0
+offset_right = 104.0
+offset_bottom = -472.0
+scale = Vector2(4, 4)
 value = 100.0
+texture_under = ExtResource("2_5albg")
+texture_progress = ExtResource("3_o452j")
 
-[node name="spell2_charge_bar" type="ProgressBar" parent="spell_charge_bar_folder"]
+[node name="spell2_charge_bar" type="TextureProgressBar" parent="spell_charge_bar_folder"]
+texture_filter = 1
 layout_mode = 0
-offset_left = 48.0
-offset_top = -120.0
-offset_right = 160.0
-offset_bottom = -93.0
+offset_left = 72.0
+offset_top = -432.0
+offset_right = 104.0
+offset_bottom = -424.0
+scale = Vector2(4, 4)
 value = 100.0
+texture_under = ExtResource("2_5albg")
+texture_progress = ExtResource("3_o452j")
 
-[node name="spell3_charge_bar" type="ProgressBar" parent="spell_charge_bar_folder"]
+[node name="spell3_charge_bar" type="TextureProgressBar" parent="spell_charge_bar_folder"]
+texture_filter = 1
 layout_mode = 0
-offset_left = 48.0
-offset_top = -80.0
-offset_right = 160.0
-offset_bottom = -53.0
+offset_left = 72.0
+offset_top = -376.0
+offset_right = 104.0
+offset_bottom = -368.0
+scale = Vector2(4, 4)
 value = 100.0
+texture_under = ExtResource("2_5albg")
+texture_progress = ExtResource("3_o452j")
 
-[node name="spell4_charge_bar" type="ProgressBar" parent="spell_charge_bar_folder"]
+[node name="spell4_charge_bar" type="TextureProgressBar" parent="spell_charge_bar_folder"]
+texture_filter = 1
 layout_mode = 0
-offset_left = 48.0
-offset_top = -40.0
-offset_right = 160.0
-offset_bottom = -13.0
+offset_left = 72.0
+offset_top = -320.0
+offset_right = 104.0
+offset_bottom = -312.0
+scale = Vector2(4, 4)
 value = 100.0
+texture_under = ExtResource("2_5albg")
+texture_progress = ExtResource("3_o452j")
 
-[node name="spell5_charge_bar" type="ProgressBar" parent="spell_charge_bar_folder"]
+[node name="spell5_charge_bar" type="TextureProgressBar" parent="spell_charge_bar_folder"]
+texture_filter = 1
 layout_mode = 0
-offset_left = 48.0
-offset_right = 160.0
-offset_bottom = 27.0
+offset_left = 72.0
+offset_top = -264.0
+offset_right = 104.0
+offset_bottom = -256.0
+scale = Vector2(4, 4)
 value = 100.0
+texture_under = ExtResource("2_5albg")
+texture_progress = ExtResource("3_o452j")
 
 [node name="state_debug_label" type="Label" parent="."]
-offset_left = 8.0
-offset_top = 112.0
-offset_right = 61.0
-offset_bottom = 138.0
+offset_left = 296.0
+offset_top = 576.0
+offset_right = 349.0
+offset_bottom = 602.0
 text = "state =
 "
 
 [node name="fps_debug_label" type="Label" parent="."]
-offset_left = 8.0
-offset_top = 136.0
-offset_right = 48.0
-offset_bottom = 162.0
+offset_left = 304.0
+offset_top = 544.0
+offset_right = 344.0
+offset_bottom = 570.0
 text = "fps ="
 
-[node name="health_bar" type="ProgressBar" parent="."]
-modulate = Color(0.937255, 0, 0.113725, 1)
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 320.0
-offset_bottom = 40.0
+[node name="health_bar" type="TextureProgressBar" parent="."]
+texture_filter = 1
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 148.0
+offset_bottom = 36.0
+scale = Vector2(4, 4)
 value = 100.0
-show_percentage = false
+texture_under = ExtResource("1_cfrp3")
+texture_progress = ExtResource("2_8aj7y")
+
+[node name="spell_icon_background" type="Node" parent="."]
+
+[node name="icon_background1" type="Sprite2D" parent="spell_icon_background"]
+modulate = Color(0, 0, 0, 0.294118)
+position = Vector2(40, 136)
+scale = Vector2(48, 48)
+texture = SubResource("PlaceholderTexture2D_c2vtk")
+
+[node name="icon_background2" type="Sprite2D" parent="spell_icon_background"]
+modulate = Color(0, 0, 0, 0.294118)
+position = Vector2(40, 192)
+scale = Vector2(48, 48)
+texture = SubResource("PlaceholderTexture2D_qq66q")
+
+[node name="icon_background3" type="Sprite2D" parent="spell_icon_background"]
+modulate = Color(0, 0, 0, 0.294118)
+position = Vector2(40, 248)
+scale = Vector2(48, 48)
+texture = SubResource("PlaceholderTexture2D_a181o")
+
+[node name="icon_background4" type="Sprite2D" parent="spell_icon_background"]
+modulate = Color(0, 0, 0, 0.294118)
+position = Vector2(40, 304)
+scale = Vector2(48, 48)
+texture = SubResource("PlaceholderTexture2D_tu36w")
+
+[node name="icon_background5" type="Sprite2D" parent="spell_icon_background"]
+modulate = Color(0, 0, 0, 0.294118)
+position = Vector2(40, 360)
+scale = Vector2(48, 48)
+texture = SubResource("PlaceholderTexture2D_6ailn")
+
+[node name="spell_icons" type="Node" parent="."]
+
+[node name="spell_icon1" type="Sprite2D" parent="spell_icons"]
+position = Vector2(40, 136)
+scale = Vector2(28, 28)
+
+[node name="spell_icon2" type="Sprite2D" parent="spell_icons"]
+position = Vector2(40, 192)
+scale = Vector2(28, 28)
+
+[node name="spell_icon3" type="Sprite2D" parent="spell_icons"]
+position = Vector2(40, 248)
+scale = Vector2(28, 28)
+
+[node name="spell_icon4" type="Sprite2D" parent="spell_icons"]
+position = Vector2(40, 304)
+scale = Vector2(28, 28)
+
+[node name="spell_icon5" type="Sprite2D" parent="spell_icons"]
+position = Vector2(40, 360)
+scale = Vector2(28, 28)

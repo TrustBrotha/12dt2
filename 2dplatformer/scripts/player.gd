@@ -24,6 +24,7 @@ var movement_state = "normal"
 var last_direction = 1
 var health_change
 var taken_damage = false
+var knockback
 
 var safe_ground = Vector2.ZERO
 var reset_position = false
@@ -45,6 +46,7 @@ var spell_movement = false
 var stop_stream = false
 var spell_type
 var charge_lock
+var exit_cast = false
 
 var near_wall = false
 var near_right_wall = false
@@ -65,6 +67,10 @@ var combo3_called = false
 
 func _ready():
 	set_spells()
+	$Camera2D.limit_left = get_parent().camera_limit_left
+	$Camera2D.limit_right = get_parent().camera_limit_right
+	$Camera2D.limit_top = get_parent().camera_limit_up
+	$Camera2D.limit_bottom = get_parent().camera_limit_down
 
 func _physics_process(delta):
 	HUD_update()
@@ -73,11 +79,12 @@ func _physics_process(delta):
 	healthcheck()
 	screen_effects()
 	move_and_slide()
+	
 
 
 func set_spells():
 	var all_spells = ["fireburst", "airburst", "firestream", "waterstream", "lightningstream"]
-	equiped_spells = ["fireburst", "airburst", "firestream", "waterstream", "lightningstream"]
+	equiped_spells = GlobalVar.equipped_spells
 
 	spell1 = load("res://scenes/spells/%s.tscn" %equiped_spells[0])
 	spell2 = load("res://scenes/spells/%s.tscn" %equiped_spells[1])
@@ -141,17 +148,15 @@ func start_spells(): #plays once when entering casting state
 func cast_released():
 	if saved_spell == null:
 		pass
+	
 	elif saved_spell.is_in_group("stream"):
-		if saved_spell is GPUParticles2D:
-			saved_spell.emitting = false
-		elif saved_spell is AnimatedSprite2D:
-			saved_spell.stop()
-			saved_spell.hide()
-		$timers/spell_timer.wait_time = saved_spell.deletion_wait_time
+		saved_spell.emit = false
 		$timers/spell_timer.start()
 		$timers/spell_cooldown.start()
 		saved_spell = null
 		losing_charge = false
+		exit_cast = true
+
 
 func spell_creation(spell):
 	$spell_spawn.position.x = 16 * last_direction
@@ -159,11 +164,8 @@ func spell_creation(spell):
 	spell.global_position = $spell_spawn.global_position
 	spell.scale.x = last_direction
 	add_sibling(spell)
-#	get_parent().move_child(spell,3)
-	created_spells.append(spell)
-	
-	if spell is GPUParticles2D:
-		spell.emitting = true
+	get_parent().move_child(spell,3)
+
 	if spell.is_in_group("burst"):
 		can_cast = false
 		animation_lock = true
@@ -171,19 +173,18 @@ func spell_creation(spell):
 			animated_sprite.play("combo1")
 			combo1_called = true
 			$timers/combo_timer.start()
-			
+
 		elif combo2_called == false and $timers/combo_timer.time_left > 0:
 			animated_sprite.play("combo2")
 			combo2_called = true
 			$timers/combo_timer.start()
-			
+
 		elif combo3_called == false and $timers/combo_timer.time_left > 0:
 			animated_sprite.play("combo3")
 			combo2_called = false
 			combo1_called = false
 			$timers/combo_timer.stop()
-		
-		$timers/spell_timer.wait_time = spell.deletion_wait_time
+
 		$timers/spell_timer.start()
 		spell_type = "burst"
 	elif spell.is_in_group("stream"):
@@ -215,10 +216,9 @@ func basic_movement():
 				velocity.x += direction * acceleration
 				moving = true
 		
-		
-		else:
-			velocity.x = int(lerpf(velocity.x,0.0,0.2))
-			moving = false
+		else: #if no input
+			velocity.x = int(lerpf(velocity.x,0.0,0.2)) #decelerates the player towards zero
+			moving = false #called in ground state for animations
 
 func sprite_position():
 	$player_sprite.scale.x = -last_direction
@@ -232,46 +232,48 @@ func sprite_position():
 	else:
 		$player_sprite.position.x -= 0 * last_direction
 
-func wall_check():
-	var num_of_false_check = 0
+func wall_check(): #called during air state
+	var num_of_false_check = 0 #resets number of detections at the start of eacah frame
 	
-	for check in right_wall_check_folder:
-		var ray : RayCast2D = check
+	for check in right_wall_check_folder: #runs for however many raycasts in the right wall check folder
+		var ray : RayCast2D = check #sets var as a raycast2D
 		if ray.is_colliding():
 			near_wall = true
 			near_right_wall = true
-			break
+			break #stops wall check as it is true
 		elif !ray.is_colliding():
 			num_of_false_check +=1
 			near_right_wall = false
 	
-	for check in left_wall_check_folder:
-		var ray : RayCast2D = check
+	for check in left_wall_check_folder: #runs for however many raycasts in the left wall check folder
+		var ray : RayCast2D = check #sets var as a raycast2D
 		if ray.is_colliding():
 			near_wall = true
 			near_left_wall = true
-			break
+			break #stops wall check as it is true
 		elif !ray.is_colliding():
 			num_of_false_check +=1
 			near_left_wall = false
 	
-	if num_of_false_check == 4:
+	if num_of_false_check == 4: #if all 4 checks return false then character is not near a wall
 		near_wall = false
 
 
-func safe_ground_check():
-	var num_of_safe_checks = 0
-	for check in safe_floor_folder:
+func safe_ground_check(): #searches for safe ground to return to if hit by environmental damaga
+	#could optimize to run every 5 frames or so
+	
+	var num_of_safe_checks = 0 #resets number of detections at the start of eacah frame
+	for check in safe_floor_folder: #runs for however many raycasts in the safe floor check folder
 		if check.is_colliding():
 			num_of_safe_checks += 1
 		else:
 			pass
-	if num_of_safe_checks == 2:
-		safe_ground = global_position
+	if num_of_safe_checks == 2: #if all of the checks return then the next line runs
+		safe_ground = global_position #saves the position to return to if needed
 
 func gravity_applying(delta):
-	if !is_on_floor():
-		velocity.y += gravity * delta
+	if !is_on_floor(): #checks if player is in the air
+		velocity.y += gravity * delta #if true accelerates player down
 		if velocity.y > 2000:
 			velocity.y = 2000
 
@@ -279,13 +281,15 @@ func gravity_applying(delta):
 
 
 func healthcheck():
-	if get_parent().get_node("HUD").get_node("health_bar").value <= 0:
+	if GlobalVar.character_health <= 0:
 		get_tree().change_scene_to_file("res://scenes/title_screen_scenes/titlescreen.tscn")
+		GlobalVar.reset()
 
 
 func health_update():
 	if health_change != null:
-		get_parent().get_node("HUD").get_node("health_bar").value += health_change
+		GlobalVar.character_health += health_change
+		get_parent().get_node("HUD").get_node("health_bar").value = GlobalVar.character_health
 
 
 
@@ -293,28 +297,25 @@ func health_update():
 func _on_enemyhitbox_area_entered(area):
 	if area.is_in_group("enemy") and taken_damage == false:
 		health_change = area.get_parent().damage
-		var knockback = area.get_parent().knockback
-		velocity.x = -last_direction * knockback
-		velocity.y = -knockback
+		knockback = area.get_parent().knockback
+		
 		taken_damage = true
 		
 		health_update()
 	
 	elif area.is_in_group("environment_threat"):
 		health_change = -10
-		var knockback = 200
+		knockback = 200
 		velocity.x = -last_direction * 2 * knockback
 		velocity.y = -knockback
 		taken_damage = true
 		health_update()
 		reset_position = true
 		
-	elif area.is_in_group("finish_line"):
-		get_tree().change_scene_to_file("res://scenes/title_screen_scenes/titlescreen.tscn")
+	
 
 func screen_effects():
 	if reset_position == true:
-		
 		get_parent().get_node("environment_effect").modulate.a = lerpf(get_parent().get_node("environment_effect").modulate.a, screen_target_opacity, 0.3)
 		
 		if get_parent().get_node("environment_effect").modulate.a > 0.3:

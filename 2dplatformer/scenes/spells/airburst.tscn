@@ -45,7 +45,10 @@ collision_bounce = 0.0
 radius = 24.0
 height = 112.0
 
-[node name="airburst" type="GPUParticles2D" groups=["air", "burst", "spell"]]
+[node name="Node2D" type="Node2D" groups=["air", "burst", "spell"]]
+script = ExtResource("2_tu5o4")
+
+[node name="airburst" type="GPUParticles2D" parent="."]
 texture_filter = 1
 emitting = false
 amount = 100
@@ -54,7 +57,14 @@ texture = ExtResource("1_kp4hn")
 lifetime = 0.3
 one_shot = true
 explosiveness = 1.0
-script = ExtResource("2_tu5o4")
+
+[node name="deletion_timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="collision_timer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+autostart = true
 
 [node name="Area2D" type="Area2D" parent="." groups=["burst_collision"]]
 
@@ -64,14 +74,5 @@ rotation = 1.5708
 shape = SubResource("CapsuleShape2D_ayyy2")
 disabled = true
 
-[node name="collision_timer" type="Timer" parent="."]
-wait_time = 0.1
-one_shot = true
-autostart = true
-
-[node name="collision_deletion" type="Timer" parent="."]
-wait_time = 0.1
-one_shot = true
-
+[connection signal="timeout" from="deletion_timer" to="." method="_on_deletion_timer_timeout"]
 [connection signal="timeout" from="collision_timer" to="." method="_on_collision_timer_timeout"]
-[connection signal="timeout" from="collision_deletion" to="." method="_on_collision_deletion_timeout"]
