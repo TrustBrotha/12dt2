@@ -5,6 +5,9 @@ class_name State
 var character : CharacterBody2D
 var next_state : State
 
+
+
+# defines states in "state" class
 func state_process(delta):
 	pass
 

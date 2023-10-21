@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://b253jsyqao2rg"]
+[gd_scene load_steps=18 format=3 uid="uid://b253jsyqao2rg"]
 
 [ext_resource type="Texture2D" uid="uid://evqobg3jinw0" path="res://assets/healthbar_under.png" id="1_cfrp3"]
 [ext_resource type="Script" path="res://scripts/HUD.gd" id="1_uxdc7"]
@@ -26,6 +26,9 @@ colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_oiewh"]
 gradient = SubResource("Gradient_ksjxk")
+
+[sub_resource type="Theme" id="Theme_66dgn"]
+default_font_size = 30
 
 [sub_resource type="Theme" id="Theme_ciduq"]
 
@@ -212,7 +215,7 @@ scale = Vector2(28, 28)
 
 [node name="screen_effect" type="Sprite2D" parent="."]
 modulate = Color(0, 0, 0, 0)
-position = Vector2(656, 344)
+position = Vector2(655, 344)
 scale = Vector2(1688, 1032)
 texture = SubResource("PlaceholderTexture2D_tt1u1")
 
@@ -241,11 +244,21 @@ position = Vector2(276, -16)
 scale = Vector2(8.625, 1)
 texture = SubResource("GradientTexture2D_oiewh")
 
+[node name="temp" type="Label" parent="Control"]
+visible = false
+layout_mode = 0
+offset_left = 839.0
+offset_top = -40.0
+offset_right = 1258.0
+offset_bottom = 5.0
+theme = SubResource("Theme_66dgn")
+text = "<---- Tutorials Displayed Here"
+
 [node name="tutorials" type="Label" parent="Control"]
 layout_mode = 0
-offset_left = 30.0
+offset_left = 17.0
 offset_top = -30.0
-offset_right = 70.0
+offset_right = 57.0
 offset_bottom = -2.0
 theme = SubResource("Theme_ciduq")
 

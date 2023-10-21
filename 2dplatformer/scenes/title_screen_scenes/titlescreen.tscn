@@ -319,9 +319,9 @@ action = "inventory"
 [node name="back_kebind" type="Button" parent="screens/key_binds"]
 layout_mode = 0
 offset_left = -144.0
-offset_top = 216.0
+offset_top = 256.0
 offset_right = 144.0
-offset_bottom = 264.0
+offset_bottom = 304.0
 action_mode = 0
 text = "back
 "
@@ -382,16 +382,34 @@ text = "Size: 0"
 layout_mode = 2
 text = "+"
 
-[node name="Label" type="Label" parent="screens/visual_settings/GridContainer"]
+[node name="GridContainer2" type="GridContainer" parent="screens/visual_settings"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -124.0
+offset_top = 20.0
+offset_right = 124.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 4
+
+[node name="Label" type="Label" parent="screens/visual_settings/GridContainer2"]
+texture_filter = 1
 layout_mode = 2
 text = "Screen Mode:"
 
-[node name="change_screen_mode" type="Button" parent="screens/visual_settings/GridContainer"]
+[node name="change_screen_mode" type="Button" parent="screens/visual_settings/GridContainer2"]
+texture_filter = 1
 layout_mode = 2
 text = "DEFAULT
 "
 
-[node name="apply_screen_mode" type="Button" parent="screens/visual_settings/GridContainer"]
+[node name="apply_screen_mode" type="Button" parent="screens/visual_settings/GridContainer2"]
+texture_filter = 1
 layout_mode = 2
 text = "APPLY"
 
@@ -432,7 +450,7 @@ horizontal_alignment = 2
 
 [node name="music_volume_down" type="Button" parent="screens/audio_settings/GridContainer"]
 layout_mode = 2
-text = " - "
+text = "-"
 
 [node name="music_volume" type="Label" parent="screens/audio_settings/GridContainer"]
 layout_mode = 2
@@ -459,40 +477,6 @@ text = "Volume: 0"
 layout_mode = 2
 text = "+"
 
-[node name="GridContainer2" type="GridContainer" parent="screens/audio_settings"]
-layout_mode = 0
-offset_left = -72.0
-offset_top = -56.0
-offset_right = 76.0
-offset_bottom = 10.0
-columns = 2
-
-[node name="music" type="Label" parent="screens/audio_settings/GridContainer2"]
-visible = false
-layout_mode = 2
-text = "Music enabled:"
-horizontal_alignment = 2
-
-[node name="Button" type="Button" parent="screens/audio_settings/GridContainer2"]
-visible = false
-layout_mode = 2
-toggle_mode = true
-text = "on
-"
-
-[node name="sfx" type="Label" parent="screens/audio_settings/GridContainer2"]
-visible = false
-layout_mode = 2
-text = "SFX enabled:"
-horizontal_alignment = 2
-
-[node name="Button2" type="Button" parent="screens/audio_settings/GridContainer2"]
-visible = false
-layout_mode = 2
-toggle_mode = true
-text = "on
-"
-
 [node name="audio_back" type="Button" parent="screens/audio_settings"]
 layout_mode = 0
 offset_left = -124.0
@@ -503,7 +487,6 @@ text = "back
 "
 
 [node name="credits" type="Control" parent="screens"]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -573,9 +556,9 @@ offset_bottom = 148.0
 theme_override_font_sizes/font_size = 15
 text = "
 Music:
-Menu:
-Forest:
-Boss:
+Menu: Hajime Wakai, Manaka Kataoka, and Yasuaki Iwata
+Forest: Kevin MacLeod
+Boss: MSR (monster siren records)
 "
 horizontal_alignment = 1
 
@@ -599,8 +582,8 @@ text = "Back"
 [connection signal="pressed" from="screens/visual_settings/back_visual" to="." method="_on_back_visual_pressed"]
 [connection signal="pressed" from="screens/visual_settings/GridContainer/font_size_down" to="." method="_on_font_size_down_pressed"]
 [connection signal="pressed" from="screens/visual_settings/GridContainer/font_size_up" to="." method="_on_font_size_up_pressed"]
-[connection signal="pressed" from="screens/visual_settings/GridContainer/change_screen_mode" to="." method="_on_change_screen_mode_pressed"]
-[connection signal="pressed" from="screens/visual_settings/GridContainer/apply_screen_mode" to="." method="_on_apply_screen_mode_pressed"]
+[connection signal="pressed" from="screens/visual_settings/GridContainer2/change_screen_mode" to="." method="_on_change_screen_mode_pressed"]
+[connection signal="pressed" from="screens/visual_settings/GridContainer2/apply_screen_mode" to="." method="_on_apply_screen_mode_pressed"]
 [connection signal="pressed" from="screens/audio_settings/GridContainer/music_volume_down" to="." method="_on_music_volume_down_pressed"]
 [connection signal="pressed" from="screens/audio_settings/GridContainer/music_volume_up" to="." method="_on_music_volume_up_pressed"]
 [connection signal="pressed" from="screens/audio_settings/GridContainer/sfx_volume_down" to="." method="_on_sfx_volume_down_pressed"]

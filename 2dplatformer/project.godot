@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="12DT2MetroidvaniaTest_Thomas_Shaw"
-run/main_scene="res://scenes/testlevel.tscn"
+run/main_scene="res://scenes/title_screen_scenes/titlescreen.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 config/icon="res://assets/icon.svg"
 
@@ -24,6 +24,7 @@ MusicPlayer="*res://scenes/music_player.tscn"
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+window/size/mode=3
 window/stretch/mode="canvas_items"
 
 [input]

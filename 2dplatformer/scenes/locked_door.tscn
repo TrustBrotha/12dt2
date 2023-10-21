@@ -1,77 +1,113 @@
-[gd_scene load_steps=21 format=3 uid="uid://cbu4hac6eppsr"]
+[gd_scene load_steps=24 format=3 uid="uid://cbu4hac6eppsr"]
 
 [ext_resource type="Script" path="res://scripts/locked_door.gd" id="1_5uuid"]
 [ext_resource type="Texture2D" uid="uid://2dmhwdtbx25h" path="res://assets/door_pillar.png" id="2_0pnec"]
-[ext_resource type="Texture2D" uid="uid://cg42itrnrsd7s" path="res://assets/rock_key.png" id="2_45ppl"]
+[ext_resource type="Texture2D" uid="uid://d0s2hfsas7hwd" path="res://assets/rock_key.png" id="2_45ppl"]
 [ext_resource type="Texture2D" uid="uid://2mgp524u01xe" path="res://assets/spell_assets/water_particle_temp.png" id="4_8s1hm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0ikpi"]
 size = Vector2(23, 43)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0n8jj"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_p8prl"]
 atlas = ExtResource("2_45ppl")
-region = Rect2(192, 49, 32, 32)
+region = Rect2(0, 49, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_jhps5"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ptkae"]
 atlas = ExtResource("2_45ppl")
-region = Rect2(224, 49, 32, 32)
+region = Rect2(64, 49, 32, 32)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_iusbw"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0n8jj")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jhps5")
-}],
-"loop": true,
-"name": &"default",
-"speed": 0.6
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nsfes"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_fvurw"]
 atlas = ExtResource("2_45ppl")
-region = Rect2(192, 49, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_a8psg"]
-atlas = ExtResource("2_45ppl")
-region = Rect2(224, 49, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_ka57h"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_nsfes")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_a8psg")
-}],
-"loop": true,
-"name": &"default",
-"speed": 0.4
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_c8uyj"]
-atlas = ExtResource("2_45ppl")
-region = Rect2(192, 49, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8kvbt"]
-atlas = ExtResource("2_45ppl")
-region = Rect2(224, 49, 32, 32)
+region = Rect2(32, 49, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_8ybfq"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_c8uyj")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_8kvbt")
+"texture": SubResource("AtlasTexture_p8prl")
 }],
 "loop": true,
-"name": &"default",
+"name": &"off",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ptkae")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fvurw")
+}],
+"loop": true,
+"name": &"on",
 "speed": 0.5
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_up0qn"]
+atlas = ExtResource("2_45ppl")
+region = Rect2(0, 49, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3rn8a"]
+atlas = ExtResource("2_45ppl")
+region = Rect2(64, 49, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m4mud"]
+atlas = ExtResource("2_45ppl")
+region = Rect2(32, 49, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_iusbw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_up0qn")
+}],
+"loop": true,
+"name": &"off",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3rn8a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m4mud")
+}],
+"loop": true,
+"name": &"on",
+"speed": 0.6
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6xjo"]
+atlas = ExtResource("2_45ppl")
+region = Rect2(0, 49, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tm3ei"]
+atlas = ExtResource("2_45ppl")
+region = Rect2(64, 49, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bsfhx"]
+atlas = ExtResource("2_45ppl")
+region = Rect2(32, 49, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ka57h"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e6xjo")
+}],
+"loop": true,
+"name": &"off",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tm3ei")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bsfhx")
+}],
+"loop": true,
+"name": &"on",
+"speed": 0.4
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_25myb"]
@@ -131,6 +167,35 @@ texture = ExtResource("2_0pnec")
 position = Vector2(35.5, -46.5)
 shape = SubResource("RectangleShape2D_0ikpi")
 
+[node name="keyhole1" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(112, 1)
+sprite_frames = SubResource("SpriteFrames_8ybfq")
+animation = &"off"
+
+[node name="keyhole2" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(80, 1)
+rotation = 3.14159
+scale = Vector2(1, -1)
+sprite_frames = SubResource("SpriteFrames_iusbw")
+animation = &"off"
+
+[node name="keyhole3" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(96, -33)
+scale = Vector2(1, -1)
+sprite_frames = SubResource("SpriteFrames_ka57h")
+animation = &"off"
+
+[node name="rock" type="AnimatedSprite2D" parent="."]
+modulate = Color(1, 1, 1, 0)
+texture_filter = 1
+position = Vector2(112, 1)
+sprite_frames = SubResource("SpriteFrames_8ybfq")
+animation = &"on"
+frame_progress = 0.0166438
+
 [node name="rock2" type="AnimatedSprite2D" parent="."]
 modulate = Color(1, 1, 1, 0)
 texture_filter = 1
@@ -138,7 +203,7 @@ position = Vector2(80, 1)
 rotation = 3.14159
 scale = Vector2(1, -1)
 sprite_frames = SubResource("SpriteFrames_iusbw")
-frame_progress = 0.970519
+animation = &"on"
 
 [node name="rock3" type="AnimatedSprite2D" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -146,14 +211,7 @@ texture_filter = 1
 position = Vector2(96, -33)
 scale = Vector2(1, -1)
 sprite_frames = SubResource("SpriteFrames_ka57h")
-frame_progress = 0.429815
-
-[node name="rock" type="AnimatedSprite2D" parent="."]
-modulate = Color(1, 1, 1, 0)
-texture_filter = 1
-position = Vector2(112, 1)
-sprite_frames = SubResource("SpriteFrames_8ybfq")
-frame_progress = 0.460576
+animation = &"on"
 
 [node name="Area2D" type="Area2D" parent="."]
 
@@ -189,6 +247,10 @@ explosiveness = 1.0
 
 [node name="rumble_timer" type="Timer" parent="."]
 one_shot = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
 [connection signal="timeout" from="rumble_timer" to="." method="_on_rumble_timer_timeout"]

@@ -13,16 +13,20 @@ var target_level = "none"
 @onready var room_change_areas = $room_changes.get_children()
 var zoom = "in"
 
+
 # Called when the node enters the scene tree for the first time.
+# moves player to correct door, checks what needs to be created from globalvar
 func _ready():
+	get_node("HUD").get_node("screen_effect").modulate.a = 1
 	$player.get_node("Camera2D").position_smoothing_enabled = false
 	GlobalVar.current_level = "f5"
 	if GlobalVar.double_jump_unlocked == false:
 		create_pickup("movement","double_jump",Vector2(-968,-443))
 	if "f5_key" not in GlobalVar.discovered_keys:
-		create_pickup("key","f5_key",Vector2(-1552,-91))
-	get_node("HUD").get_node("screen_effect").modulate.a = 1
+		create_pickup("key","f5_key",Vector2(-1440,-218))
 
+
+# creates a pickup which when picked up changes unlocks in globalvar
 func create_pickup(type,unlock,pickup_position):
 	var pickup = pickup_scene.instantiate()
 	pickup.type = type
@@ -32,16 +36,20 @@ func create_pickup(type,unlock,pickup_position):
 	add_child(pickup)
 	move_child(get_node(unlock),get_node("walls_floor").get_index())
 
+
+# camera control, fade in / out control
 func _process(delta):
 	$player.get_node("Camera2D").position_smoothing_enabled = true
 	if fade_from_black == true:
-		get_node("HUD").get_node("screen_effect").modulate.a = lerpf(get_node("HUD").get_node("screen_effect").modulate.a, 0, 0.2)
+		get_node("HUD").get_node("screen_effect").modulate.a\
+				 = lerpf(get_node("HUD").get_node("screen_effect").modulate.a, 0, 0.2)
 		if get_node("HUD").get_node("screen_effect").modulate.a <= 0.05:
 			get_node("HUD").get_node("screen_effect").modulate.a = 0
 			fade_from_black = false
 	
 	if fade_to_black == true:
-		get_node("HUD").get_node("screen_effect").modulate.a = lerpf(get_node("HUD").get_node("screen_effect").modulate.a, 1, 0.2)
+		get_node("HUD").get_node("screen_effect").modulate.a\
+				 = lerpf(get_node("HUD").get_node("screen_effect").modulate.a, 1, 0.2)
 	
 	if get_node("HUD").get_node("screen_effect").modulate.a >= 0.9:
 		if target_level != "none":
@@ -49,9 +57,15 @@ func _process(delta):
 	
 	
 	
-	if $player.global_position.x > $zoom_down.global_position.x or $player.global_position.y < $zoom_down.global_position.y:
+	if (
+			$player.global_position.x > $zoom_down.global_position.x
+			or $player.global_position.y < $zoom_down.global_position.y
+	):
 		zoom = "normal"
-	elif $player.global_position.x < $zoom_down.global_position.x or $player.global_position.y > $zoom_down.global_position.y:
+	elif (
+			$player.global_position.x < $zoom_down.global_position.x
+			or $player.global_position.y > $zoom_down.global_position.y
+	):
 		zoom = "down"
 	
 	if zoom == "down":
@@ -60,7 +74,7 @@ func _process(delta):
 		$player/Camera2D.position.y = lerpf($player/Camera2D.position.y, -67,0.1)
 
 
-
+# door detections
 func _on_f_5_f_1_area_entered(area):
 	if area.is_in_group("player"):
 		GlobalVar.last_level = "f5"
@@ -68,6 +82,7 @@ func _on_f_5_f_1_area_entered(area):
 		target_level = "res://scenes/levels/f_1.tscn"
 
 
+# controls when the doors become active after entering room
 func _on_change_room_timer_timeout():
 	for area in room_change_areas:
 		area.get_node("CollisionShape2D").disabled = false

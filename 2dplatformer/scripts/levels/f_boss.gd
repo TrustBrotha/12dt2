@@ -16,8 +16,12 @@ var close_door = false
 var boss_spawned = false
 var zoom = "in"
 var zoom_lock = false
+
+
 # Called when the node enters the scene tree for the first time.
+# moves player to correct door, checks what needs to be created from globalvar
 func _ready():
+	get_node("HUD").get_node("screen_effect").modulate.a = 1
 	$player.get_node("Camera2D").position_smoothing_enabled = false
 	GlobalVar.current_level = "fboss"
 	if GlobalVar.last_level == "f4":
@@ -32,31 +36,37 @@ func _ready():
 		$golem_dead.visible = true
 		$golem_dead.play("dead")
 		move_child(get_node("golem_dead"),get_node("player").get_index())
-	
-	
-	get_node("HUD").get_node("screen_effect").modulate.a = 1
 
 
+# camera control, fade in / out control
 func _process(delta):
 	$player.get_node("Camera2D").position_smoothing_enabled = true
 	if fade_from_black == true:
-		get_node("HUD").get_node("screen_effect").modulate.a = lerpf(get_node("HUD").get_node("screen_effect").modulate.a, 0, 0.2)
+		get_node("HUD").get_node("screen_effect").modulate.a\
+				 = lerpf(get_node("HUD").get_node("screen_effect").modulate.a, 0, 0.2)
 		if get_node("HUD").get_node("screen_effect").modulate.a <= 0.05:
 			get_node("HUD").get_node("screen_effect").modulate.a = 0
 			fade_from_black = false
 	
 	
 	if fade_to_black == true:
-		get_node("HUD").get_node("screen_effect").modulate.a = lerpf(get_node("HUD").get_node("screen_effect").modulate.a, 1, 0.2)
+		get_node("HUD").get_node("screen_effect").modulate.a\
+				 = lerpf(get_node("HUD").get_node("screen_effect").modulate.a, 1, 0.2)
 	
 	if get_node("HUD").get_node("screen_effect").modulate.a >= 0.9:
 		if target_level != "none":
 			get_tree().change_scene_to_file(target_level)
 	
 	
-	if $player.global_position.x > $zoom_left.global_position.x and $player.global_position.x < $zoom_right.global_position.x:
+	if (
+			$player.global_position.x > $zoom_left.global_position.x
+			and $player.global_position.x < $zoom_right.global_position.x
+	):
 		zoom = "out"
-	elif $player.global_position.x < $zoom_left.global_position.x or $player.global_position.x > $zoom_right.global_position.x:
+	elif (
+			$player.global_position.x < $zoom_left.global_position.x
+			or $player.global_position.x > $zoom_right.global_position.x
+	):
 		zoom = "in"
 		if zoom_lock == true:
 			zoom_lock = false
@@ -79,7 +89,10 @@ func _process(delta):
 	
 	
 	
-	if $player.global_position.x < $zoom_lock.global_position.x and GlobalVar.fboss_zoom_lock_called == false:
+	if (
+			$player.global_position.x < $zoom_lock.global_position.x
+			and GlobalVar.fboss_zoom_lock_called == false
+	):
 		zoom_lock = true
 		GlobalVar.fboss_zoom_lock_called = true
 	
@@ -99,6 +112,7 @@ func _process(delta):
 		$player.camera_update()
 
 
+# door detections
 func _on_fboss_f_4_area_entered(area):
 	if area.is_in_group("player"):
 		GlobalVar.last_level = "fboss"
@@ -115,6 +129,7 @@ func _on_fboss_ffinal_area_entered(area):
 		target_level = "res://scenes/title_screen_scenes/titlescreen.tscn"
 
 
+# controls when the doors become active after entering room
 func _on_change_room_timer_timeout():
 	for area in room_change_areas:
 		area.get_node("CollisionShape2D").disabled = false

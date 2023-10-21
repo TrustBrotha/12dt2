@@ -6,10 +6,12 @@ extends State
 
 # Called when the node enters the scene tree for the first time.
 func on_enter():
+	# controls exiting the casting state
 	character.exit_cast = false
+	
+	# starts the process of creating spells if allowed to
 	if character.can_cast == true:
 		character.start_spells()
-#		character.can_cast = false
 	else:
 		if character.is_on_floor():
 			next_state = ground_state_var
@@ -17,8 +19,8 @@ func on_enter():
 			next_state = air_state_var
 
 
+# controlls physics for different spells types, checks connections to different states
 func state_process(delta):
-#	character.spells()
 	if character.spell_type == "stream":
 		can_move_state = false
 		character.velocity.x = 0
@@ -34,6 +36,7 @@ func state_process(delta):
 		next_state = immunity_state_var
 
 
+# cancels stream spells and leaves casting state
 func state_input(event : InputEvent):
 	if(event.is_action_released("cast")):
 		character.cast_released()

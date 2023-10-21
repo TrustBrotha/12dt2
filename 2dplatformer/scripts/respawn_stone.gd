@@ -10,18 +10,20 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	# controls prompt
 	if in_player == true and on == false:
 		$Control.visible = true
+		# sets respawn room
 		if Input.is_action_just_pressed("up"):
 			GlobalVar.respawn_room = "res://scenes/levels/%s.tscn"%room
 			GlobalVar.respawn_point_reached = true
 			$stone_sound.play()
-			
 	
 	
 	elif in_player == false:
 		$Control.visible = false
 	
+	# controls whether on or off
 	if GlobalVar.respawn_room == "res://scenes/levels/%s.tscn"%room:
 		on = true
 	elif GlobalVar.respawn_room != "res://scenes/levels/%s.tscn"%room:
@@ -34,9 +36,12 @@ func _process(delta):
 		$glow.modulate.a = lerpf($glow.modulate.a, 0, 0.05)
 
 
+#player detection
 func _on_area_2d_area_entered(area):
-	in_player = true
+	if area.is_in_group("player"):
+		in_player = true
 
 
 func _on_area_2d_area_exited(area):
-	in_player = false
+	if area.is_in_group("player"):
+		in_player = false

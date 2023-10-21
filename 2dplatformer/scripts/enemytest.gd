@@ -32,17 +32,17 @@ func _ready():
 
 
 func _physics_process(delta):
-#	print($Control/healthbar.value)
-#	print($AnimatedSprite2D.animation)
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	
+	#check if dead
 	if $Control/healthbar.value <= 0:
 		$hitbox/hitbox_collision.disabled = true
 		$vision/vision_shape.disabled = true
 		$AnimatedSprite2D.play("death")
-		
+	
+	# debuff check
 	if frost_buildup >= 50:
 		debuff = "frozen"
 		$debuff_cooldown.wait_time = 2
@@ -51,10 +51,13 @@ func _physics_process(delta):
 		$paricle_folder/frozen_particles2.emitting = true
 		$paricle_folder/frozen_particles3.emitting = true
 		frost_buildup = 0
+	
+	# check if dead if not run like normal
 	if $Control/healthbar.value <= 0:
 		$hitbox/hitbox_collision.disabled = true
 		$vision/vision_shape.disabled = true
 		$AnimatedSprite2D.play("death")
+	
 	elif $Control/healthbar.value > 0:
 		pathfinding()
 		states()
@@ -63,6 +66,7 @@ func _physics_process(delta):
 	move_and_slide()
 
 
+# flipping if sees wall / edge
 func pathfinding():
 	if $raycastfloorcheck.is_colliding() == false:
 		direction *= -1
@@ -70,6 +74,8 @@ func pathfinding():
 		if $raycastfloorcheck.get_collider().is_in_group("tile"):
 			direction *= -1
 
+
+#controls physics
 func states():
 	if movement_state == "moving":
 		$raycastwallcheck.enabled = true
@@ -83,7 +89,7 @@ func states():
 #		movement()
 
 
-
+#controls how the slime accelerates 
 func movement():
 	$raycastfloorcheck.position.x = direction * 16
 	$raycastwallcheck.scale.y = direction
@@ -96,6 +102,8 @@ func movement():
 	velocity.x += direction * accel * speedchange
 	velocity.x = lerpf(velocity.x, 0 , 0.1)
 
+
+# controls how the attacking works
 func attack():
 	if attack_timer_called == false:
 		velocity.x = 0
@@ -104,14 +112,20 @@ func attack():
 	if $attack_timer.time_left <= $attack_timer.wait_time / 2:
 		velocity.x += 40 * direction
 
+
+# once finished attacking returns to normal
 func _on_attack_timer_timeout():
 	movement_state = "moving"
 	attack_timer_called = false
 	$attack_cooldown_timer.start()
 
+
+# controls when can attack
 func _on_attack_cooldown_timer_timeout():
 	attack_lock = false
 
+
+# detection for when to attack
 func _on_vision_area_entered(area):
 	if area.is_in_group("player") and attack_lock == false:
 		attack_lock = true
@@ -122,7 +136,7 @@ func _on_vision_area_entered(area):
 		$slime_audio.play()
 
 
-
+# control for if immune or not and conrolling hitboxes
 func immunity():
 	if immune == true and immunity_frames_called == false:
 		immunity_frames_called = true
@@ -131,12 +145,14 @@ func immunity():
 	elif immune == false:
 		$hitbox/hitbox_collision.disabled = false
 
+
+
 func _on_immunity_frame_timer_timeout():
 	immune = false
 	immunity_frames_called = false
-	
 
 
+# detection for spells / environment / player
 func _on_hitbox_area_entered(area):
 	if immune == false:
 		if area.is_in_group("stream_collision"):
@@ -156,8 +172,11 @@ func _on_hitbox_area_entered(area):
 		$Control/healthbar.value = 0
 		$slime_audio.stream = load("res://assets/sounds/slime_hit_sound.mp3")
 		$slime_audio.play()
+	if area.is_in_group("player"):
+		velocity.x = 0
 
 
+# applying the effect of the spell
 func apply_spell(spell_scene):
 	$AnimatedSprite2D.play("damaged")
 	if spell_scene.global_position.x >= global_position.x:
@@ -185,12 +204,9 @@ func apply_spell(spell_scene):
 			$debuff_cooldown.start()
 		elif spell_scene.is_in_group("ice"):
 			frost_buildup += 10
-			
 
-#func damaged():
-	
-	
 
+# applying the effect of each debuff
 func apply_debuffs():
 	if debuff != "clear":
 		if debuff == "burning":
@@ -209,6 +225,7 @@ func apply_debuffs():
 			$vision/vision_shape.disabled = true
 
 
+# reseting debuffs
 func _on_debuff_cooldown_timeout():
 	debuff = "clear"
 	speedchange = 1
@@ -218,6 +235,8 @@ func _on_debuff_cooldown_timeout():
 		if effect.emitting == true:
 			effect.emitting = false
 
+
+# controlling animation
 func _on_animated_sprite_2d_animation_finished():
 	animation_lock = false
 	if movement_state == "damaged":
@@ -230,11 +249,11 @@ func _on_animated_sprite_2d_animation_finished():
 
 
 
-
 func _on_hit_effect_timer_timeout():
 	pass # Replace with function body.
 
 
+# controls slime more sound loop
 func _on_audio_stream_player_2d_finished():
 	$slime_audio.stream = load("res://assets/sounds/slime_move_sound.mp3")
 	$slime_audio.play()

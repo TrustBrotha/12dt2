@@ -10,32 +10,36 @@ var fade_from_black = true
 var target_level = "none"
 
 @onready var room_change_areas = $room_changes.get_children()
+
+
 # Called when the node enters the scene tree for the first time.
+# moves player to correct door, checks what needs to be created from globalvar
 func _ready():
 	$player.get_node("Camera2D").position_smoothing_enabled = false
 	GlobalVar.current_level = "ffinal"
 	get_node("HUD").get_node("screen_effect").modulate.a = 1
 
 
+# camera control, fade in / out control
 func _process(delta):
 	$player.get_node("Camera2D").position_smoothing_enabled = true
 	if fade_from_black == true:
-		get_node("HUD").get_node("screen_effect").modulate.a = lerpf(get_node("HUD").get_node("screen_effect").modulate.a, 0, 0.2)
+		get_node("HUD").get_node("screen_effect").modulate.a\
+				 = lerpf(get_node("HUD").get_node("screen_effect").modulate.a, 0, 0.2)
 		if get_node("HUD").get_node("screen_effect").modulate.a <= 0.05:
 			get_node("HUD").get_node("screen_effect").modulate.a = 0
 			fade_from_black = false
 	
 	if fade_to_black == true:
-		get_node("HUD").get_node("screen_effect").modulate.a = lerpf(get_node("HUD").get_node("screen_effect").modulate.a, 1, 0.2)
+		get_node("HUD").get_node("screen_effect").modulate.a\
+				 = lerpf(get_node("HUD").get_node("screen_effect").modulate.a, 1, 0.2)
 	
 	if get_node("HUD").get_node("screen_effect").modulate.a >= 0.9:
 		if target_level != "none":
 			get_tree().change_scene_to_file(target_level)
 
 
-
-
-
+# door detections
 func _on_ffinal_fboss_area_entered(area):
 	if area.is_in_group("player"):
 		GlobalVar.last_level = "ffinal"
@@ -50,6 +54,7 @@ func _on_ffinal_titlescreen_area_entered(area):
 		target_level = "res://scenes/title_screen_scenes/titlescreen.tscn"
 
 
+# controls when the doors become active after entering room
 func _on_change_room_timer_timeout():
 	for area in room_change_areas:
 		area.get_node("CollisionShape2D").disabled = false

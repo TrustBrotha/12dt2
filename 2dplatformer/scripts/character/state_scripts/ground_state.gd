@@ -12,6 +12,9 @@ class_name ground_state
 
 var max_hori_speed = 125
 
+
+# controls animation, clamps max speed, calls the safe floor check in the character script
+# checks state connections
 func state_process(delta):
 	if character.moving == true and character.animation_lock == false:
 		character.animated_sprite.play("run")
@@ -29,11 +32,12 @@ func state_process(delta):
 	character.safe_ground_check()
 
 
-
+# resets the dash so that you can dash once while in the air again
 func on_enter():
 	character.can_dash = true
 
 
+# one way platform control, state changes, ability calling (jump)
 func state_input(event : InputEvent):
 	if(event.is_action_pressed("down")):
 		character.position.y += 1
@@ -43,8 +47,14 @@ func state_input(event : InputEvent):
 	
 	if(event.is_action_pressed("jump")):
 		jump()
-	if(event.is_action_pressed("dash") and character.can_dash and character.ground_can_dash and GlobalVar.dash_unlocked):
+	
+	if(
+		event.is_action_pressed("dash") and character.can_dash
+		and character.ground_can_dash
+		and GlobalVar.dash_unlocked
+	):
 		next_state = dash_state_var
+	
 	if(event.is_action_pressed("cast")):
 		if(event.is_action_pressed("spell1")):
 			character.saved_spell_input = "spell1"
@@ -59,13 +69,16 @@ func state_input(event : InputEvent):
 		next_state = casting_state_var
 
 
+# sends the player into the air
 func jump():
 	character.velocity.y = -jump_force
 	next_state = air_state_var
 	character.animated_sprite.play("jump")
 	character.play_sound("jump")
 
+
+# saves the state in case it is needed for a specific animation change
 func on_exit():
 	character.previous_state = "ground"
-	
+
 

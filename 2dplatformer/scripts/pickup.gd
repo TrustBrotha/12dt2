@@ -6,14 +6,17 @@ var picked_up = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# makes same volume as everything else
 	$AudioStreamPlayer2D.volume_db = GlobalVar.sound_effect_volume
 	
+	# controls lights
 	$PointLight2D.enabled = true
 	$PointLight2D2.enabled = true
 	$PointLight2D3.enabled = true
 	$GPUParticles2D.emitting = true
 	$GPUParticles2D2.emitting = true
 	
+	# controls colour of pickup
 	if type == "spell":
 		$PointLight2D.modulate = Color(0,1,1)
 		$PointLight2D2.modulate = Color(0,1,1)
@@ -37,15 +40,9 @@ func _ready():
 		
 	else:
 		pass
-	
-	
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
-
+# detects if player picks up the pickup and applies visual effects
 func _on_area_2d_area_entered(area):
 	if area.is_in_group("player"):
 		if picked_up == false:
@@ -67,8 +64,8 @@ func _on_area_2d_area_entered(area):
 			$GPUParticles2D2.emitting = false
 			$deletion_timer.wait_time = $GPUParticles2D3.lifetime
 			$deletion_timer.start()
-	
 
 
+# deletes once finished for optimisation reasons
 func _on_deletion_timer_timeout():
 	queue_free()

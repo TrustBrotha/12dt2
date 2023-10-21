@@ -5,17 +5,18 @@ class_name air_state
 @export var coyote_jump_force = 275.0
 
 @export var ground_state_var : State
-@export var landing_state_var : State
 @export var wall_state_var : State
 @export var dash_state_var : State
 @export var casting_state_var : State
 @export var immunity_state_var : State
+@export var inventory_state_var : State
 
 var max_hori_speed = 125
 var has_double_jumped = false
-
 var dash_animation_called = false
 
+
+# checks connections to other states, applies gravity, fixes animation issue
 func state_process(delta):
 	if(character.is_on_floor()):
 		next_state = ground_state_var
@@ -37,6 +38,8 @@ func state_process(delta):
 				character.animated_sprite.play("fall_start")
 				dash_animation_called = true
 
+
+# checks connections to other states, makes the character do some actions based on some inputs
 func state_input(event : InputEvent):
 	if character.coyote_jump == false:
 		if(event.is_action_pressed("jump") and !has_double_jumped):
@@ -65,13 +68,19 @@ func state_input(event : InputEvent):
 		elif(event.is_action_pressed("spell5")):
 			character.saved_spell_input = "spell5"
 		next_state = casting_state_var
+	
+	if(event.is_action_pressed("inventory")):
+		next_state = inventory_state_var
 
+
+# resets double jump
 func on_exit():
 	if(next_state == ground_state_var or next_state == wall_state_var):
 		has_double_jumped = false
 		character.previous_state = "air"
-	
 
+
+# applies force from double jump
 func double_jump():
 	if GlobalVar.double_jump_unlocked:
 		character.velocity.y = -double_jump_force
@@ -80,6 +89,8 @@ func double_jump():
 		character.animated_sprite.play("jump")
 		character.play_sound("jump")
 
+
+# controls animation
 func on_enter():
 	dash_animation_called = false
 	if(character.previous_state == "ground" and character.velocity.y >0):

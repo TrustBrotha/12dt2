@@ -1,8 +1,5 @@
 extends CharacterBody2D
 
-#603,282
-var all_options = ["power_up","idle","move","turn_left_to_right","turn_right_to_left","death","burst_attack","ground_punch","lazer_attack","spin","steam_burst"]
-var left_to_do = ["turn_left_to_right","turn_right_to_left","death"]
 # Called when the node enters the scene tree for the first time.
 @onready var next_animation = "power_up"
 @onready var attack_areas = $turnables/attack_hitboxes.get_children()
@@ -29,8 +26,10 @@ var dead = false
 var frost_buildup = 0
 @onready var current_sound_effect_nodes = $audio.get_children()
 var current_sound_effects = []
+
+
 func _ready():
-	
+	# controls sound / visuals
 	MusicPlayer.play_boss_music()
 	$golem_hover.play()
 	$golem_hover.volume_db = GlobalVar.sound_effect_volume
@@ -44,11 +43,11 @@ func _ready():
 func _process(delta):
 	current_sound_effect_nodes = $audio.get_children()
 	current_sound_effects = []
+	# controls sound
 	for i in current_sound_effect_nodes:
 		current_sound_effects.append(i.name)
 	
-	
-	
+	# controls if dead
 	if health <= 0 and dead == false:
 		dead = true
 		play_sound("golem_death")
@@ -92,13 +91,14 @@ func _process(delta):
 	
 	move_and_slide()
 
+# calls for decision to be made
 func _on_decision_timer_timeout():
 	action_decision()
 	$turnables/AnimatedSprite2D.play(next_animation)
 	wait_timer_called = false
 
 
-
+# instanciates sounds
 func play_sound(sound):
 	var audio = audio_scene.instantiate()
 	audio.stream = load("res://assets/sounds/%s_sound.mp3"%sound)
@@ -106,7 +106,7 @@ func play_sound(sound):
 	$audio.add_child(audio)
 
 
-
+# controlls immunity
 func immunity():
 	if immune == true and immunity_timer_called == false:
 		immunity_timer_called = true
@@ -125,29 +125,37 @@ func immunity():
 	elif $hitbox/CollisionShape2D.disabled == false:
 		immune_effect_called = false
 
+
+# controls colour of golem
 func _on_damaged_effect_timer_timeout():
 	color_normal()
 	$turnables/AnimatedSprite2D.modulate = Color(1,1,1)
 
+# controls immunity
 func _on_immunity_frame_timer_timeout():
 	immune = false
 	immunity_timer_called = false
 
 
+# controls colour of golem
 func color_white():
 	for i in range(7):
-		$turnables/AnimatedSprite2D.material.set("shader_parameter/newcolor%s"%(i+1),Color8(1000,1000,1000))
-	
+		$turnables/AnimatedSprite2D.material\
+				.set("shader_parameter/newcolor%s"%(i+1),Color8(1000,1000,1000))
 
+
+# controls colour of golem
 func color_normal():
-	var color_list = [Color8(27,38,30),Color8(42,62,51),Color8(64,88,111),Color8(59,108,101),Color8(58,108,101),Color8(64,88,111),Color8(75,138,153)]
+	var color_list = [
+		Color8(27,38,30),Color8(42,62,51),Color8(64,88,111),
+		Color8(59,108,101),Color8(58,108,101),Color8(64,88,111),Color8(75,138,153)
+	]
 	for i in range(7):
-		$turnables/AnimatedSprite2D.material.set("shader_parameter/newcolor%s"%(i+1),color_list[i])
+		$turnables/AnimatedSprite2D.material\
+				.set("shader_parameter/newcolor%s"%(i+1),color_list[i])
 
 
-
-
-
+# decision making code
 func action_decision():
 	if player_infront == true:
 		var options = ["steam_burst","lazer_attack"]
@@ -199,6 +207,8 @@ func action_decision():
 			$attack_collision_timer.start()
 			play_sound("golem_rock")
 
+
+# fliping control
 func _on_animated_sprite_2d_animation_finished():
 	if dead == false:
 		if global_position.x < get_parent().get_node("player").global_position.x:
@@ -214,22 +224,15 @@ func _on_animated_sprite_2d_animation_finished():
 			$decision_wait_timer.start()
 			wait_timer_called = true
 
+
+# spawning boulder from ground punch attack
 func create_boulder():
 	var boulder = boulder_scene.instantiate()
 	boulder.position.y = -330
 	boulder.xpos = get_parent().get_node("player").global_position.x
 	$turnables/projectiles.add_child(boulder)
 
-
-
-
-
-
-
-
-
-
-
+# player detection
 func _on_infront_area_entered(area):
 	if area.is_in_group("player"):
 		player_infront = true
@@ -237,13 +240,16 @@ func _on_infront_area_entered(area):
 			$turnables/AnimatedSprite2D.play("1_frame")
 			moving = false
 
+
 func _on_infront_area_exited(area):
 	if area.is_in_group("player"):
 		player_infront = false
 
+
 func _on_under_area_entered(area):
 	if area.is_in_group("player"):
 		player_under = true
+
 
 func _on_under_area_exited(area):
 	if area.is_in_group("player"):
@@ -252,7 +258,7 @@ func _on_under_area_exited(area):
 
 
 
-
+# controlling attack collision
 func _on_attack_collision_timer_timeout():
 	if $turnables/AnimatedSprite2D.animation == "steam_burst":
 		$turnables/attack_hitboxes/steam_burst/collision.disabled = false
@@ -302,9 +308,7 @@ func _on_attack_collision_deletion_timeout():
 		area.get_node("collision").disabled = true
 
 
-
-
-
+# controls spell effect
 func _on_hitbox_area_entered(area):
 	if immune == false:
 		if area.is_in_group("stream_collision"):
@@ -317,6 +321,7 @@ func _on_hitbox_area_entered(area):
 			immune = true
 			var spell_scene = area.get_parent()
 			apply_spell(spell_scene)
+
 
 func apply_spell(spell_scene):
 	if spell_scene.global_position.x >= global_position.x:
@@ -345,6 +350,8 @@ func apply_spell(spell_scene):
 		elif spell_scene.is_in_group("ice"):
 			frost_buildup += 10
 
+
+# controls what debuffs do each frame
 func apply_debuffs():
 	if debuff != "clear":
 		if debuff == "burning":
@@ -365,7 +372,7 @@ func apply_debuffs():
 			$turnables/vision_hitboxes/under/under_collision.disabled = true
 
 
-
+# clears debuffs
 func _on_debuff_timer_timeout():
 	debuff = "clear"
 	speedchange = 1
@@ -377,9 +384,9 @@ func _on_debuff_timer_timeout():
 
 
 func _on_golem_sounds_finished():
-	
 	pass # Replace with function body.
 
 
+# loops hover sound
 func _on_golem_hover_finished():
 	$golem_hover.play()

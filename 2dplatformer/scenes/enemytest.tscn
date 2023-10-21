@@ -264,10 +264,10 @@ orbit_velocity_max = 0.0
 color_initial_ramp = SubResource("GradientTexture1D_dll1n")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ywvyw"]
-size = Vector2(24, 12)
+size = Vector2(20, 9)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_finxi"]
-size = Vector2(26, 14)
+size = Vector2(22, 11)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_26xib"]
 size = Vector2(52, 30)
@@ -281,7 +281,7 @@ script = ExtResource("1_v6o0j")
 texture_filter = 1
 position = Vector2(0, -11.5)
 sprite_frames = SubResource("SpriteFrames_2fmvl")
-animation = &"attack"
+animation = &"move"
 
 [node name="paricle_folder" type="Node2D" parent="."]
 
@@ -329,8 +329,7 @@ amount = 10
 process_material = SubResource("ParticleProcessMaterial_cseay")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(0, -6)
+position = Vector2(0, -4.5)
 shape = SubResource("RectangleShape2D_ywvyw")
 
 [node name="raycastfloorcheck" type="RayCast2D" parent="."]
@@ -343,11 +342,10 @@ rotation = -1.5708
 target_position = Vector2(-5.76973e-05, 16)
 
 [node name="hitbox" type="Area2D" parent="." groups=["enemy"]]
-visible = false
 metadata/enemy = true
 
 [node name="hitbox_collision" type="CollisionShape2D" parent="hitbox"]
-position = Vector2(0, -6)
+position = Vector2(0, -4.5)
 shape = SubResource("RectangleShape2D_finxi")
 
 [node name="debuff_cooldown" type="Timer" parent="."]
@@ -371,7 +369,6 @@ value = 100.0
 show_percentage = false
 
 [node name="vision" type="Area2D" parent="."]
-visible = false
 
 [node name="vision_shape" type="CollisionShape2D" parent="vision"]
 position = Vector2(26, -9)

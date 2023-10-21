@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://hdcfj3ve4gst"]
+[gd_scene load_steps=15 format=3 uid="uid://hdcfj3ve4gst"]
 
 [ext_resource type="Texture2D" uid="uid://2mgp524u01xe" path="res://assets/spell_assets/water_particle_temp.png" id="1_obh18"]
 [ext_resource type="Script" path="res://scripts/character/spell_scripts/waterstream.gd" id="2_hhbpy"]
 [ext_resource type="PackedScene" uid="uid://dhtlk54r0jal6" path="res://scenes/spells/collision.tscn" id="3_cxpod"]
+[ext_resource type="AudioStream" uid="uid://bjre45o6tvehq" path="res://assets/sounds/waterstream_sound.mp3" id="4_h0jqu"]
 
 [sub_resource type="Curve" id="Curve_3lgce"]
 min_value = -360.0
@@ -96,6 +97,9 @@ amount = 50
 process_material = SubResource("ParticleProcessMaterial_oyy70")
 texture = ExtResource("1_obh18")
 lifetime = 0.3
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_h0jqu")
 
 [connection signal="timeout" from="deletion_timer" to="." method="_on_deletion_timer_timeout"]
 [connection signal="timeout" from="collision_timer" to="." method="_on_collision_timer_timeout"]

@@ -8,6 +8,8 @@ class_name wall_state
 @export var air_state_var : State
 @export var dash_state_var : State
 
+
+# checks if still on wall, applies gravity, checks state connections, animation control
 func state_process(delta):
 	character.wall_check()
 	character.gravity_applying(delta)
@@ -17,6 +19,7 @@ func state_process(delta):
 		next_state = air_state_var
 	
 	if(character.is_on_wall()):
+		# controls wall slide
 		if character.animation_lock == false:
 			character.animated_sprite.play("wall_slide")
 		character.velocity.y = int(lerpf((character.velocity.y),0.0,0.3))
@@ -24,6 +27,8 @@ func state_process(delta):
 	if(character.taken_damage == true):
 		next_state = immunity_state_var
 
+
+# wall jump, state connection checks
 func state_input(event : InputEvent):
 	if(event.is_action_pressed("jump")):
 		if character.near_left_wall:
@@ -42,9 +47,13 @@ func state_input(event : InputEvent):
 	if(event.is_action_pressed("dash") and GlobalVar.dash_unlocked):
 		next_state = dash_state_var
 
+
+# saves state to be used later on
 func on_exit():
 	character.previous_state = "wall"
 
+
+# resets air dash, lets animations change
 func on_enter():
 	character.can_dash = true
 	character.animation_lock = false

@@ -1183,14 +1183,14 @@ casting_state_var = NodePath("../casting")
 immunity_state_var = NodePath("../immunity")
 inventory_state_var = NodePath("../inventory")
 
-[node name="air" type="Node" parent="character_state_machine" node_paths=PackedStringArray("ground_state_var", "landing_state_var", "wall_state_var", "dash_state_var", "casting_state_var", "immunity_state_var")]
+[node name="air" type="Node" parent="character_state_machine" node_paths=PackedStringArray("ground_state_var", "wall_state_var", "dash_state_var", "casting_state_var", "immunity_state_var", "inventory_state_var")]
 script = ExtResource("11_ri2tl")
 ground_state_var = NodePath("../ground")
-landing_state_var = NodePath("../dead")
 wall_state_var = NodePath("../wall")
 dash_state_var = NodePath("../dash")
 casting_state_var = NodePath("../casting")
 immunity_state_var = NodePath("../immunity")
+inventory_state_var = NodePath("../inventory")
 
 [node name="dead" type="Node" parent="character_state_machine"]
 script = ExtResource("9_2iyre")
@@ -1222,10 +1222,11 @@ air_state_var = NodePath("../air")
 dead_state_var = NodePath("../dead")
 can_move_state = false
 
-[node name="inventory" type="Node" parent="character_state_machine" node_paths=PackedStringArray("ground_state_var", "immunity_state_var")]
+[node name="inventory" type="Node" parent="character_state_machine" node_paths=PackedStringArray("ground_state_var", "immunity_state_var", "air_state_var")]
 script = ExtResource("12_qq6ub")
 ground_state_var = NodePath("../ground")
 immunity_state_var = NodePath("../immunity")
+air_state_var = NodePath("../air")
 can_move_state = false
 
 [node name="safe_floor_check_folder" type="Node2D" parent="."]
