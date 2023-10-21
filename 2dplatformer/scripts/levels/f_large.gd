@@ -15,6 +15,7 @@ var zoom = "in"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$updraft/updraft_sound.volume_db = GlobalVar.sound_effect_volume
 	$player.get_node("Camera2D").position_smoothing_enabled = false
 	GlobalVar.current_level = "flarge"
 	if GlobalVar.last_level == "f3":
@@ -87,3 +88,8 @@ func _on_flarge_f_4_area_entered(area):
 func _on_change_room_timer_timeout():
 	for area in room_change_areas:
 		area.get_node("CollisionShape2D").disabled = false
+
+
+func _on_updraft_area_entered(area):
+	if area.is_in_group("player"):
+		$updraft/updraft_sound.play()

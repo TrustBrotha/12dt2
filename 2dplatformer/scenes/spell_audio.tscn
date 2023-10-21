@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" path="res://scripts/spell_audio.gd" id="1_dn2kw"]
 
-[node name="spell_audio" type="AudioStreamPlayer2D"]
+[node name="spell_audio" type="AudioStreamPlayer"]
+volume_db = -5.0
 script = ExtResource("1_dn2kw")
 
 [connection signal="finished" from="." to="." method="_on_finished"]

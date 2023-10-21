@@ -15,6 +15,7 @@ var max_hori_speed = 125
 func state_process(delta):
 	if character.moving == true and character.animation_lock == false:
 		character.animated_sprite.play("run")
+		
 	elif character.moving == false and character.animation_lock == false:
 		character.animated_sprite.play("idle")
 	character.gravity_applying(delta)
@@ -62,6 +63,7 @@ func jump():
 	character.velocity.y = -jump_force
 	next_state = air_state_var
 	character.animated_sprite.play("jump")
+	character.play_sound("jump")
 
 func on_exit():
 	character.previous_state = "ground"

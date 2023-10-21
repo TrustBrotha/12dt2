@@ -18,9 +18,9 @@ func state_process(delta):
 		next_state = immunity_state_var
 
 func state_input(event : InputEvent):
-	if(event.is_action_pressed("inventory")) or (event.is_action_pressed("exit")):
+	if(event.is_action_pressed("inventory")):
 		next_state = ground_state_var
-		
+
 
 func on_exit():
 	get_parent().get_parent().get_parent().get_node("HUD").visible = true

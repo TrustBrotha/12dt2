@@ -13,7 +13,7 @@ var direction = 1
 var health = 1000
 var debuff = "clear"
 var damage = -10
-var knockback = 150
+var knockback = 170
 var immune = false
 var immunity_frames_called = false
 
@@ -26,6 +26,9 @@ var attack_timer_called = false
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 func _ready():
 	damage = -10
+	$slime_audio.volume_db = GlobalVar.sound_effect_volume - 5
+	$slime_audio.stream = load("res://assets/sounds/slime_move_sound.mp3")
+	$slime_audio.play()
 
 
 func _physics_process(delta):
@@ -102,6 +105,8 @@ func _on_vision_area_entered(area):
 		movement_state = "attack"
 		velocity.x = 0.1 * direction
 		$AnimatedSprite2D.play("attack")
+		$slime_audio.stream = load("res://assets/sounds/slime_hiss_sound.mp3")
+		$slime_audio.play()
 
 
 
@@ -125,13 +130,19 @@ func _on_hitbox_area_entered(area):
 			immune = true
 			var spell_scene = area
 			apply_spell(spell_scene)
-			
+			$slime_audio.stream = load("res://assets/sounds/slime_hit_sound.mp3")
+			$slime_audio.play()
 		elif area.is_in_group("burst_collision"):
 			immune = true
 			var spell_scene = area.get_parent()
 			apply_spell(spell_scene)
+			$slime_audio.stream = load("res://assets/sounds/slime_hit_sound.mp3")
+			$slime_audio.play()
+		
 	if area.is_in_group("environment_threat"):
 		$Control/healthbar.value = 0
+		$slime_audio.stream = load("res://assets/sounds/slime_hit_sound.mp3")
+		$slime_audio.play()
 
 
 func apply_spell(spell_scene):
@@ -202,3 +213,8 @@ func _on_animated_sprite_2d_animation_finished():
 
 func _on_hit_effect_timer_timeout():
 	pass # Replace with function body.
+
+
+func _on_audio_stream_player_2d_finished():
+	$slime_audio.stream = load("res://assets/sounds/slime_move_sound.mp3")
+	$slime_audio.play()

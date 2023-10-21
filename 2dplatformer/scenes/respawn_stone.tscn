@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://djadal2ed171h"]
+[gd_scene load_steps=14 format=3 uid="uid://djadal2ed171h"]
 
 [ext_resource type="Script" path="res://scripts/respawn_stone.gd" id="1_3jvbd"]
 [ext_resource type="Texture2D" uid="uid://x3wh2goxpwbh" path="res://assets/respawn_rock.png" id="1_hn1aq"]
+[ext_resource type="AudioStream" uid="uid://woxelq2iwoa0" path="res://assets/sounds/stone_power_on_sound.mp3" id="3_til75"]
 
 [sub_resource type="Gradient" id="Gradient_l2ouj"]
 offsets = PackedFloat32Array(0, 0.37931, 0.793103, 1)
@@ -112,6 +113,9 @@ horizontal_alignment = 1
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_h6q51")
+
+[node name="stone_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_til75")
 
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
 [connection signal="area_exited" from="Area2D" to="." method="_on_area_2d_area_exited"]

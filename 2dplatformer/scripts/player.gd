@@ -16,7 +16,7 @@ extends CharacterBody2D
 
 @export var inventory_scene : PackedScene
 @export var spell_audio_scene : PackedScene
-
+@export var audio_player : PackedScene
 @export var jump_force = 250.0
 @export var maxspeed = 125
 @export var acceleration = 30
@@ -51,6 +51,8 @@ var spell_type
 var charge_lock
 var exit_cast = false
 
+var audio_timer_called = false
+
 var near_wall = false
 var near_right_wall = false
 var near_left_wall = false
@@ -72,6 +74,9 @@ var combo3_called = false
 func _ready():
 	set_spells()
 	camera_update()
+	if GlobalVar.play_respawn_sound == true:
+		play_sound("respawn")
+		GlobalVar.play_respawn_sound = false
 
 func camera_update():
 	$Camera2D.limit_left = get_parent().camera_limit_left
@@ -86,6 +91,7 @@ func _physics_process(delta):
 	sprite_position()
 	healthcheck()
 	screen_effects()
+	play_walk_sound()
 	move_and_slide()
 	
 
@@ -99,7 +105,22 @@ func set_spells():
 	spell4 = load("res://scenes/spells/%s.tscn" %equiped_spells[3])
 	spell5 = load("res://scenes/spells/%s.tscn" %equiped_spells[4])
 
+func play_walk_sound():
+	if $player_sprite.animation == "run" and audio_timer_called == false:
+		$timers/walk_sound_timer.wait_time = float(4.5)/12
+		audio_timer_called = true
+		var audio = audio_player.instantiate()
+		audio.stream = load("res://assets/sounds/walk_sound.mp3")
+		$sounds.add_child(audio)
+		$timers/walk_sound_timer.start()
 
+func play_sound(sound):
+	var audio = audio_player.instantiate()
+	audio.stream = load("res://assets/sounds/%s_sound.mp3"%sound)
+	$sounds.add_child(audio)
+
+func _on_sound_timer_timeout():
+	audio_timer_called = false
 
 func HUD_update():
 	get_parent().get_node("HUD").get_node("state_debug_label").text = "state = " + state_machine.current_state.name
@@ -361,8 +382,6 @@ func _on_screen_effect_timer_timeout():
 	screen_target_opacity = 1
 
 
-func _on_enemyhitbox_area_exited(area):
-	pass
 
 
 
@@ -421,3 +440,10 @@ func _on_can_cast_combo_timer_timeout():
 
 func _on_dash_cooldown_timeout():
 	ground_can_dash = true
+
+
+
+
+
+func _on_player_sprite_animation_changed():
+	audio_timer_called = false

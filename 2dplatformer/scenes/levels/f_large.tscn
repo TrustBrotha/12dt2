@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dcjj21544jxna"]
+[gd_scene load_steps=32 format=3 uid="uid://dcjj21544jxna"]
 
 [ext_resource type="Texture2D" uid="uid://fng46ecvpkut" path="res://assets/tileset.png" id="1_0ed34"]
 [ext_resource type="Script" path="res://scripts/levels/f_large.gd" id="1_8rheh"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://b3jwiljkye268" path="res://assets/parallax_forest/mountains_far.png" id="6_4kymu"]
 [ext_resource type="Texture2D" uid="uid://cxakl2tdhskt" path="res://assets/parallax_forest/mountains_close.png" id="7_smp6w"]
 [ext_resource type="Texture2D" uid="uid://bnuwryv434d34" path="res://assets/parallax_forest/trees.png" id="8_e6gwe"]
+[ext_resource type="AudioStream" uid="uid://byc5fqwhaqvbh" path="res://assets/sounds/airburst_sound.mp3" id="13_vmwmd"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ia8o6"]
 texture = ExtResource("1_0ed34")
@@ -1146,9 +1147,9 @@ layer_0/tile_data = PackedInt32Array(-393127, 720896, 2, -327591, 720896, 3, -26
 [node name="player" parent="." instance=ExtResource("3_llys2")]
 position = Vector2(135, 0)
 
-[node name="Area2D" type="Area2D" parent="." groups=["updraft"]]
+[node name="updraft" type="Area2D" parent="." groups=["updraft"]]
 
-[node name="GPUParticles2D" type="GPUParticles2D" parent="Area2D"]
+[node name="GPUParticles2D" type="GPUParticles2D" parent="updraft"]
 position = Vector2(1471, 19)
 amount = 50
 process_material = SubResource("ParticleProcessMaterial_v23b2")
@@ -1156,9 +1157,14 @@ texture = ExtResource("2_7q8r4")
 lifetime = 2.0
 visibility_rect = Rect2(0, -600, 200, 200)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="updraft"]
 position = Vector2(1471, -13.2513)
 shape = SubResource("RectangleShape2D_6luq5")
+
+[node name="updraft_sound" type="AudioStreamPlayer2D" parent="updraft"]
+position = Vector2(1471, 12)
+stream = ExtResource("13_vmwmd")
+pitch_scale = 0.5
 
 [node name="details_infront" type="TileMap" parent="."]
 texture_filter = 1
@@ -1217,6 +1223,7 @@ occluder = SubResource("OccluderPolygon2D_mohgw")
 
 [node name="HUD" parent="." instance=ExtResource("4_ghj2i")]
 
+[connection signal="area_entered" from="updraft" to="." method="_on_updraft_area_entered"]
 [connection signal="area_entered" from="room_changes/flarge_f3" to="." method="_on_flarge_f_3_area_entered"]
 [connection signal="area_entered" from="room_changes/flarge_f4" to="." method="_on_flarge_f_4_area_entered"]
 [connection signal="timeout" from="change_room_timer" to="." method="_on_change_room_timer_timeout"]

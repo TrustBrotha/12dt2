@@ -1,9 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://delu1i6dkw5oo"]
+[gd_scene load_steps=11 format=3 uid="uid://delu1i6dkw5oo"]
 
 [ext_resource type="Script" path="res://scripts/titlescreen.gd" id="1_1ri3p"]
-[ext_resource type="Texture2D" uid="uid://dnxvrqpgkm3r7" path="res://pixil-frame-0 (10).png" id="2_58v3b"]
+[ext_resource type="Texture2D" uid="uid://b64huftt26msl" path="res://assets/parallax_forest/background.png" id="2_fdtw2"]
+[ext_resource type="Texture2D" uid="uid://dtaqaunorwycn" path="res://assets/parallax_forest/sky.png" id="3_xe4ws"]
+[ext_resource type="Texture2D" uid="uid://crhec4g8y0aln" path="res://assets/parallax_forest/clouds_var.png" id="4_4ri43"]
+[ext_resource type="Texture2D" uid="uid://dwk57yaagjlak" path="res://assets/parallax_forest/clouds_close.png" id="5_5d3qs"]
+[ext_resource type="Texture2D" uid="uid://b3jwiljkye268" path="res://assets/parallax_forest/mountains_far.png" id="6_d0c7a"]
+[ext_resource type="Texture2D" uid="uid://cxakl2tdhskt" path="res://assets/parallax_forest/mountains_close.png" id="7_qn582"]
+[ext_resource type="Texture2D" uid="uid://bnuwryv434d34" path="res://assets/parallax_forest/trees.png" id="8_xkxqb"]
+[ext_resource type="PackedScene" uid="uid://ci4ls2rhr7adk" path="res://scenes/remap_button.tscn" id="9_1o741"]
 
-[node name="title_sceen" type="Control"]
+[sub_resource type="Theme" id="Theme_58uqc"]
+default_font_size = 20
+
+[node name="title_screen" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,12 +22,94 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1ri3p")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture_filter = 1
-scale = Vector2(61.75, 26.75)
-texture = ExtResource("2_58v3b")
+[node name="ParallaxBackground2" type="ParallaxBackground" parent="."]
 
-[node name="play" type="Button" parent="."]
+[node name="space" type="ParallaxLayer" parent="ParallaxBackground2"]
+motion_scale = Vector2(0, 1)
+motion_mirroring = Vector2(3200, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground2/space"]
+modulate = Color(0.537255, 0.772549, 1, 1)
+texture_filter = 1
+position = Vector2(0, -100)
+scale = Vector2(200, 200)
+texture = ExtResource("2_fdtw2")
+
+[node name="sky" type="ParallaxLayer" parent="ParallaxBackground2"]
+motion_scale = Vector2(0, 1)
+motion_mirroring = Vector2(3200, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground2/sky"]
+modulate = Color(0.152941, 0.360784, 0.690196, 1)
+texture_filter = 1
+position = Vector2(1400, -120)
+scale = Vector2(2, 2)
+texture = ExtResource("3_xe4ws")
+
+[node name="clouds_far" type="ParallaxLayer" parent="ParallaxBackground2"]
+motion_scale = Vector2(0.1, 1)
+motion_mirroring = Vector2(3072, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground2/clouds_far"]
+modulate = Color(0.521569, 0.717647, 1, 1)
+texture_filter = 1
+position = Vector2(0, -60)
+scale = Vector2(2, 2)
+texture = ExtResource("4_4ri43")
+
+[node name="clouds_close" type="ParallaxLayer" parent="ParallaxBackground2"]
+motion_scale = Vector2(0.2, 1)
+motion_mirroring = Vector2(2880, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground2/clouds_close"]
+modulate = Color(0.705882, 0.796078, 1, 1)
+texture_filter = 1
+position = Vector2(0, -45)
+scale = Vector2(2, 2)
+texture = ExtResource("5_5d3qs")
+
+[node name="mountains_far" type="ParallaxLayer" parent="ParallaxBackground2"]
+motion_scale = Vector2(0.3, 1)
+motion_mirroring = Vector2(2880, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground2/mountains_far"]
+modulate = Color(0.537255, 0.772549, 1, 1)
+texture_filter = 1
+position = Vector2(0, -30)
+scale = Vector2(2, 2)
+texture = ExtResource("6_d0c7a")
+
+[node name="mountains_close" type="ParallaxLayer" parent="ParallaxBackground2"]
+motion_scale = Vector2(0.4, 1)
+motion_mirroring = Vector2(3200, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground2/mountains_close"]
+modulate = Color(0.537255, 0.772549, 1, 1)
+texture_filter = 1
+position = Vector2(0, -15)
+scale = Vector2(2, 2)
+texture = ExtResource("7_qn582")
+
+[node name="trees" type="ParallaxLayer" parent="ParallaxBackground2"]
+motion_scale = Vector2(0.7, 1)
+motion_mirroring = Vector2(2880, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground2/trees"]
+modulate = Color(0.537255, 0.772549, 1, 1)
+texture_filter = 1
+scale = Vector2(2, 2)
+texture = ExtResource("8_xkxqb")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="screens" type="Node" parent="."]
+
+[node name="title" type="Control" parent="screens"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+
+[node name="play" type="Button" parent="screens/title"]
 layout_mode = 0
 offset_left = -144.0
 offset_top = -88.0
@@ -26,7 +118,7 @@ offset_bottom = -40.0
 text = "play
 "
 
-[node name="settings" type="Button" parent="."]
+[node name="settings" type="Button" parent="screens/title"]
 layout_mode = 0
 offset_left = -144.0
 offset_top = -24.0
@@ -34,7 +126,7 @@ offset_right = 144.0
 offset_bottom = 24.0
 text = "settings"
 
-[node name="quit" type="Button" parent="."]
+[node name="quit" type="Button" parent="screens/title"]
 layout_mode = 0
 offset_left = -144.0
 offset_top = 40.0
@@ -43,8 +135,302 @@ offset_bottom = 88.0
 text = "quit
 "
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="speed_run_time_label" type="Label" parent="screens/title"]
+layout_mode = 0
+offset_left = -64.0
+offset_top = 184.0
+offset_right = 64.0
+offset_bottom = 216.0
+theme = SubResource("Theme_58uqc")
+horizontal_alignment = 1
 
-[connection signal="pressed" from="play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="settings" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="quit" to="." method="_on_quit_pressed"]
+[node name="settings" type="Control" parent="screens"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+
+[node name="audio" type="Button" parent="screens/settings"]
+layout_mode = 0
+offset_left = -144.0
+offset_top = -152.0
+offset_right = 144.0
+offset_bottom = -104.0
+text = "audio
+"
+
+[node name="visual" type="Button" parent="screens/settings"]
+layout_mode = 0
+offset_left = -144.0
+offset_top = -88.0
+offset_right = 144.0
+offset_bottom = -40.0
+text = "visual
+"
+
+[node name="key_binds" type="Button" parent="screens/settings"]
+layout_mode = 0
+offset_left = -144.0
+offset_top = -24.0
+offset_right = 144.0
+offset_bottom = 24.0
+text = "key binds"
+
+[node name="back" type="Button" parent="screens/settings"]
+layout_mode = 0
+offset_left = -144.0
+offset_top = 136.0
+offset_right = 144.0
+offset_bottom = 184.0
+text = "back
+"
+
+[node name="key_binds" type="Control" parent="screens"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="keybind_setting_grid" type="GridContainer" parent="screens/key_binds"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -36.0
+offset_top = -44.0
+offset_right = -2.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="jump" type="Label" parent="screens/key_binds/keybind_setting_grid"]
+layout_mode = 2
+text = "JUMP:"
+
+[node name="remap_button" parent="screens/key_binds/keybind_setting_grid" instance=ExtResource("9_1o741")]
+layout_mode = 2
+action = "jump"
+
+[node name="up" type="Label" parent="screens/key_binds/keybind_setting_grid"]
+layout_mode = 2
+text = "MOVE UP:"
+
+[node name="remap_button2" parent="screens/key_binds/keybind_setting_grid" instance=ExtResource("9_1o741")]
+layout_mode = 2
+action = "up"
+
+[node name="down" type="Label" parent="screens/key_binds/keybind_setting_grid"]
+layout_mode = 2
+text = "MOVE DOWN:"
+
+[node name="remap_button3" parent="screens/key_binds/keybind_setting_grid" instance=ExtResource("9_1o741")]
+layout_mode = 2
+action = "down"
+
+[node name="left" type="Label" parent="screens/key_binds/keybind_setting_grid"]
+layout_mode = 2
+text = "MOVE LEFT:"
+
+[node name="remap_button4" parent="screens/key_binds/keybind_setting_grid" instance=ExtResource("9_1o741")]
+layout_mode = 2
+action = "move_left"
+
+[node name="right" type="Label" parent="screens/key_binds/keybind_setting_grid"]
+layout_mode = 2
+text = "MOVE RIGHT:"
+
+[node name="remap_button5" parent="screens/key_binds/keybind_setting_grid" instance=ExtResource("9_1o741")]
+layout_mode = 2
+action = "move_right"
+
+[node name="dash" type="Label" parent="screens/key_binds/keybind_setting_grid"]
+layout_mode = 2
+text = "DASH:"
+
+[node name="remap_button6" parent="screens/key_binds/keybind_setting_grid" instance=ExtResource("9_1o741")]
+layout_mode = 2
+action = "dash"
+
+[node name="spell1" type="Label" parent="screens/key_binds/keybind_setting_grid"]
+layout_mode = 2
+text = "SPELL 1:"
+
+[node name="remap_button7" parent="screens/key_binds/keybind_setting_grid" instance=ExtResource("9_1o741")]
+layout_mode = 2
+action = "spell1"
+
+[node name="spell2" type="Label" parent="screens/key_binds/keybind_setting_grid"]
+layout_mode = 2
+text = "SPELL 2:"
+
+[node name="remap_button8" parent="screens/key_binds/keybind_setting_grid" instance=ExtResource("9_1o741")]
+layout_mode = 2
+action = "spell2"
+
+[node name="spell3" type="Label" parent="screens/key_binds/keybind_setting_grid"]
+layout_mode = 2
+text = "SPELL 3:"
+
+[node name="remap_button9" parent="screens/key_binds/keybind_setting_grid" instance=ExtResource("9_1o741")]
+layout_mode = 2
+action = "spell3"
+
+[node name="spell4" type="Label" parent="screens/key_binds/keybind_setting_grid"]
+layout_mode = 2
+text = "SPELL 4:"
+
+[node name="remap_button10" parent="screens/key_binds/keybind_setting_grid" instance=ExtResource("9_1o741")]
+layout_mode = 2
+action = "spell4"
+
+[node name="spell5" type="Label" parent="screens/key_binds/keybind_setting_grid"]
+layout_mode = 2
+text = "SPELL 5:"
+
+[node name="remap_button11" parent="screens/key_binds/keybind_setting_grid" instance=ExtResource("9_1o741")]
+layout_mode = 2
+action = "spell5"
+
+[node name="menu" type="Label" parent="screens/key_binds/keybind_setting_grid"]
+layout_mode = 2
+text = "MENU:"
+
+[node name="remap_button12" parent="screens/key_binds/keybind_setting_grid" instance=ExtResource("9_1o741")]
+layout_mode = 2
+action = "inventory"
+
+[node name="back_kebind" type="Button" parent="screens/key_binds"]
+layout_mode = 0
+offset_left = -144.0
+offset_top = 216.0
+offset_right = 144.0
+offset_bottom = 264.0
+action_mode = 0
+text = "back
+"
+
+[node name="visual_settings" type="Control" parent="screens"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HUD_scale" type="Button" parent="screens/visual_settings"]
+layout_mode = 0
+offset_left = -144.0
+offset_top = -152.0
+offset_right = 144.0
+offset_bottom = -104.0
+text = "audio
+"
+
+[node name="audio_settings" type="Control" parent="screens"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GridContainer" type="GridContainer" parent="screens/audio_settings"]
+layout_mode = 0
+offset_left = -108.0
+offset_top = -144.0
+offset_right = 114.0
+offset_bottom = -78.0
+columns = 4
+
+[node name="music" type="Label" parent="screens/audio_settings/GridContainer"]
+layout_mode = 2
+text = "Music Volume:"
+horizontal_alignment = 2
+
+[node name="music_volume_down" type="Button" parent="screens/audio_settings/GridContainer"]
+layout_mode = 2
+text = " - "
+
+[node name="music_volume" type="Label" parent="screens/audio_settings/GridContainer"]
+layout_mode = 2
+text = "Volume: 0"
+
+[node name="music_volume_up" type="Button" parent="screens/audio_settings/GridContainer"]
+layout_mode = 2
+text = "+"
+
+[node name="sfx" type="Label" parent="screens/audio_settings/GridContainer"]
+layout_mode = 2
+text = "SFX Volume:"
+horizontal_alignment = 2
+
+[node name="sfx_volume_down" type="Button" parent="screens/audio_settings/GridContainer"]
+layout_mode = 2
+text = "-"
+
+[node name="sfx_volume" type="Label" parent="screens/audio_settings/GridContainer"]
+layout_mode = 2
+text = "Volume: 0"
+
+[node name="sfx_volume_up" type="Button" parent="screens/audio_settings/GridContainer"]
+layout_mode = 2
+text = "+"
+
+[node name="GridContainer2" type="GridContainer" parent="screens/audio_settings"]
+layout_mode = 0
+offset_left = -72.0
+offset_top = -56.0
+offset_right = 76.0
+offset_bottom = 10.0
+columns = 2
+
+[node name="music" type="Label" parent="screens/audio_settings/GridContainer2"]
+visible = false
+layout_mode = 2
+text = "Music enabled:"
+horizontal_alignment = 2
+
+[node name="Button" type="Button" parent="screens/audio_settings/GridContainer2"]
+visible = false
+layout_mode = 2
+toggle_mode = true
+text = "on
+"
+
+[node name="sfx" type="Label" parent="screens/audio_settings/GridContainer2"]
+visible = false
+layout_mode = 2
+text = "SFX enabled:"
+horizontal_alignment = 2
+
+[node name="Button2" type="Button" parent="screens/audio_settings/GridContainer2"]
+visible = false
+layout_mode = 2
+toggle_mode = true
+text = "on
+"
+
+[node name="audio_back" type="Button" parent="screens/audio_settings"]
+layout_mode = 0
+offset_left = -144.0
+offset_top = 40.0
+offset_right = 144.0
+offset_bottom = 88.0
+text = "back
+"
+
+[connection signal="pressed" from="screens/title/play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="screens/title/settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="screens/title/quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="screens/settings/audio" to="." method="_on_audio_pressed"]
+[connection signal="pressed" from="screens/settings/key_binds" to="." method="_on_key_binds_pressed"]
+[connection signal="pressed" from="screens/settings/back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="screens/key_binds/back_kebind" to="." method="_on_back_kebind_pressed"]
+[connection signal="pressed" from="screens/audio_settings/GridContainer/music_volume_down" to="." method="_on_music_volume_down_pressed"]
+[connection signal="pressed" from="screens/audio_settings/GridContainer/music_volume_up" to="." method="_on_music_volume_up_pressed"]
+[connection signal="pressed" from="screens/audio_settings/GridContainer/sfx_volume_down" to="." method="_on_sfx_volume_down_pressed"]
+[connection signal="pressed" from="screens/audio_settings/GridContainer/sfx_volume_up" to="." method="_on_sfx_volume_up_pressed"]
+[connection signal="pressed" from="screens/audio_settings/audio_back" to="." method="_on_audio_back_pressed"]

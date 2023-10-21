@@ -15,6 +15,8 @@ func on_enter():
 	
 	get_parent().get_parent().get_node("enemyhitbox").get_node("hitbox_collision").disabled = true
 	character.animated_sprite.play("death")
+	var death_sound = randi_range(1,2)
+	character.play_sound("death%s"%death_sound)
 
 func state_process(delta):
 	character.gravity_applying(delta)

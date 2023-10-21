@@ -176,3 +176,7 @@ func _on_airstream_pressed():
 	change_text()
 	change_to_spell_type_select()
 	spell_listening = 0
+
+
+func _on_menu_button_pressed():
+	get_tree().change_scene_to_file("res://scenes/title_screen_scenes/titlescreen.tscn")

@@ -185,4 +185,10 @@ lifetime = 0.7
 one_shot = true
 explosiveness = 1.0
 
+[node name="stone_sound" type="AudioStreamPlayer2D" parent="."]
+
+[node name="rumble_timer" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="timeout" from="rumble_timer" to="." method="_on_rumble_timer_timeout"]

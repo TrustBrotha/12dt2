@@ -1,8 +1,27 @@
-[gd_scene load_steps=8 format=3 uid="uid://bqppt1grooo7u"]
+[gd_scene load_steps=11 format=3 uid="uid://bqppt1grooo7u"]
 
 [ext_resource type="Texture2D" uid="uid://bq8e0qcdhof7v" path="res://assets/golem_rock.png" id="1_d8unt"]
 [ext_resource type="Script" path="res://scripts/boulder.gd" id="1_lfac2"]
+[ext_resource type="Shader" path="res://scripts/shaders/golem.gdshader" id="2_3ddsh"]
 [ext_resource type="Texture2D" uid="uid://2mgp524u01xe" path="res://assets/spell_assets/water_particle_temp.png" id="3_scir4"]
+[ext_resource type="AudioStream" uid="uid://die8pq46lpwdi" path="res://assets/sounds/golem_punch_sound.mp3" id="4_7wcax"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o6j88"]
+shader = ExtResource("2_3ddsh")
+shader_parameter/oldcolor1 = Color(0.262745, 0.301961, 0.172549, 1)
+shader_parameter/oldcolor2 = Color(0.470588, 0.533333, 0.188235, 1)
+shader_parameter/oldcolor3 = Color(0.615686, 0.635294, 0.172549, 1)
+shader_parameter/oldcolor4 = null
+shader_parameter/oldcolor5 = null
+shader_parameter/oldcolor6 = null
+shader_parameter/oldcolor7 = null
+shader_parameter/newcolor1 = Color(0.105882, 0.14902, 0.117647, 1)
+shader_parameter/newcolor2 = Color(0.164706, 0.243137, 0.2, 1)
+shader_parameter/newcolor3 = Color(0.25098, 0.345098, 0.435294, 1)
+shader_parameter/newcolor4 = null
+shader_parameter/newcolor5 = null
+shader_parameter/newcolor6 = null
+shader_parameter/newcolor7 = null
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vgqyr"]
 size = Vector2(20, 24)
@@ -34,10 +53,12 @@ script = ExtResource("1_lfac2")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
+material = SubResource("ShaderMaterial_o6j88")
 scale = Vector2(0.333, 0.333)
 texture = ExtResource("1_d8unt")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_vgqyr")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
@@ -51,6 +72,9 @@ explosiveness = 1.0
 
 [node name="deletion_timer" type="Timer" parent="."]
 one_shot = true
+
+[node name="hit_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_7wcax")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="deletion_timer" to="." method="_on_deletion_timer_timeout"]

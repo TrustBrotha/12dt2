@@ -17,6 +17,7 @@ func _ready():
 	GlobalVar.current_level = "fstart"
 	if GlobalVar.last_level == "none":
 		pass
+		
 	elif GlobalVar.last_level == "f1":
 		$player.global_position = Vector2(-650,909)
 	elif GlobalVar.last_level == "f2":

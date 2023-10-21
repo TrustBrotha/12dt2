@@ -6,6 +6,7 @@ extends State
 var knockback = 200
 
 func on_enter():
+	character.play_sound("player_hit")
 	if GlobalVar.character_health > 0:
 		character.velocity.x = character.knockback_direction * character.knockback
 		character.velocity.y = -1.5 * character.knockback

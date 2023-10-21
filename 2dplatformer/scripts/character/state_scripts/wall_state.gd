@@ -35,6 +35,7 @@ func state_input(event : InputEvent):
 		if character.animation_lock == false:
 			character.animated_sprite.scale.x *= -1
 			character.animated_sprite.play("jump")
+			character.play_sound("jump")
 	if(event.is_action_released("jump") and character.velocity.y < 0):
 		character.velocity.y /= 2
 		character.velocity.x /= 2

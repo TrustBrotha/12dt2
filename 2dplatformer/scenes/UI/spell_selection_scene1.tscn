@@ -163,6 +163,13 @@ offset_bottom = 460.0
 text = "spell description"
 script = ExtResource("2_gohyj")
 
+[node name="menu_button" type="Button" parent="."]
+offset_left = 1184.0
+offset_top = 640.0
+offset_right = 1264.0
+offset_bottom = 704.0
+text = "MENU"
+
 [connection signal="pressed" from="Control/spell_select_buttons/spell1" to="." method="_on_spell_1_pressed"]
 [connection signal="pressed" from="Control/spell_select_buttons/spell2" to="." method="_on_spell_2_pressed"]
 [connection signal="pressed" from="Control/spell_select_buttons/spell3" to="." method="_on_spell_3_pressed"]
@@ -174,3 +181,4 @@ script = ExtResource("2_gohyj")
 [connection signal="pressed" from="Control/spell_buttons/waterstream" to="." method="_on_waterstream_pressed"]
 [connection signal="pressed" from="Control/spell_buttons/fireburst" to="." method="_on_fireburst_pressed"]
 [connection signal="pressed" from="Control/spell_buttons/lightningstream" to="." method="_on_lightningstream_pressed"]
+[connection signal="pressed" from="menu_button" to="." method="_on_menu_button_pressed"]

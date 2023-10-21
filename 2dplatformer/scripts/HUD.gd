@@ -13,6 +13,9 @@ func _ready():
 		sprite.scale.x = 1.5
 		sprite.scale.y = 1.5
 		sprite.texture_filter = 1
+	
+	if GlobalVar.speen_run_timer_enabled == true:
+		$speedrun_timer.visible = true
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -31,6 +34,9 @@ func _process(delta):
 		if dead_timer_called == false:
 			$death_timer.start()
 			dead_timer_called = true
+	
+	if GlobalVar.speen_run_timer_enabled == true:
+		$speedrun_timer.text = GlobalVar.stopwatch_display
 
 func sprite_update():
 	selected_spells = GlobalVar.equipped_spells

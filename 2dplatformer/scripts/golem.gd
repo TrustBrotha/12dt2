@@ -8,6 +8,7 @@ var left_to_do = ["turn_left_to_right","turn_right_to_left","death"]
 @onready var attack_areas = $turnables/attack_hitboxes.get_children()
 @onready var particle_effect_folder = $particle_folder.get_children()
 @export var boulder_scene : PackedScene
+@export var audio_scene : PackedScene
 var damage = -20
 var knockback = 150
 var debuff = "clear"
@@ -25,7 +26,14 @@ var player_to_the_left = false
 var wait_timer_called = false
 var health = 1000
 var dead = false
+@onready var current_sound_effect_nodes = $audio.get_children()
+var current_sound_effects = []
 func _ready():
+	
+	MusicPlayer.play_boss_music()
+	$golem_hover.play()
+	$golem_hover.volume_db = GlobalVar.sound_effect_volume
+	play_sound("golem_power_up")
 	get_parent().get_node("HUD").get_node("boss_health_bar").visible = true
 	$turnables/AnimatedSprite2D.play("power_up")
 	next_animation = "idle"
@@ -33,12 +41,22 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	current_sound_effect_nodes = $audio.get_children()
+	current_sound_effects = []
+	for i in current_sound_effect_nodes:
+		current_sound_effects.append(i.name)
+	
+	
+	
 	if health <= 0 and dead == false:
 		dead = true
+		play_sound("golem_death")
+		$golem_hover.stop()
 		$turnables/AnimatedSprite2D.play("death")
 		get_parent().get_node("HUD").get_node("boss_health_bar").visible = false
 		GlobalVar.golem_defeated = true
 		get_parent().close_door = false
+		MusicPlayer.fade_out = true
 	if dead == true and $turnables/AnimatedSprite2D.animation != "death":
 		$turnables/AnimatedSprite2D.play("death")
 	
@@ -57,7 +75,7 @@ func _process(delta):
 		velocity.x = lerpf(velocity.x, 0 , 0.1)
 	immunity()
 	apply_debuffs()
-	get_parent().get_node("HUD").get_node("boss_health_bar").value = (health/10)
+	get_parent().get_node("HUD").get_node("boss_health_bar").value = (float(health)/10)
 	
 	move_and_slide()
 
@@ -68,6 +86,11 @@ func _on_decision_timer_timeout():
 
 
 
+func play_sound(sound):
+	var audio = audio_scene.instantiate()
+	audio.stream = load("res://assets/sounds/%s_sound.mp3"%sound)
+	audio.name = sound
+	$audio.add_child(audio)
 
 
 
@@ -81,13 +104,16 @@ func immunity():
 	
 	if $hitbox/CollisionShape2D.disabled == true:
 		if immune_effect_called == false:
+			color_white()
 			$turnables/AnimatedSprite2D.modulate = Color(100,100,100)
 			$damaged_effect_timer.start()
+			play_sound("golem_hit")
 			immune_effect_called = true
 	elif $hitbox/CollisionShape2D.disabled == false:
 		immune_effect_called = false
 
 func _on_damaged_effect_timer_timeout():
+	color_normal()
 	$turnables/AnimatedSprite2D.modulate = Color(1,1,1)
 
 func _on_immunity_frame_timer_timeout():
@@ -95,7 +121,15 @@ func _on_immunity_frame_timer_timeout():
 	immunity_timer_called = false
 
 
+func color_white():
+	for i in range(7):
+		$turnables/AnimatedSprite2D.material.set("shader_parameter/newcolor%s"%(i+1),Color8(1000,1000,1000))
+	
 
+func color_normal():
+	var color_list = [Color8(27,38,30),Color8(42,62,51),Color8(64,88,111),Color8(59,108,101),Color8(58,108,101),Color8(64,88,111),Color8(75,138,153)]
+	for i in range(7):
+		$turnables/AnimatedSprite2D.material.set("shader_parameter/newcolor%s"%(i+1),color_list[i])
 
 
 
@@ -109,9 +143,12 @@ func action_decision():
 		if next_animation == "steam_burst":
 			$attack_collision_timer.wait_time = 0.8333
 			$attack_collision_timer.start()
+			play_sound("golem_rock")
+			
 		elif next_animation == "lazer_attack":
 			$attack_collision_timer.wait_time = 0.9166
 			$attack_collision_timer.start()
+			play_sound("golem_rock")
 		
 	
 	
@@ -122,9 +159,13 @@ func action_decision():
 		if next_animation == "burst_attack":
 			$attack_collision_timer.wait_time = 0.5833
 			$attack_collision_timer.start()
+			play_sound("golem_rock")
 		elif next_animation == "ground_punch":
 			$attack_collision_timer.wait_time = 0.8333
 			$attack_collision_timer.start()
+			play_sound("golem_rock")
+		elif next_animation == "spin":
+			play_sound("golem_rock")
 			
 	
 	
@@ -143,6 +184,7 @@ func action_decision():
 		if next_animation == "ground_punch":
 			$attack_collision_timer.wait_time = 0.8333
 			$attack_collision_timer.start()
+			play_sound("golem_rock")
 
 func _on_animated_sprite_2d_animation_finished():
 	if dead == false:
@@ -203,18 +245,42 @@ func _on_attack_collision_timer_timeout():
 		$turnables/attack_hitboxes/steam_burst/collision.disabled = false
 		$attack_collision_deletion.wait_time = 0.1666
 		$attack_collision_deletion.start()
+		
+		if "golem_rock" in current_sound_effects:
+			$audio.get_node("golem_rock").queue_free()
+		
+		play_sound("golem_steam")
+	
 	elif $turnables/AnimatedSprite2D.animation == "lazer_attack":
 		$turnables/attack_hitboxes/lazer_attack/collision.disabled = false
 		$attack_collision_deletion.wait_time = 0.1666
 		$attack_collision_deletion.start()
+		
+		if "golem_rock" in current_sound_effects:
+			$audio.get_node("golem_rock").queue_free()
+		
+		play_sound("golem_lazer")
+
 	elif $turnables/AnimatedSprite2D.animation == "burst_attack":
 		$turnables/attack_hitboxes/burst_attack/collision.disabled = false
 		$attack_collision_deletion.wait_time = 0.1666
 		$attack_collision_deletion.start()
+		
+		if "golem_rock" in current_sound_effects:
+			$audio.get_node("golem_rock").queue_free()
+			
+		play_sound("golem_punch")
+		
 	elif $turnables/AnimatedSprite2D.animation == "ground_punch":
 		$turnables/attack_hitboxes/ground_punch/collision.disabled = false
 		$attack_collision_deletion.wait_time = 0.3333
 		$attack_collision_deletion.start()
+		
+		if "golem_rock" in current_sound_effects:
+			$audio.get_node("golem_rock").queue_free()
+		
+		play_sound("golem_punch")
+		
 		create_boulder()
 
 
@@ -289,3 +355,12 @@ func _on_debuff_timer_timeout():
 	for effect in particle_effect_folder:
 		if effect.emitting == true:
 			effect.emitting = false
+
+
+func _on_golem_sounds_finished():
+	
+	pass # Replace with function body.
+
+
+func _on_golem_hover_finished():
+	$golem_hover.play()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b253jsyqao2rg"]
+[gd_scene load_steps=14 format=3 uid="uid://b253jsyqao2rg"]
 
 [ext_resource type="Texture2D" uid="uid://evqobg3jinw0" path="res://assets/healthbar_under.png" id="1_cfrp3"]
 [ext_resource type="Script" path="res://scripts/HUD.gd" id="1_uxdc7"]
@@ -6,6 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://cl1n0onebk80p" path="res://assets/healthbar_bar.png" id="2_8aj7y"]
 [ext_resource type="Texture2D" uid="uid://pirl2irfrjvn" path="res://assets/chargebar_bar.png" id="3_o452j"]
 [ext_resource type="Texture2D" uid="uid://cjrffjf50beqs" path="res://assets/died of cringe.png" id="6_8ewle"]
+
+[sub_resource type="Theme" id="Theme_2k0be"]
+default_font_size = 20
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_c2vtk"]
 
@@ -132,6 +135,17 @@ scale = Vector2(8, 4)
 value = 100.0
 texture_under = ExtResource("1_cfrp3")
 texture_progress = ExtResource("2_8aj7y")
+
+[node name="speedrun_timer" type="Label" parent="."]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -256.0
+offset_bottom = 64.0
+grow_horizontal = 0
+theme = SubResource("Theme_2k0be")
+text = "------"
 
 [node name="spell_icon_background" type="Node" parent="."]
 

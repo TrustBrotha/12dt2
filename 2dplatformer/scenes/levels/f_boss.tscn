@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://da8w6icvkld2d"]
+[gd_scene load_steps=31 format=3 uid="uid://da8w6icvkld2d"]
 
 [ext_resource type="Texture2D" uid="uid://fng46ecvpkut" path="res://assets/tileset.png" id="1_61hqg"]
 [ext_resource type="Script" path="res://scripts/levels/f_boss.gd" id="1_w4kod"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://cxs6abswkdxch" path="res://assets/boss_sprite.png" id="6_snjgu"]
 [ext_resource type="Texture2D" uid="uid://bx4k5guh3ojki" path="res://assets/parallax_forest/parallax_front.png" id="6_uyf0r"]
 [ext_resource type="Texture2D" uid="uid://2dmhwdtbx25h" path="res://assets/door_pillar.png" id="9_4ki0o"]
+[ext_resource type="Shader" path="res://scripts/shaders/golem.gdshader" id="10_v0x83"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_s6dds"]
 texture = ExtResource("1_61hqg")
@@ -374,6 +375,23 @@ size = Vector2(24, 64)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0fla5"]
 size = Vector2(24, 64)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tpdia"]
+shader = ExtResource("10_v0x83")
+shader_parameter/oldcolor1 = Color(0.262745, 0.301961, 0.172549, 1)
+shader_parameter/oldcolor2 = Color(0.470588, 0.533333, 0.188235, 1)
+shader_parameter/oldcolor3 = Color(0.643137, 0.662745, 0.231373, 1)
+shader_parameter/oldcolor4 = null
+shader_parameter/oldcolor5 = null
+shader_parameter/oldcolor6 = null
+shader_parameter/oldcolor7 = null
+shader_parameter/newcolor1 = Color(0.105882, 0.14902, 0.117647, 1)
+shader_parameter/newcolor2 = Color(0.164706, 0.243137, 0.2, 1)
+shader_parameter/newcolor3 = Color(0.25098, 0.345098, 0.435294, 1)
+shader_parameter/newcolor4 = null
+shader_parameter/newcolor5 = null
+shader_parameter/newcolor6 = null
+shader_parameter/newcolor7 = null
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_d65px"]
 atlas = ExtResource("6_snjgu")
 region = Rect2(0, 0, 603, 282)
@@ -400,6 +418,12 @@ animations = [{
 "name": &"dead",
 "speed": 5.0
 }]
+
+[sub_resource type="Gradient" id="Gradient_ant0q"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_m7sby"]
+gradient = SubResource("Gradient_ant0q")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x78nh"]
 texture = ExtResource("1_61hqg")
@@ -1203,10 +1227,16 @@ shape = SubResource("RectangleShape2D_0fla5")
 
 [node name="golem_dead" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
+material = SubResource("ShaderMaterial_tpdia")
 position = Vector2(-209.5, -38)
 scale = Vector2(0.333, 0.333)
 sprite_frames = SubResource("SpriteFrames_tjlds")
 animation = &"asleep"
+
+[node name="final_room_shine" type="Sprite2D" parent="."]
+position = Vector2(-901, -38.5)
+scale = Vector2(1.90625, 1.92188)
+texture = SubResource("GradientTexture2D_m7sby")
 
 [node name="walls_floor" type="TileMap" parent="." groups=["tile"]]
 texture_filter = 1

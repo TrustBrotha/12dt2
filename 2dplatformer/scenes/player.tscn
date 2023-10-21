@@ -1066,14 +1066,13 @@ collision_mask = 15
 script = ExtResource("1_sebs5")
 inventory_scene = ExtResource("2_0fnwd")
 spell_audio_scene = ExtResource("3_n243r")
+audio_player = ExtResource("3_n243r")
 
 [node name="player_sprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(5, -15)
 sprite_frames = SubResource("SpriteFrames_jtxed")
-animation = &"death"
-frame = 50
-frame_progress = 0.817462
+animation = &"jump"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 visible = false
@@ -1124,6 +1123,9 @@ wait_time = 0.3
 one_shot = true
 
 [node name="can_cast_combo_timer" type="Timer" parent="timers"]
+one_shot = true
+
+[node name="walk_sound_timer" type="Timer" parent="timers"]
 one_shot = true
 
 [node name="spell_spawn" type="Node2D" parent="."]
@@ -1239,6 +1241,9 @@ target_position = Vector2(0, 8)
 [node name="boid_target" type="Node2D" parent="."]
 position = Vector2(0, -19)
 
+[node name="sounds" type="Node" parent="."]
+
+[connection signal="animation_changed" from="player_sprite" to="." method="_on_player_sprite_animation_changed"]
 [connection signal="animation_finished" from="player_sprite" to="." method="_on_player_sprite_animation_finished"]
 [connection signal="timeout" from="timers/coyote_timer" to="." method="_on_coyote_timer_timeout"]
 [connection signal="timeout" from="timers/dash_cooldown" to="." method="_on_dash_cooldown_timeout"]
@@ -1248,5 +1253,5 @@ position = Vector2(0, -19)
 [connection signal="timeout" from="timers/immunity_frame_timer" to="." method="_on_immunity_frame_timer_timeout"]
 [connection signal="timeout" from="timers/screen_effect_timer" to="." method="_on_screen_effect_timer_timeout"]
 [connection signal="timeout" from="timers/can_cast_combo_timer" to="." method="_on_can_cast_combo_timer_timeout"]
+[connection signal="timeout" from="timers/walk_sound_timer" to="." method="_on_sound_timer_timeout"]
 [connection signal="area_entered" from="enemyhitbox" to="." method="_on_enemyhitbox_area_entered"]
-[connection signal="area_exited" from="enemyhitbox" to="." method="_on_enemyhitbox_area_exited"]

@@ -14,6 +14,8 @@ class_name air_state
 var max_hori_speed = 125
 var has_double_jumped = false
 
+var dash_animation_called = false
+
 func state_process(delta):
 	if(character.is_on_floor()):
 		next_state = ground_state_var
@@ -28,6 +30,12 @@ func state_process(delta):
 	
 	if(character.taken_damage == true):
 		next_state = immunity_state_var
+	
+	if(character.previous_state == "dash" and character.velocity.y >0):
+		if dash_animation_called == false:
+			if character.animation_lock == false:
+				character.animated_sprite.play("fall_start")
+				dash_animation_called = true
 
 func state_input(event : InputEvent):
 	if character.coyote_jump == false:
@@ -38,6 +46,7 @@ func state_input(event : InputEvent):
 		if(event.is_action_pressed("jump")):
 			character.velocity.y = -coyote_jump_force
 			character.animated_sprite.play("jump")
+			character.play_sound("jump")
 	
 	if(event.is_action_pressed("dash") and character.can_dash and GlobalVar.dash_unlocked):
 		next_state = dash_state_var
@@ -69,14 +78,18 @@ func double_jump():
 		has_double_jumped = true
 		character.animated_sprite.stop()
 		character.animated_sprite.play("jump")
+		character.play_sound("jump")
 
 func on_enter():
+	dash_animation_called = false
 	if(character.previous_state == "ground" and character.velocity.y >0):
 		if character.animation_lock == false:
 			character.animated_sprite.play("fall_start")
 		character.coyote_jump = true
 		character.coyote_time()
-	if(character.previous_state == "casting" or character.previous_state == "wall"):
+	elif(character.previous_state == "casting" or character.previous_state == "wall"):
 #		if character.animated_sprite.animation != "jump":
 		if character.animation_lock == false:
 			character.animated_sprite.play("fall_start")
+	
+	

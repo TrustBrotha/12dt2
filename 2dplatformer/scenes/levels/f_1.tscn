@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bmx2mlv4hbsrr"]
+[gd_scene load_steps=30 format=3 uid="uid://bmx2mlv4hbsrr"]
 
 [ext_resource type="Script" path="res://scripts/levels/f_1.gd" id="1_868rc"]
 [ext_resource type="Texture2D" uid="uid://fng46ecvpkut" path="res://assets/tileset.png" id="1_hch5p"]
@@ -11,6 +11,10 @@
 [ext_resource type="Texture2D" uid="uid://b2c3i8at5si0m" path="res://assets/parallax_forest/j2.png" id="5_j4yxq"]
 [ext_resource type="PackedScene" uid="uid://cxg1m1njkwwc5" path="res://scenes/enemytest.tscn" id="5_meeyr"]
 [ext_resource type="Texture2D" uid="uid://bx4k5guh3ojki" path="res://assets/parallax_forest/parallax_front.png" id="6_l1rl3"]
+[ext_resource type="Texture2D" uid="uid://bqsxpxrc78ppx" path="res://assets/parallax_forest/root_background.png" id="7_ktret"]
+[ext_resource type="Texture2D" uid="uid://cpa0c48jced8w" path="res://assets/parallax_forest/root_layer3.png" id="8_5b3ia"]
+[ext_resource type="Texture2D" uid="uid://bxibg0di1lipl" path="res://assets/parallax_forest/root_layer2.png" id="8_snjj1"]
+[ext_resource type="Texture2D" uid="uid://darxutkdhjphd" path="res://assets/parallax_forest/root_layer1.png" id="10_lo1xa"]
 [ext_resource type="Texture2D" uid="uid://bbaxf2bo3aeo5" path="res://assets/thorns_above.png" id="10_uwbbp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7g3si"]
@@ -1059,7 +1063,7 @@ motion_mirroring = Vector2(1920, 0)
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2"]
 modulate = Color(0.0862745, 0.384314, 0.960784, 1)
 texture_filter = 1
-position = Vector2(0, -70)
+position = Vector2(0, -80)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("3_4shji")
 
@@ -1070,7 +1074,7 @@ motion_mirroring = Vector2(960, 0)
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3"]
 modulate = Color(0.0862745, 0.384314, 0.960784, 1)
 texture_filter = 1
-position = Vector2(0, -70)
+position = Vector2(0, -80)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("4_yge8p")
 
@@ -1081,7 +1085,7 @@ motion_mirroring = Vector2(1440, 0)
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer4"]
 modulate = Color(0.0862745, 0.384314, 0.960784, 1)
 texture_filter = 1
-position = Vector2(0, -70)
+position = Vector2(0, -80)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("5_j4yxq")
 
@@ -1092,9 +1096,52 @@ motion_mirroring = Vector2(1920, 0)
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
 modulate = Color(0.0862745, 0.384314, 0.960784, 1)
 texture_filter = 1
-position = Vector2(0, -77)
+position = Vector2(0, -80)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("6_l1rl3")
+
+[node name="ParallaxLayer5" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(1440, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer5"]
+modulate = Color(0.0352941, 0.286275, 0.756863, 1)
+texture_filter = 1
+position = Vector2(-240, 300)
+scale = Vector2(2, 2)
+texture = ExtResource("7_ktret")
+
+[node name="ParallaxLayer8" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.1, 1)
+motion_mirroring = Vector2(1440, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer8"]
+modulate = Color(0.0862745, 0.384314, 0.960784, 1)
+texture_filter = 1
+position = Vector2(-240, 300)
+scale = Vector2(2, 2)
+texture = ExtResource("8_5b3ia")
+
+[node name="ParallaxLayer6" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.2, 1)
+motion_mirroring = Vector2(1440, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer6"]
+modulate = Color(0.0862745, 0.384314, 0.960784, 1)
+texture_filter = 1
+position = Vector2(-500, 300)
+scale = Vector2(2, 2)
+texture = ExtResource("8_snjj1")
+
+[node name="ParallaxLayer7" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.3, 1)
+motion_mirroring = Vector2(1440, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer7"]
+modulate = Color(0.0862745, 0.384314, 0.960784, 1)
+texture_filter = 1
+position = Vector2(-240, 300)
+scale = Vector2(2, 2)
+texture = ExtResource("10_lo1xa")
 
 [node name="details_behind" type="TileMap" parent="."]
 texture_filter = 1

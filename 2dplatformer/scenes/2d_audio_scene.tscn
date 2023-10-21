@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dc1bkduqxfjfv"]
+
+[ext_resource type="AudioStream" uid="uid://byc5fqwhaqvbh" path="res://assets/sounds/airburst_sound.mp3" id="1_d0qxl"]
+[ext_resource type="Script" path="res://scripts/2d_audio_scene.gd" id="2_b88ik"]
+
+[node name="2d_audio_scene" type="AudioStreamPlayer2D"]
+stream = ExtResource("1_d0qxl")
+script = ExtResource("2_b88ik")
+
+[connection signal="finished" from="." to="." method="_on_finished"]

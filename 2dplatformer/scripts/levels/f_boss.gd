@@ -108,9 +108,11 @@ func _on_fboss_f_4_area_entered(area):
 
 func _on_fboss_ffinal_area_entered(area):
 	if area.is_in_group("player"):
+		GlobalVar.speed_run_timer_on = false
 		GlobalVar.last_level = "fboss"
 		fade_to_black = true
-		target_level = "res://scenes/levels/f_final.tscn"
+		GlobalVar.finish_time = GlobalVar.stopwatch_display
+		target_level = "res://scenes/title_screen_scenes/titlescreen.tscn"
 
 
 func _on_change_room_timer_timeout():

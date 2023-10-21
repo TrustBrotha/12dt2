@@ -6,6 +6,7 @@ var xpos = 1
 var vel = Vector2.ZERO
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$hit_sound.volume_db = GlobalVar.sound_effect_volume
 	pass # Replace with function body.
 
 
@@ -25,8 +26,8 @@ func _process(delta):
 
 
 func _on_body_entered(body):
-	print("hit")
 	speed = 0
+	$hit_sound.play()
 	$GPUParticles2D.emitting = true
 	$deletion_timer.start()
 	$CollisionShape2D.call_deferred("queue_free")

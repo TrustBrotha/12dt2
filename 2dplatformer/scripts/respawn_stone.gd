@@ -5,6 +5,7 @@ var on = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$glow.play("default")
+	$stone_sound.volume_db = GlobalVar.sound_effect_volume
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -13,6 +14,9 @@ func _process(delta):
 		$Control.visible = true
 		if Input.is_action_just_pressed("up"):
 			GlobalVar.respawn_room = "res://scenes/levels/%s.tscn"%room
+			GlobalVar.respawn_point_reached = true
+			$stone_sound.play()
+			
 	
 	
 	elif in_player == false:

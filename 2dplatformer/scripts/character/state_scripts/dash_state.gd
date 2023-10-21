@@ -6,6 +6,7 @@ class_name dash_state
 
 # Called when the node enters the scene tree for the first time.
 func on_enter():
+	character.play_sound("dash")
 	character.collision_layer = 4
 	character.collision_layer != 2
 	character.collision_mask != 3
