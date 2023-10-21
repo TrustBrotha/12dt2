@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=3 uid="uid://bqppt1grooo7u"]
+
+[ext_resource type="Texture2D" uid="uid://bq8e0qcdhof7v" path="res://assets/golem_rock.png" id="1_d8unt"]
+[ext_resource type="Script" path="res://scripts/boulder.gd" id="1_lfac2"]
+[ext_resource type="Texture2D" uid="uid://2mgp524u01xe" path="res://assets/spell_assets/water_particle_temp.png" id="3_scir4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vgqyr"]
+size = Vector2(20, 24)
+
+[sub_resource type="Gradient" id="Gradient_d3fbx"]
+colors = PackedColorArray(0.518503, 0.518503, 0.518503, 1, 0.851769, 0.851769, 0.851769, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_f1dur"]
+gradient = SubResource("Gradient_d3fbx")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_l2k8q"]
+lifetime_randomness = 0.3
+particle_flag_disable_z = true
+direction = Vector3(0, -11, 0)
+gravity = Vector3(0, 98, 0)
+initial_velocity_min = 25.0
+initial_velocity_max = 100.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 0.5
+color = Color(1, 1, 1, 0.596078)
+color_initial_ramp = SubResource("GradientTexture1D_f1dur")
+collision_mode = 1
+collision_friction = 0.0
+collision_bounce = 0.0
+
+[node name="boulder" type="Area2D" groups=["boss"]]
+script = ExtResource("1_lfac2")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(0.333, 0.333)
+texture = ExtResource("1_d8unt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_vgqyr")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+texture_filter = 1
+emitting = false
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_l2k8q")
+texture = ExtResource("3_scir4")
+one_shot = true
+explosiveness = 1.0
+
+[node name="deletion_timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="deletion_timer" to="." method="_on_deletion_timer_timeout"]

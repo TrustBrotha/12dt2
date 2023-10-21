@@ -9,7 +9,11 @@ var fade_to_black = false
 var fade_from_black = true
 var target_level = "none"
 
+var close_door = false
+
 @onready var room_change_areas = $room_changes.get_children()
+@export var boss_scene : PackedScene
+var boss_spawned = false
 var zoom = "in"
 var zoom_lock = false
 # Called when the node enters the scene tree for the first time.
@@ -20,6 +24,16 @@ func _ready():
 		$player.global_position = Vector2(385,0)
 	elif GlobalVar.last_level == "ffinal":
 		$player.global_position = Vector2(-848,0)
+	
+	if GlobalVar.golem_defeated == false:
+		$golem_dead.visible = true
+		$golem_dead.play("asleep")
+	elif GlobalVar.golem_defeated == true:
+		$golem_dead.visible = true
+		$golem_dead.play("dead")
+		move_child(get_node("golem_dead"),get_node("player").get_index())
+	
+	
 	get_node("HUD").get_node("screen_effect").modulate.a = 1
 
 
@@ -46,6 +60,23 @@ func _process(delta):
 		zoom = "in"
 		if zoom_lock == true:
 			zoom_lock = false
+	
+	if $player.global_position.x < $boss_trigger.global_position.x and boss_spawned == false:
+		
+		if GlobalVar.golem_defeated == false:
+			close_door = true
+			boss_spawned = true
+			var golem = boss_scene.instantiate()
+			golem.global_position = $boss_spawn.global_position
+			add_child(golem)
+			move_child(get_node("golem"),get_node("walls_floor").get_index())
+			$golem_dead.visible = false
+	
+	if close_door == true:
+		$doors.global_position.y = lerpf($doors.global_position.y,0,0.1)
+	elif close_door == false:
+		$doors.global_position.y = lerpf($doors.global_position.y,65,0.1)
+	
 	
 	
 	if $player.global_position.x < $zoom_lock.global_position.x and GlobalVar.fboss_zoom_lock_called == false:

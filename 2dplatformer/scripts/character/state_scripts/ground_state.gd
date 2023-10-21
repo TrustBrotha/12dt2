@@ -11,7 +11,6 @@ class_name ground_state
 @export var inventory_state_var : State
 
 var max_hori_speed = 125
-var state_can_dash = true
 
 func state_process(delta):
 	if character.moving == true and character.animation_lock == false:
@@ -43,7 +42,7 @@ func state_input(event : InputEvent):
 	
 	if(event.is_action_pressed("jump")):
 		jump()
-	if(event.is_action_pressed("dash") and character.can_dash and state_can_dash and GlobalVar.dash_unlocked):
+	if(event.is_action_pressed("dash") and character.can_dash and character.ground_can_dash and GlobalVar.dash_unlocked):
 		next_state = dash_state_var
 	if(event.is_action_pressed("cast")):
 		if(event.is_action_pressed("spell1")):

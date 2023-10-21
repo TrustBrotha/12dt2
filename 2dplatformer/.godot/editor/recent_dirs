@@ -1,6 +1,7 @@
 res://scripts
 res://scenes
 res://assets
+res://scripts/character/state_scripts
 res://scripts/character/spell_scripts
 res://scripts/levels
 res://scenes/levels

@@ -2,7 +2,7 @@ extends Node2D
 
 var camera_limit_left = 106
 var camera_limit_right = 2568
-var camera_limit_up = -9999999
+var camera_limit_up = -1015
 var camera_limit_down = 150
 
 var fade_to_black = false

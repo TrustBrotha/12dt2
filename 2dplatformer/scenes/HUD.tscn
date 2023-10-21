@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://b253jsyqao2rg"]
+[gd_scene load_steps=13 format=3 uid="uid://b253jsyqao2rg"]
 
 [ext_resource type="Texture2D" uid="uid://evqobg3jinw0" path="res://assets/healthbar_under.png" id="1_cfrp3"]
 [ext_resource type="Script" path="res://scripts/HUD.gd" id="1_uxdc7"]
 [ext_resource type="Texture2D" uid="uid://dq5mhdi8axd4s" path="res://assets/chargebar_empty.png" id="2_5albg"]
 [ext_resource type="Texture2D" uid="uid://cl1n0onebk80p" path="res://assets/healthbar_bar.png" id="2_8aj7y"]
 [ext_resource type="Texture2D" uid="uid://pirl2irfrjvn" path="res://assets/chargebar_bar.png" id="3_o452j"]
+[ext_resource type="Texture2D" uid="uid://cjrffjf50beqs" path="res://assets/died of cringe.png" id="6_8ewle"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_c2vtk"]
 
@@ -120,6 +121,18 @@ value = 100.0
 texture_under = ExtResource("1_cfrp3")
 texture_progress = ExtResource("2_8aj7y")
 
+[node name="boss_health_bar" type="TextureProgressBar" parent="."]
+visible = false
+texture_filter = 1
+offset_left = 128.0
+offset_top = 640.0
+offset_right = 256.0
+offset_bottom = 656.0
+scale = Vector2(8, 4)
+value = 100.0
+texture_under = ExtResource("1_cfrp3")
+texture_progress = ExtResource("2_8aj7y")
+
 [node name="spell_icon_background" type="Node" parent="."]
 
 [node name="icon_background1" type="Sprite2D" parent="spell_icon_background"]
@@ -179,3 +192,15 @@ modulate = Color(0, 0, 0, 0)
 position = Vector2(740, 404)
 scale = Vector2(1688, 1032)
 texture = SubResource("PlaceholderTexture2D_tt1u1")
+
+[node name="death_message" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 0, 0, 0)
+position = Vector2(640, 360)
+texture = ExtResource("6_8ewle")
+
+[node name="death_timer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[connection signal="timeout" from="death_timer" to="." method="_on_death_timer_timeout"]

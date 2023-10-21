@@ -1,6 +1,8 @@
 extends CanvasLayer
 @onready var spell_icons = $spell_icons.get_children()
 var selected_spells
+var dead = false
+var dead_timer_called = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$health_bar.value = GlobalVar.character_health
@@ -21,6 +23,14 @@ func _process(delta):
 	elif visible == true:
 		for icon in spell_icons:
 			icon.visible = true
+	
+	if dead == true:
+		$death_message.visible = true
+		$screen_effect.modulate.a = lerpf($screen_effect.modulate.a, 1, 0.02)
+		$death_message.modulate.a = lerpf($death_message.modulate.a, 1, 0.02)
+		if dead_timer_called == false:
+			$death_timer.start()
+			dead_timer_called = true
 
 func sprite_update():
 	selected_spells = GlobalVar.equipped_spells
@@ -30,3 +40,9 @@ func sprite_update():
 		sprite.scale.x = 1.5
 		sprite.scale.y = 1.5
 		sprite.texture_filter = 1
+
+
+
+
+func _on_death_timer_timeout():
+	GlobalVar.respawn()

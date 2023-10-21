@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 
-const accel = 10
+const accel = 5
 const jump_velocity = -400.0
 
 @onready var particle_effect_folder = $paricle_folder.get_children()

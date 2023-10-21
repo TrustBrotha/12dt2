@@ -1,7 +1,7 @@
 extends Node
 
 var equipped_spells = ["empty","empty","empty","empty","empty"]
-var discovered_spells = ["fireburst","waterstream","firestream","airburst"]
+var discovered_spells = ["fireburst","waterstream","firestream"]
 # "fireburst","waterstream","firestream","airburst"
 
 var discovered_movement = []
@@ -10,6 +10,8 @@ var discovered_keys = ["f5_key","f4_key","flarge_key"]
 var character_health = 100
 var last_level = "none"
 var current_level = "none"
+
+var respawn_room = "res://scenes/title_screen_scenes/titlescreen.tscn"
 var fboss_zoom_lock_called = false
 var boss_door_open = false
 var boss_door_finished = false
@@ -19,6 +21,7 @@ var dash_unlocked = true
 var wall_jump_unlocked = true
 
 var f1_wall_broken = false
+var golem_defeated = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
@@ -41,4 +44,8 @@ func update_movement():
 			wall_jump_unlocked = true
 		else:
 			pass
-			
+
+func respawn():
+	reset()
+	last_level = "dead"
+	get_tree().change_scene_to_file(respawn_room)

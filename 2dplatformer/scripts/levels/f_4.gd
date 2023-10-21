@@ -18,6 +18,8 @@ func _ready():
 		$player.global_position = Vector2(75,0)
 	elif GlobalVar.last_level == "fboss":
 		$player.global_position = Vector2(64,352)
+	elif GlobalVar.last_level == "dead":
+		$player.global_position = $respawn_stone.global_position
 	
 	if "f4_key" not in GlobalVar.discovered_keys:
 		create_pickup("key","f4_key",Vector2(240,341))

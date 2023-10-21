@@ -57,6 +57,7 @@ var near_left_wall = false
 
 var can_dash = true 
 var is_dashing_now = false
+var ground_can_dash = true
 
 var coyote_jump = false
 var previous_state = ""
@@ -289,9 +290,11 @@ func gravity_applying(delta):
 
 
 func healthcheck():
-	if GlobalVar.character_health <= 0:
-		get_tree().change_scene_to_file("res://scenes/title_screen_scenes/titlescreen.tscn")
-		GlobalVar.reset()
+	pass
+#		pass
+#		$enemyhitbox/hitbox_collision.disabled = true
+#		get_tree().change_scene_to_file("res://scenes/title_screen_scenes/titlescreen.tscn")
+#		GlobalVar.reset()
 
 
 func health_update():
@@ -309,6 +312,17 @@ func _on_enemyhitbox_area_entered(area):
 		if area.global_position.x < global_position.x:
 			knockback_direction = 1
 		elif area.global_position.x >= global_position.x:
+			knockback_direction = -1
+		taken_damage = true
+		
+		health_update()
+	
+	if area.is_in_group("boss") and taken_damage == false:
+		health_change = area.get_parent().get_parent().get_parent().damage
+		knockback = area.get_parent().get_parent().get_parent().knockback
+		if area.get_parent().get_parent().get_parent().global_position.x < global_position.x:
+			knockback_direction = 1
+		elif area.get_parent().get_parent().get_parent().global_position.x >= global_position.x:
 			knockback_direction = -1
 		taken_damage = true
 		
@@ -366,6 +380,7 @@ func dash_start():
 
 func _on_is_dashing_timeout():
 	is_dashing_now = false
+	$timers/dash_cooldown.start()
 
 func coyote_time():
 	$timers/coyote_timer.start()
@@ -402,3 +417,7 @@ func _on_immunity_frame_timer_timeout():
 func _on_can_cast_combo_timer_timeout():
 	if can_cast == false:
 		can_cast = true
+
+
+func _on_dash_cooldown_timeout():
+	ground_can_dash = true

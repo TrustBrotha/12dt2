@@ -1,0 +1,117 @@
+[gd_scene load_steps=13 format=3 uid="uid://djadal2ed171h"]
+
+[ext_resource type="Script" path="res://scripts/respawn_stone.gd" id="1_3jvbd"]
+[ext_resource type="Texture2D" uid="uid://x3wh2goxpwbh" path="res://assets/respawn_rock.png" id="1_hn1aq"]
+
+[sub_resource type="Gradient" id="Gradient_l2ouj"]
+offsets = PackedFloat32Array(0, 0.37931, 0.793103, 1)
+colors = PackedColorArray(0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.176471)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6yjb0"]
+gradient = SubResource("Gradient_l2ouj")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qnyul"]
+lifetime_randomness = 0.4
+emission_shape = 1
+emission_sphere_radius = 5.0
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 0.0
+gravity = Vector3(0, -40, 0)
+initial_velocity_min = 30.0
+initial_velocity_max = 30.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_max = 2.0
+color_ramp = SubResource("GradientTexture1D_6yjb0")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oyjan"]
+atlas = ExtResource("1_hn1aq")
+region = Rect2(64, 0, 32, 25)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dql8j"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oyjan")
+}],
+"loop": true,
+"name": &"off",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q3pk5"]
+atlas = ExtResource("1_hn1aq")
+region = Rect2(96, 0, 32, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mf6ek"]
+atlas = ExtResource("1_hn1aq")
+region = Rect2(32, 0, 32, 25)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_e4ab8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q3pk5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mf6ek")
+}],
+"loop": true,
+"name": &"default",
+"speed": 0.5
+}]
+
+[sub_resource type="Theme" id="Theme_mpbfq"]
+default_font_size = 10
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h6q51"]
+size = Vector2(32, 23)
+
+[node name="respawn_stone" type="Node2D"]
+script = ExtResource("1_3jvbd")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+position = Vector2(2, 0)
+amount = 15
+process_material = SubResource("ParticleProcessMaterial_qnyul")
+
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, 0.5)
+sprite_frames = SubResource("SpriteFrames_dql8j")
+animation = &"off"
+
+[node name="glow" type="AnimatedSprite2D" parent="."]
+modulate = Color(1, 1, 1, 0)
+texture_filter = 1
+position = Vector2(0, 0.5)
+sprite_frames = SubResource("SpriteFrames_e4ab8")
+frame_progress = 0.0099435
+
+[node name="Control" type="Control" parent="."]
+visible = false
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = -81.0
+offset_top = -30.0
+offset_right = 81.0
+offset_bottom = 15.0
+theme = SubResource("Theme_mpbfq")
+text = "Press W to set respawn"
+horizontal_alignment = 1
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 1.5)
+shape = SubResource("RectangleShape2D_h6q51")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="area_exited" from="Area2D" to="." method="_on_area_2d_area_exited"]

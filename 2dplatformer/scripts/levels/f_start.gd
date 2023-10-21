@@ -8,7 +8,7 @@ var camera_limit_down = 9999999
 var fade_to_black = false
 var fade_from_black = true
 var target_level = "none"
-
+var zoom = "normal"
 @export var pickup_scene : PackedScene
 @onready var room_change_areas = $room_changes.get_children()
 # Called when the node enters the scene tree for the first time.
@@ -21,6 +21,8 @@ func _ready():
 		$player.global_position = Vector2(-650,909)
 	elif GlobalVar.last_level == "f2":
 		$player.global_position = Vector2(600,896)
+	elif GlobalVar.last_level == "dead":
+		$player.global_position = $respawn_stone.global_position
 	if GlobalVar.dash_unlocked == false:
 		create_pickup()
 	get_node("HUD").get_node("screen_effect").modulate.a = 1
@@ -48,6 +50,17 @@ func _process(delta):
 	if get_node("HUD").get_node("screen_effect").modulate.a >= 0.9:
 		if target_level != "none":
 			get_tree().change_scene_to_file(target_level)
+	
+	if $player.global_position.y > $zoom_down.global_position.y:
+		zoom = "normal"
+		$ParallaxBackground2/updraft/GPUParticles2D2.emitting = false
+	elif $player.global_position.y < $zoom_down.global_position.y and $player.global_position.x > $zoom_down.global_position.x:
+		zoom = "down"
+	
+	if zoom == "down":
+		$player/Camera2D.position.y = lerpf($player/Camera2D.position.y, 40,0.1)
+	elif zoom == "normal":
+		$player/Camera2D.position.y = lerpf($player/Camera2D.position.y, -67,0.1)
 
 
 func _on_fstart_f_1_area_entered(area):

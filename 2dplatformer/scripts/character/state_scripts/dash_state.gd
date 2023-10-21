@@ -16,6 +16,7 @@ func on_enter():
 	character.animated_sprite.play("dash_loop")
 	character.can_dash = false
 	character.is_dashing_now = true
+	character.ground_can_dash = false
 	character.dash_start()
 
 func on_exit():

@@ -3,7 +3,8 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	GlobalVar.last_level = "none"
+	GlobalVar.character_health = 10
 #	GlobalVar.reset()
 
 
