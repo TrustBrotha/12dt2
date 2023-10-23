@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cfhwywy2f5fv2"]
+[gd_scene load_steps=18 format=3 uid="uid://cfhwywy2f5fv2"]
 
 [ext_resource type="Script" path="res://scenes/UI/spell_selection_scene1.gd" id="1_cytnc"]
 [ext_resource type="Texture2D" uid="uid://b7xn4t4ipqkwn" path="res://scenes/UI/icons/airburst_icon.png" id="2_1x2gn"]
@@ -9,6 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://d3ms06jgmqx4p" path="res://scenes/UI/icons/icespikefrombelow_icon.png" id="4_sks7f"]
 [ext_resource type="Texture2D" uid="uid://bg0xywrdvmwc3" path="res://scenes/UI/icons/lightningstream_icon.png" id="6_lcjy5"]
 [ext_resource type="Texture2D" uid="uid://urugwqedoy4x" path="res://scenes/UI/icons/icespear_icon.png" id="8_amshf"]
+[ext_resource type="Texture2D" uid="uid://f7cfmenq1a57" path="res://scenes/UI/icons/heal_icon.png" id="9_y68u0"]
+[ext_resource type="Texture2D" uid="uid://bld24qyl55ogi" path="res://scenes/UI/icons/explosion_icon.png" id="10_p6d2a"]
+[ext_resource type="Texture2D" uid="uid://c72kn6qpntjuw" path="res://scenes/UI/icons/earthspike_icon.png" id="11_fq4pq"]
+[ext_resource type="Texture2D" uid="uid://cdf2t7suii06s" path="res://scenes/UI/icons/earthwall_icon.png" id="12_xdpt4"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bjxp3"]
 
@@ -182,6 +186,66 @@ position = Vector2(50, 50)
 scale = Vector2(3, 3)
 texture = ExtResource("8_amshf")
 
+[node name="heal" type="Button" parent="Control/spell_buttons"]
+visible = false
+offset_left = 350.0
+offset_top = 200.0
+offset_right = 450.0
+offset_bottom = 300.0
+disabled = true
+
+[node name="icon" type="Sprite2D" parent="Control/spell_buttons/heal"]
+visible = false
+texture_filter = 1
+position = Vector2(50, 50)
+scale = Vector2(3, 3)
+texture = ExtResource("9_y68u0")
+
+[node name="explosion" type="Button" parent="Control/spell_buttons"]
+visible = false
+offset_left = 475.0
+offset_top = 200.0
+offset_right = 575.0
+offset_bottom = 300.0
+disabled = true
+
+[node name="icon" type="Sprite2D" parent="Control/spell_buttons/explosion"]
+visible = false
+texture_filter = 1
+position = Vector2(50, 50)
+scale = Vector2(3, 3)
+texture = ExtResource("10_p6d2a")
+
+[node name="earthspike" type="Button" parent="Control/spell_buttons"]
+visible = false
+offset_left = 600.0
+offset_top = 200.0
+offset_right = 700.0
+offset_bottom = 300.0
+disabled = true
+
+[node name="icon" type="Sprite2D" parent="Control/spell_buttons/earthspike"]
+visible = false
+texture_filter = 1
+position = Vector2(50, 50)
+scale = Vector2(3, 3)
+texture = ExtResource("11_fq4pq")
+
+[node name="earthwall" type="Button" parent="Control/spell_buttons"]
+visible = false
+offset_left = 100.0
+offset_top = 325.0
+offset_right = 200.0
+offset_bottom = 425.0
+disabled = true
+
+[node name="icon" type="Sprite2D" parent="Control/spell_buttons/earthwall"]
+visible = false
+texture_filter = 1
+position = Vector2(50, 50)
+scale = Vector2(3, 3)
+texture = ExtResource("12_xdpt4")
+
 [node name="Sprite2D" type="Sprite2D" parent="Control"]
 visible = false
 modulate = Color(0, 0, 0, 0.211765)
@@ -220,4 +284,8 @@ text = "MENU"
 [connection signal="pressed" from="Control/spell_buttons/fireburst" to="." method="_on_fireburst_pressed"]
 [connection signal="pressed" from="Control/spell_buttons/lightningstream" to="." method="_on_lightningstream_pressed"]
 [connection signal="pressed" from="Control/spell_buttons/icespear" to="." method="_on_icespear_pressed"]
+[connection signal="pressed" from="Control/spell_buttons/heal" to="." method="_on_heal_pressed"]
+[connection signal="pressed" from="Control/spell_buttons/explosion" to="." method="_on_explosion_pressed"]
+[connection signal="pressed" from="Control/spell_buttons/earthspike" to="." method="_on_earthspike_pressed"]
+[connection signal="pressed" from="Control/spell_buttons/earthwall" to="." method="_on_earthwall_pressed"]
 [connection signal="pressed" from="menu_button" to="." method="_on_menu_button_pressed"]

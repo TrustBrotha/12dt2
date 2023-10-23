@@ -12,12 +12,15 @@ func _ready():
 	$deletion_timer.wait_time = float(23)/12
 	$deletion_timer.start()
 	$sprite.play("ice_spike_up")
-	global_position.y += 16
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	if $RayCast2D.is_colliding():
+		var collision_point = $RayCast2D.get_collision_point()
+		global_position = collision_point
+		$RayCast2D.enabled = false
 
 
 # once visual effects line up with being fully cast, enable collision

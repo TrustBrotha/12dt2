@@ -1,0 +1,79 @@
+[gd_scene load_steps=10 format=3 uid="uid://c8cbihwra7tjh"]
+
+[ext_resource type="Script" path="res://scripts/character/spell_scripts/heal.gd" id="1_7r08s"]
+[ext_resource type="AudioStream" uid="uid://bg2gd1ikuuayd" path="res://assets/sounds/heal_charge_sound.mp3" id="2_0hq8n"]
+[ext_resource type="AudioStream" uid="uid://cfm8punwrjeet" path="res://assets/sounds/heal_sound.mp3" id="2_ouumv"]
+
+[sub_resource type="Gradient" id="Gradient_8bada"]
+offsets = PackedFloat32Array(0, 0.881773)
+colors = PackedColorArray(1, 0.843137, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_pbf4b"]
+gradient = SubResource("Gradient_8bada")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mnptr"]
+lifetime_randomness = 0.8
+emission_shape = 3
+emission_box_extents = Vector3(20, 1, 1)
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 2.0
+gravity = Vector3(0, 98, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_max = 2.0
+color_initial_ramp = SubResource("GradientTexture1D_pbf4b")
+collision_mode = 1
+collision_friction = 0.0
+collision_bounce = 0.0
+
+[sub_resource type="Gradient" id="Gradient_n2dsq"]
+colors = PackedColorArray(1, 0.843137, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ml6bt"]
+gradient = SubResource("Gradient_n2dsq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wtyqo"]
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_box_extents = Vector3(20, 1, 1)
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 2.0
+gravity = Vector3(0, 98, 0)
+initial_velocity_min = 40.0
+initial_velocity_max = 40.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+color_initial_ramp = SubResource("GradientTexture1D_ml6bt")
+collision_mode = 1
+collision_friction = 0.0
+collision_bounce = 0.0
+
+[node name="heal" type="Node2D" groups=["spell", "stream"]]
+script = ExtResource("1_7r08s")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_mnptr")
+one_shot = true
+explosiveness = 0.71
+
+[node name="deletion_timer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
+[node name="GPUParticles2D2" type="GPUParticles2D" parent="."]
+process_material = SubResource("ParticleProcessMaterial_wtyqo")
+lifetime = 0.35
+
+[node name="heal_charge_sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_0hq8n")
+
+[node name="heal_end_sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_ouumv")
+
+[connection signal="timeout" from="deletion_timer" to="." method="_on_deletion_timer_timeout"]

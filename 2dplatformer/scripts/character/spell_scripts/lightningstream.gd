@@ -3,7 +3,7 @@ extends Node2D
 var knockback = 0
 var damage = 10
 
-var charge_decrease = 2
+var charge_decrease = 20
 
 var timer_called = false
 var hitbox_direction

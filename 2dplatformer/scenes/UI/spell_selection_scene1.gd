@@ -84,6 +84,24 @@ func _process(delta):
 		else:
 			$Control/Label.spell_text = "undiscovered"
 	
+	elif $Control/spell_buttons/heal.is_hovered():
+		if $Control/spell_buttons/heal.disabled == false:
+			$Control/Label.spell_text = "heal"
+		else:
+			$Control/Label.spell_text = "undiscovered"
+	
+	elif $Control/spell_buttons/explosion.is_hovered():
+		if $Control/spell_buttons/explosion.disabled == false:
+			$Control/Label.spell_text = "explosion"
+		else:
+			$Control/Label.spell_text = "undiscovered"
+	
+	elif $Control/spell_buttons/earthspike.is_hovered():
+		if $Control/spell_buttons/earthspike.disabled == false:
+			$Control/Label.spell_text = "earthspike"
+		else:
+			$Control/Label.spell_text = "undiscovered"
+	
 	else:
 		$Control/Label.spell_text = "clear"
 	
@@ -143,57 +161,71 @@ func _on_spell_5_pressed():
 
 # changes the selected spell slot to the selected spell
 func _on_airburst_pressed():
-	selected_spells[spell_listening-1] = "airburst"
-	change_text()
-	change_to_spell_type_select()
-	spell_listening = 0
+	change_spell("airburst")
 
 
 func _on_firestream_pressed():
-	selected_spells[spell_listening-1] = "firestream"
-	change_text()
-	change_to_spell_type_select()
-	spell_listening = 0
+	change_spell("firestream")
 
 
 func _on_waterstream_pressed():
-	selected_spells[spell_listening-1] = "waterstream"
-	change_text()
-	change_to_spell_type_select()
-	spell_listening = 0
+	change_spell("waterstream")
 
 
 func _on_fireburst_pressed():
-	selected_spells[spell_listening-1] = "fireburst"
-	change_text()
-	change_to_spell_type_select()
-	spell_listening = 0
+	change_spell("fireburst")
+
 
 func _on_lightningstream_pressed():
-	selected_spells[spell_listening-1] = "lightningstream"
-	change_text()
-	change_to_spell_type_select()
-	spell_listening = 0
+	change_spell("lightningstream")
+
 
 func _on_icespikefrombelow_pressed():
-	selected_spells[spell_listening-1] = "icespikefrombelow"
-	change_text()
-	change_to_spell_type_select()
-	spell_listening = 0
+	change_spell("icespikefrombelow")
+
 
 func _on_icespear_pressed():
-	selected_spells[spell_listening-1] = "icespear"
+	change_spell("icespear")
+
+
+func _on_heal_pressed():
+	change_spell("heal")
+
+
+func _on_explosion_pressed():
+	change_spell("explosion")
+
+
+func _on_earthspike_pressed():
+	change_spell("earthspike")
+
+
+func _on_earthwall_pressed():
+	change_spell("earthwall")
+
+
+func change_spell(spell):
+	selected_spells[spell_listening-1] = spell
 	change_text()
 	change_to_spell_type_select()
 	spell_listening = 0
-
-
-
 
 
 # changes to title screen scene
 func _on_menu_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/title_screen_scenes/titlescreen.tscn")
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

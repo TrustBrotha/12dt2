@@ -6,7 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://dpdx4mx1yudre" path="res://assets/sounds/firestream_sound.mp3" id="4_suapd"]
 
 [sub_resource type="Gradient" id="Gradient_mh12f"]
-offsets = PackedFloat32Array(0, 0.251852, 0.72963, 1)
+offsets = PackedFloat32Array(0, 0.251852, 0.72963, 0.995074)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.909804, 0.802019, 0.263359, 0, 0.796078, 0.559524, 0, 0, 0.603922)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_nnbck"]

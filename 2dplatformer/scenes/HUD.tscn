@@ -56,7 +56,8 @@ offset_top = -480.0
 offset_right = 112.0
 offset_bottom = -472.0
 scale = Vector2(4, 4)
-value = 100.0
+max_value = 1000.0
+value = 1000.0
 texture_under = ExtResource("2_5albg")
 texture_progress = ExtResource("3_o452j")
 
@@ -68,7 +69,8 @@ offset_top = -432.0
 offset_right = 112.0
 offset_bottom = -424.0
 scale = Vector2(4, 4)
-value = 100.0
+max_value = 1000.0
+value = 1000.0
 texture_under = ExtResource("2_5albg")
 texture_progress = ExtResource("3_o452j")
 
@@ -80,7 +82,8 @@ offset_top = -376.0
 offset_right = 112.0
 offset_bottom = -368.0
 scale = Vector2(4, 4)
-value = 100.0
+max_value = 1000.0
+value = 1000.0
 texture_under = ExtResource("2_5albg")
 texture_progress = ExtResource("3_o452j")
 
@@ -92,7 +95,8 @@ offset_top = -320.0
 offset_right = 112.0
 offset_bottom = -312.0
 scale = Vector2(4, 4)
-value = 100.0
+max_value = 1000.0
+value = 1000.0
 texture_under = ExtResource("2_5albg")
 texture_progress = ExtResource("3_o452j")
 
@@ -104,7 +108,8 @@ offset_top = -264.0
 offset_right = 112.0
 offset_bottom = -256.0
 scale = Vector2(4, 4)
-value = 100.0
+max_value = 1000.0
+value = 1000.0
 texture_under = ExtResource("2_5albg")
 texture_progress = ExtResource("3_o452j")
 

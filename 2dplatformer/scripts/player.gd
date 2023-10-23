@@ -146,30 +146,20 @@ func HUD_update():
 			 = "fps = " + str(Engine.get_frames_per_second())
 	
 	for bar in chargerbar_folder:
-#		var bar_temp : ProgressBar = bar
-		bar.value += 0.5
-		if bar.value == 100:
+		bar.value += 10
+		
+		if bar.value == 1000:
 			bar.hide()
-		elif bar.value != 100:
+		elif bar.value != 1000:
 			bar.show()
-		if bar.value <= 2:
+		
+		if bar.value <= 20:
 			cast_released()
 	if losing_charge == true:
-		if Input.is_action_pressed("spell1") and charge_lock == "spell1":
-			get_parent().get_node("HUD").get_node("spell_charge_bar_folder")\
-					.get_node("spell1_charge_bar").value -= saved_spell.charge_decrease
-		if Input.is_action_pressed("spell2") and charge_lock == "spell2":
-			get_parent().get_node("HUD").get_node("spell_charge_bar_folder")\
-					.get_node("spell2_charge_bar").value -= saved_spell.charge_decrease
-		if Input.is_action_pressed("spell3") and charge_lock == "spell3":
-			get_parent().get_node("HUD").get_node("spell_charge_bar_folder")\
-					.get_node("spell3_charge_bar").value -= saved_spell.charge_decrease
-		if Input.is_action_pressed("spell4") and charge_lock == "spell4":
-			get_parent().get_node("HUD").get_node("spell_charge_bar_folder")\
-					.get_node("spell4_charge_bar").value -= saved_spell.charge_decrease
-		if Input.is_action_pressed("spell5") and charge_lock == "spell5":
-			get_parent().get_node("HUD").get_node("spell_charge_bar_folder")\
-					.get_node("spell5_charge_bar").value -= saved_spell.charge_decrease
+		for i in range(5):
+			if Input.is_action_pressed("spell%s" %(i+1)) and charge_lock == "spell%s" %(i+1):
+				get_parent().get_node("HUD").get_node("spell_charge_bar_folder")\
+					.get_node("spell%s_charge_bar" %(i+1)).value -= saved_spell.charge_decrease
 
 
 # called from casting state
@@ -228,7 +218,7 @@ func spell_creation(spell):
 	spell.global_position = $spell_spawn.global_position
 	spell.scale.x = last_direction
 	add_sibling(spell)
-	get_parent().move_child(spell,3)
+	get_parent().move_child(spell,get_parent().get_node("player").get_index())
 	
 	if spell.is_in_group("burst"):
 		can_cast = false
@@ -354,7 +344,6 @@ func gravity_applying(delta):
 func health_update(health_change):
 	if health_change != null:
 		GlobalVar.character_health += health_change
-		get_parent().get_node("HUD").get_node("health_bar").value = GlobalVar.character_health
 
 
 # checks what has entered the player's hitbox and applies what should happen based on that.

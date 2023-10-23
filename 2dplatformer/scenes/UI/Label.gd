@@ -39,3 +39,12 @@ func change_text():
 	elif spell_text == "icespear":
 		text = "Ice Spear \n\nProduces a spear of ice \nand fires it forward,\
 				 \nfreezing enemies \n\nApplies frost buildup"
+	elif spell_text == "heal":
+		text = "Heal \n\nConjures holy energy to \nheal the player. \nHold down \
+		cast until \nbar is empty to use \n\nHeals 10 hp"
+	elif spell_text == "explosion":
+		text = "Explosion \n\nCharge fiery energy to \nproduce a massive \
+		explosion, \nigniting enemies \n\nApplies burn"
+	elif spell_text == "earthspike":
+		text = "Earth Spike \n\nProduce spikes of earth \nat your feet, \
+		\nstunning enemies \n\nApplies stunned"

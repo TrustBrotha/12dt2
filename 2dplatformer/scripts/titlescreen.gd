@@ -15,8 +15,6 @@ func _ready():
 	MusicPlayer.play_menu_music()
 	GlobalVar.character_health = 100
 	$screens/title/speed_run_time_label.text = GlobalVar.finish_time
-	
-#	GlobalVar.reset()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -154,7 +152,6 @@ func _on_change_screen_mode_pressed():
 	if selected_mode_position > 1:
 		selected_mode_position = 0
 	selected_mode = screen_modes[selected_mode_position]
-	print(selected_mode)
 	$screens/visual_settings/GridContainer2/change_screen_mode.text = selected_mode
 
 
@@ -169,3 +166,7 @@ func _on_apply_screen_mode_pressed():
 
 
 
+
+
+func _on_reset_pressed():
+	GlobalVar.reset()

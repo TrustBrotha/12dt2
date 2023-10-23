@@ -3,7 +3,7 @@ extends Node2D
 
 var timer_called = false
 
-var charge_decrease = 2
+var charge_decrease = 20
 
 #placeholder values
 var knockback = 0

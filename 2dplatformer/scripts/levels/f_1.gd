@@ -25,19 +25,32 @@ func _ready():
 		$player.global_position = Vector2(155,0)
 	elif GlobalVar.last_level == "f5":
 		$player.global_position = Vector2(-547,128)
+	
 	if "waterstream" not in GlobalVar.discovered_spells:
-		create_pickup()
+		create_pickup("spell","waterstream",Vector2(64,-128))
+	if "lightningstream" not in GlobalVar.discovered_spells:
+		create_pickup("spell","lightningstream",Vector2(44,-128))
+	if "icespikefrombelow" not in GlobalVar.discovered_spells:
+		create_pickup("spell","icespikefrombelow",Vector2(24,-128))
+	if "icespear" not in GlobalVar.discovered_spells:
+		create_pickup("spell","icespear",Vector2(4,-128))
+	if "heal" not in GlobalVar.discovered_spells:
+		create_pickup("spell","heal",Vector2(-16,-128))
+	if "explosion" not in GlobalVar.discovered_spells:
+		create_pickup("spell","explosion",Vector2(-36,-128))
+	if "earthspike" not in GlobalVar.discovered_spells:
+		create_pickup("spell","earthspike",Vector2(84,-128))
 
 
 # creates a pickup which when picked up changes unlocks in globalvar
-func create_pickup():
+func create_pickup(type,unlock,pickup_position):
 	var pickup = pickup_scene.instantiate()
-	pickup.type = "spell"
-	pickup.unlock = "waterstream"
-	pickup.name = "waterstream"
-	pickup.global_position = Vector2(64,-124)
+	pickup.type = type
+	pickup.unlock = unlock
+	pickup.name = unlock
+	pickup.global_position = pickup_position
 	add_child(pickup)
-	move_child(get_node("waterstream"),get_node("walls_floor").get_index())
+	move_child(get_node(unlock),get_node("walls_floor").get_index())
 
 
 # camera control, fade in / out control

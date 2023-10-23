@@ -1,0 +1,129 @@
+[gd_scene load_steps=18 format=3 uid="uid://v0ogigfuw88g"]
+
+[ext_resource type="Script" path="res://scripts/character/spell_scripts/explosion.gd" id="1_udkug"]
+[ext_resource type="Texture2D" uid="uid://c83c1mcv80qdj" path="res://assets/spell_assets/fire_particle.png" id="2_die0q"]
+[ext_resource type="AudioStream" uid="uid://cp2357fyte83o" path="res://assets/sounds/fuse_sound.mp3" id="3_gp7mo"]
+[ext_resource type="AudioStream" uid="uid://vww01onx2o22" path="res://assets/sounds/explosion_sound.mp3" id="3_lwvwu"]
+
+[sub_resource type="Gradient" id="Gradient_fiusn"]
+offsets = PackedFloat32Array(0, 0.349754, 0.729064, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.743688, 0.831373, 0.34902, 0, 0.913725, 0.556863, 0, 0, 0.741176)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_0br3b"]
+gradient = SubResource("Gradient_fiusn")
+
+[sub_resource type="Curve" id="Curve_ikq4f"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, -200), 0.0, 0.0, 0, 0, Vector2(0.546559, -200), 0.0, 0.0, 0, 0, Vector2(1, -200), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_uti7p"]
+curve = SubResource("Curve_ikq4f")
+
+[sub_resource type="Curve" id="Curve_5xoyg"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.291498, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xbus3"]
+curve = SubResource("Curve_5xoyg")
+
+[sub_resource type="Curve" id="Curve_fyvug"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, 7), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xvjq5"]
+curve = SubResource("Curve_fyvug")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fjccq"]
+lifetime_randomness = 0.63
+emission_shape = 1
+emission_sphere_radius = 4.0
+particle_flag_disable_z = true
+spread = 180.0
+gravity = Vector3(0, 98, 0)
+initial_velocity_max = 600.0
+angular_velocity_min = -200.0
+angular_velocity_max = 200.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+radial_accel_min = 7.0
+radial_accel_max = 7.0
+radial_accel_curve = SubResource("CurveTexture_uti7p")
+tangential_accel_min = 100.0
+tangential_accel_max = 100.0
+tangential_accel_curve = SubResource("CurveTexture_xvjq5")
+angle_max = 720.0
+scale_curve = SubResource("CurveTexture_xbus3")
+color_ramp = SubResource("GradientTexture1D_0br3b")
+collision_mode = 1
+collision_friction = 0.0
+collision_bounce = 0.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ohr1b"]
+radius = 118.8
+
+[sub_resource type="Gradient" id="Gradient_inei4"]
+colors = PackedColorArray(1, 1, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_034of"]
+gradient = SubResource("Gradient_inei4")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_uo1dt"]
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 180.0
+gravity = Vector3(0, 50, 0)
+initial_velocity_min = 20.0
+initial_velocity_max = 60.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_max = 2.0
+color_ramp = SubResource("GradientTexture1D_034of")
+collision_mode = 1
+collision_friction = 0.0
+collision_bounce = 0.0
+
+[node name="explosion" type="Node2D" groups=["fire", "spell", "stream"]]
+script = ExtResource("1_udkug")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+texture_filter = 1
+emitting = false
+amount = 300
+process_material = SubResource("ParticleProcessMaterial_fjccq")
+texture = ExtResource("2_die0q")
+lifetime = 1.4
+one_shot = true
+explosiveness = 1.0
+
+[node name="Area2D" type="Area2D" parent="." groups=["burst_collision"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_ohr1b")
+disabled = true
+
+[node name="deletion_timer" type="Timer" parent="."]
+
+[node name="collision_timer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="GPUParticles2D2" type="GPUParticles2D" parent="."]
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_uo1dt")
+
+[node name="collision_deletion_timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="fuse_sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_gp7mo")
+
+[node name="explosion_sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_lwvwu")
+
+[connection signal="timeout" from="deletion_timer" to="." method="_on_deletion_timer_timeout"]
+[connection signal="timeout" from="collision_timer" to="." method="_on_collision_timer_timeout"]
+[connection signal="timeout" from="collision_deletion_timer" to="." method="_on_collision_deletion_timer_timeout"]

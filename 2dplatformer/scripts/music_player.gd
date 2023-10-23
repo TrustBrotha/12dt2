@@ -22,7 +22,6 @@ func _process(delta):
 	if fade_in == true:
 		$music.volume_db = lerpf($music.volume_db,GlobalVar.music_volume,0.1)
 		if $music.volume_db >= (GlobalVar.music_volume - 1):
-			print("hi")
 			$music.volume_db = GlobalVar.music_volume
 			fade_in = false
 		

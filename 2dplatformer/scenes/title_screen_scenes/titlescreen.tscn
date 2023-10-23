@@ -109,7 +109,6 @@ texture = ExtResource("8_xkxqb")
 anchors_preset = 0
 
 [node name="title" type="Control" parent="screens"]
-visible = false
 layout_mode = 3
 anchors_preset = 0
 
@@ -155,6 +154,14 @@ offset_right = 64.0
 offset_bottom = 216.0
 theme = SubResource("Theme_58uqc")
 horizontal_alignment = 1
+
+[node name="reset" type="Button" parent="screens/title"]
+layout_mode = 0
+offset_left = 392.0
+offset_top = 296.0
+offset_right = 624.0
+offset_bottom = 344.0
+text = "Reset"
 
 [node name="settings" type="Control" parent="screens"]
 visible = false
@@ -487,6 +494,7 @@ text = "back
 "
 
 [node name="credits" type="Control" parent="screens"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -574,6 +582,7 @@ text = "Back"
 [connection signal="pressed" from="screens/title/settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="screens/title/quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="screens/title/credits" to="." method="_on_credits_pressed"]
+[connection signal="pressed" from="screens/title/reset" to="." method="_on_reset_pressed"]
 [connection signal="pressed" from="screens/settings/audio" to="." method="_on_audio_pressed"]
 [connection signal="pressed" from="screens/settings/visual" to="." method="_on_visual_pressed"]
 [connection signal="pressed" from="screens/settings/key_binds" to="." method="_on_key_binds_pressed"]

@@ -201,6 +201,7 @@ func apply_spell(spell_scene):
 			$debuff_cooldown.start()
 		elif spell_scene.is_in_group("earth"):
 			debuff = "stunned"
+			$debuff_cooldown.wait_time = 0.3
 			$debuff_cooldown.start()
 		elif spell_scene.is_in_group("ice"):
 			frost_buildup += 10
@@ -219,7 +220,10 @@ func apply_debuffs():
 			$paricle_folder/shocked_particles.emitting = true
 			$vision/vision_shape.disabled = true
 		elif debuff == "stunned":
-			pass
+			$AnimatedSprite2D.play("damaged")
+			velocity.x = 0
+			$paricle_folder/stun_particles1.emitting = true
+			$paricle_folder/stun_particles2.emitting = true
 		elif debuff == "frozen":
 			speedchange = 0
 			$vision/vision_shape.disabled = true

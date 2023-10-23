@@ -1216,6 +1216,9 @@ shape = SubResource("RectangleShape2D_seo08")
 
 [node name="HUD" parent="." instance=ExtResource("3_lqcbh")]
 
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2(-47.2375, -122.941)
+
 [connection signal="area_entered" from="room_changes/f1_fstart" to="." method="_on_f_1_fstart_area_entered"]
 [connection signal="area_entered" from="room_changes/f1_f5" to="." method="_on_f_1_f_5_area_entered"]
 [connection signal="timeout" from="change_room_timer" to="." method="_on_change_room_timer_timeout"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://cxg1m1njkwwc5"]
+[gd_scene load_steps=48 format=3 uid="uid://cxg1m1njkwwc5"]
 
 [ext_resource type="Script" path="res://scripts/enemytest.gd" id="1_v6o0j"]
 [ext_resource type="Texture2D" uid="uid://dcrwlaorbp65x" path="res://assets/slime-Sheet.png" id="2_cil7e"]
@@ -263,6 +263,55 @@ orbit_velocity_min = 0.0
 orbit_velocity_max = 0.0
 color_initial_ramp = SubResource("GradientTexture1D_dll1n")
 
+[sub_resource type="Curve" id="Curve_xoupq"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 11.0429), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_fuqpf"]
+curve = SubResource("Curve_xoupq")
+
+[sub_resource type="Curve" id="Curve_1djcs"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, 5), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveTexture" id="CurveTexture_gfwy5"]
+curve = SubResource("Curve_1djcs")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dl6mh"]
+particle_flag_disable_z = true
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 50.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+radial_accel_curve = SubResource("CurveTexture_fuqpf")
+tangential_accel_min = 100.0
+tangential_accel_max = 100.0
+tangential_accel_curve = SubResource("CurveTexture_gfwy5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vd7hm"]
+particle_flag_disable_z = true
+direction = Vector3(-1, 0, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 50.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+radial_accel_curve = SubResource("CurveTexture_fuqpf")
+tangential_accel_min = 100.0
+tangential_accel_max = 100.0
+tangential_accel_curve = SubResource("CurveTexture_gfwy5")
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ywvyw"]
 size = Vector2(20, 9)
 
@@ -328,6 +377,20 @@ emitting = false
 amount = 10
 process_material = SubResource("ParticleProcessMaterial_cseay")
 
+[node name="stun_particles1" type="GPUParticles2D" parent="paricle_folder"]
+position = Vector2(0, -20)
+emitting = false
+amount = 2
+process_material = SubResource("ParticleProcessMaterial_dl6mh")
+lifetime = 0.2
+
+[node name="stun_particles2" type="GPUParticles2D" parent="paricle_folder"]
+position = Vector2(0, -17)
+emitting = false
+amount = 2
+process_material = SubResource("ParticleProcessMaterial_vd7hm")
+lifetime = 0.2
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -4.5)
 shape = SubResource("RectangleShape2D_ywvyw")
@@ -371,7 +434,7 @@ show_percentage = false
 [node name="vision" type="Area2D" parent="."]
 
 [node name="vision_shape" type="CollisionShape2D" parent="vision"]
-position = Vector2(26, -9)
+position = Vector2(48, -3)
 shape = SubResource("RectangleShape2D_26xib")
 
 [node name="attack_timer" type="Timer" parent="."]

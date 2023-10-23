@@ -1104,6 +1104,12 @@ position = Vector2(256, 31)
 [node name="enemytest2" parent="." instance=ExtResource("5_eiwxv")]
 position = Vector2(762, 47)
 
+[node name="enemytest3" parent="." instance=ExtResource("5_eiwxv")]
+position = Vector2(688, 47)
+
+[node name="enemytest4" parent="." instance=ExtResource("5_eiwxv")]
+position = Vector2(847, 47)
+
 [node name="details_infront" type="TileMap" parent="."]
 texture_filter = 1
 tile_set = SubResource("TileSet_40bwr")

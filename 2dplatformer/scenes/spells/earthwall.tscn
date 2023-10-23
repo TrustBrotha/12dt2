@@ -1,0 +1,150 @@
+[gd_scene load_steps=20 format=3 uid="uid://n353l87ponjx"]
+
+[ext_resource type="Script" path="res://scripts/character/spell_scripts/earthwall.gd" id="1_vm1py"]
+[ext_resource type="Texture2D" uid="uid://bjlcscd411vix" path="res://assets/spell_assets/earth_wall_sprite_sheet.png" id="2_wn255"]
+[ext_resource type="Texture2D" uid="uid://cl6psdm6kra61" path="res://assets/spell_assets/earth_wall_destroy_sprite_sheet.png" id="3_8dh7p"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y6ev3"]
+atlas = ExtResource("2_wn255")
+region = Rect2(700, 0, 50, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xgvje"]
+atlas = ExtResource("2_wn255")
+region = Rect2(550, 0, 50, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gku3i"]
+atlas = ExtResource("2_wn255")
+region = Rect2(450, 0, 50, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_78vxe"]
+atlas = ExtResource("2_wn255")
+region = Rect2(400, 0, 50, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1fy3d"]
+atlas = ExtResource("2_wn255")
+region = Rect2(350, 0, 50, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5puab"]
+atlas = ExtResource("2_wn255")
+region = Rect2(300, 0, 50, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ltjio"]
+atlas = ExtResource("2_wn255")
+region = Rect2(250, 0, 50, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cridw"]
+atlas = ExtResource("2_wn255")
+region = Rect2(200, 0, 50, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b8doo"]
+atlas = ExtResource("3_8dh7p")
+region = Rect2(200, 0, 50, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_776n0"]
+atlas = ExtResource("3_8dh7p")
+region = Rect2(250, 0, 50, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1qp1v"]
+atlas = ExtResource("3_8dh7p")
+region = Rect2(300, 0, 50, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_27qe2"]
+atlas = ExtResource("3_8dh7p")
+region = Rect2(350, 0, 50, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s2bnl"]
+atlas = ExtResource("3_8dh7p")
+region = Rect2(400, 0, 50, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fvlcn"]
+atlas = ExtResource("3_8dh7p")
+region = Rect2(450, 0, 50, 87)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_np45u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y6ev3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xgvje")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gku3i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_78vxe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fy3d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5puab")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ltjio")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cridw")
+}],
+"loop": false,
+"name": &"build",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b8doo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_776n0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1qp1v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_27qe2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s2bnl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fvlcn")
+}],
+"loop": false,
+"name": &"destroy",
+"speed": 12.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vc20x"]
+size = Vector2(26, 83)
+
+[node name="earthwall" type="Node2D" groups=["earth", "spell", "stream"]]
+script = ExtResource("1_vm1py")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(0, -43.5)
+sprite_frames = SubResource("SpriteFrames_np45u")
+animation = &"destroy"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." groups=["tile"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, -41.5)
+shape = SubResource("RectangleShape2D_vc20x")
+disabled = true
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(0, 250)
+
+[node name="wall_lifetime" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="deletion_timer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[connection signal="timeout" from="wall_lifetime" to="." method="_on_wall_lifetime_timeout"]
+[connection signal="timeout" from="deletion_timer" to="." method="_on_deletion_timer_timeout"]
